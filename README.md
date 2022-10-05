@@ -6,7 +6,7 @@ If any of the sections in this template grows to more than one screen, consider 
 
 Provide a README file with the following information:
 
-# Project Name
+# Google Workspaces Alternative Application
 
 ## Project summary
 
