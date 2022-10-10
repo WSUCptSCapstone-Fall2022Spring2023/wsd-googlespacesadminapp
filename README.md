@@ -6,7 +6,7 @@ The Google Workspaces Alternative Application is a communicative platform design
 
 ### Additional information about the project
 
-TODO: Write a compelling/creative/informative project description / summary
+In today's information age, our communication is dominated by digital computer applications such as Discord, Zoom and much more. These applications allow for streamlined collaboration with instant messaging, VoIP, and file transfers. 
 
 ## Installation
 
