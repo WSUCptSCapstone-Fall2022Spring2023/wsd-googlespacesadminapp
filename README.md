@@ -6,34 +6,32 @@ The Google Workspaces Alternative Application is a communicative platform design
 
 ### Additional information about the project
 
-In today's information age, our communication is dominated by digital computer applications such as Discord, Zoom and much more. These applications allow for streamlined collaboration with instant messaging, VoIP, and file transfers. 
+In today's information age, our communication is dominated by digital computer applications such as Discord, Zoom and much more. These applications allow for streamlined collaboration with instant messaging, VoIP, and file transfers. However these applications are not supervisable and CIPA compliant which 
 
 ## Installation
+N/A 
 
 ### Prerequisites
 
-TODO: List what a user needs to have installed before running the installation instructions below (e.g., git, which versions of Ruby/Rails)
+None
 
 ### Add-ons
 
-TODO: List which add-ons are included in the project, and the purpose each add-on serves in your app.
+None
 
 ### Installation Steps
 
-TODO: Describe the installation process (making sure you mention `bundle install`).
-Instructions need to be such that a user can just copy/paste the commands to get things set up and running. 
+None
 
 
 ## Functionality
 
-TODO: Write usage instructions. Structuring it as a walkthrough can help structure this section,
-and showcase your features.
+None
 
 
 ## Known Problems
 
-TODO: Describe any known issues, bugs, odd behaviors or code smells. 
-Provide steps to reproduce the problem and/or name a file or a function where the problem lives.
+Currently no known problems
 
 
 ## Contributing
