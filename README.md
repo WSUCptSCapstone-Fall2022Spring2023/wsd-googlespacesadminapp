@@ -6,7 +6,9 @@ The Google Workspaces Alternative Application is a communicative platform design
 
 ### Additional information about the project
 
-In today's information age, our communication is dominated by digital computer applications such as Discord, Zoom and much more. These applications allow for streamlined collaboration with instant messaging, VoIP, and file transfers. However these applications are not supervisable and CIPA compliant which 
+In today's information age, our communication is dominated by digital computer applications such as Discord, Zoom and much more. Wahkiakum School district and Naselle School district also used these applications for streamlined collaboration with instant messaging, VoIP, and file transfers. However, these applications are not supervisable and CIPA compliant which is violation with the district's regulations. It is Team Toto's mission to design this application in the interests of Wahkiakum School district and Naselle School district. It is within our hope that this application fulfills the district's needs and that application can be used and further developed for other school districts as well. 
+
+It also worthy to note that half of the student's own smartphone, but they all have their own Chromebooks supplied to them by the school. 
 
 ## Installation
 N/A 
