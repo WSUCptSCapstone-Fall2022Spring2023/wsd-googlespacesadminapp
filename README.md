@@ -1,18 +1,8 @@
-Update your `README.md` using the template below. We are specifically interested in the installation instructions (e.g., all the gems, how to load real or seed data, etc.). This sample README was developed for a Rails project, so you can swap the "Gems" section of the "Installation" instructions to include add-ons that are relevant to you.
-
-If any of the sections in this template grows to more than one screen, consider placing it in its own file and linking to it from this file. Those files could live in a subdirectory called `docs`.
-
-**Make sure to check out the repo anew and test your installation instructions.**
-
-Provide a README file with the following information:
-
 # Google Workspaces Alternative Application
 
 ## Project summary
 
-### One-sentence description of the project
-
-TODO: A 20-second elevator pitch of your project - its core idea summarized in one sentence.
+The Google Workspaces Alternative Application is a communicative platform designed for Wahkiakum School district, Naselle School district, and Wahkiakum 4-H. The purpose of this application is to help faculty and students in classrooms, clubs and groups communicate with each other in a forum-like structure. It will be designed to have a coordinated User Interface to allow for fluid student collaboration while letting faculty monitor their student's behavior. 
 
 ### Additional information about the project
 
