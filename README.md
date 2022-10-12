@@ -49,7 +49,7 @@ TODO: Leave the steps below if you want others to contribute to your project.
 ## Additional Documentation
 
 TODO: Provide links to additional documentation that may exist in the repo, e.g.,
-  * Sprint reports
+  * [Sprint 1](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint1report.md)
   * User links
 
 ## License
