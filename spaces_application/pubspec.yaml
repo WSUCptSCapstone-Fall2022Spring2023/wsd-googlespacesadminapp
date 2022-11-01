@@ -29,7 +29,8 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  mvc_pattern: ^3.4.1
+  flutter_bloc: ^8.1.1
+  bloc: ^8.0.2
   flutter:
     sdk: flutter
 
