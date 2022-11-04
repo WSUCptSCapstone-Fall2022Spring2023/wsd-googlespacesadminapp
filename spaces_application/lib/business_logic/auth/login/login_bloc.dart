@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spaces_application/auth/form_submission_status.dart';
-import 'package:spaces_application/auth/login/login_event.dart';
-import 'package:spaces_application/auth/login/login_state.dart';
+import 'package:spaces_application/business_logic/auth/form_submission_status.dart';
+import 'package:spaces_application/business_logic/auth/login/login_event.dart';
+import 'package:spaces_application/business_logic/auth/login/login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginState());

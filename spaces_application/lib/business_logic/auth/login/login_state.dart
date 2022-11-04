@@ -1,4 +1,4 @@
-import 'package:spaces_application/auth/form_submission_status.dart';
+import 'package:spaces_application/business_logic/auth/form_submission_status.dart';
 
 class LoginState {
   final String username;
