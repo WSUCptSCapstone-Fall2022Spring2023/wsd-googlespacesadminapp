@@ -8,12 +8,15 @@ import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
 
 import '../../business_logic/auth/form_submission_status.dart';
 
+final Color bgColor = Color(0xFF4A4A57);
+
 class LoginView extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       body: BlocProvider(
         create: (context) => LoginBloc(
           authRepo: context.read<AuthRepository>(),
