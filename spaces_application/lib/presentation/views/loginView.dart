@@ -1,3 +1,7 @@
+import 'dart:ffi';
+import 'dart:math';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spaces_application/business_logic/auth/login/login_bloc.dart';
@@ -49,6 +53,14 @@ class LoginView extends StatelessWidget {
   }
 
   Widget _usernameField() {
+    return TextFormField(
+      decoration: InputDecoration(
+        icon: Icon(Icons.person),
+        hintText: 'Username',
+      ),
+      validator: (value) => null,
+    );
+
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
       return TextFormField(
         decoration: InputDecoration(
@@ -56,6 +68,13 @@ class LoginView extends StatelessWidget {
           hintText: 'Username',
         ),
         // validator returns null when valid value is passed
+        // alternative syntax:
+        // String TextFormField.validator(value) {
+        //   if state.isValidUsername()
+        //     return null;
+        //   else
+        //     return "Username is too short";
+        // }
         validator: (value) =>
             state.isValidUsername ? null : 'Username is too short',
         onChanged: (value) => context
@@ -63,6 +82,7 @@ class LoginView extends StatelessWidget {
             .add(LoginUsernameChanged(username: value)),
       );
     });
+
   }
 
   Widget _passwordField() {
