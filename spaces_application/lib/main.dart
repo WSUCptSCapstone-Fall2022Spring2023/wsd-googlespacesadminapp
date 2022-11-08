@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:spaces_application/presentation/views/homePageView.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -14,11 +13,11 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   @override
-   Widget build(BuildContext context) {
-     return MaterialApp(
-          title: 'Home Page',
-         home: RepositoryProvider(
-             create: (context) => AuthRepository(), child: HomePage()),
-         theme: ThemeData(fontFamily: 'Circular'));
-   }
-
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        title: 'Home Page',
+        home: RepositoryProvider(
+            create: (context) => AuthRepository(), child: HomePage()),
+        theme: ThemeData(fontFamily: 'Circular'));
+  }
+}

@@ -53,14 +53,6 @@ class LoginView extends StatelessWidget {
   }
 
   Widget _usernameField() {
-    return TextFormField(
-      decoration: InputDecoration(
-        icon: Icon(Icons.person),
-        hintText: 'Username',
-      ),
-      validator: (value) => null,
-    );
-
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
       return TextFormField(
         decoration: InputDecoration(
@@ -82,7 +74,6 @@ class LoginView extends StatelessWidget {
             .add(LoginUsernameChanged(username: value)),
       );
     });
-
   }
 
   Widget _passwordField() {
