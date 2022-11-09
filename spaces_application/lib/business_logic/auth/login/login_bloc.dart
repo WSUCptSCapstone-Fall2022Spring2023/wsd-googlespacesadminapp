@@ -8,31 +8,31 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthRepository authRepo;
 
   LoginBloc({required this.authRepo}) : super(LoginState()) {
-    on<LoginUsernameChanged>((event, emit) async {
-      await _changeUsername(event.username, emit);
+    on<LoginEmailChanged>((event, emit) async {
+      await _onEmailChanged(event.email, emit);
     });
     on<LoginPasswordChanged>((event, emit) async {
-      await _changePassword(event.password, emit);
+      await _onPasswordChanged(event.password, emit);
     });
     on<LoginSubmitted>((event, emit) async {
-      await _changeFormStatus(emit);
+      await _onFormStatusChanged(emit);
     });
   }
 
-  Future<void> _changeUsername(
-      String newUsername, Emitter<LoginState> emit) async {
-    emit(state.copyWith(username: newUsername));
+  Future<void> _onEmailChanged(
+      String newEmail, Emitter<LoginState> emit) async {
+    emit(state.copyWith(email: newEmail));
   }
 
-  Future<void> _changePassword(
+  Future<void> _onPasswordChanged(
       String newPassword, Emitter<LoginState> emit) async {
     emit(state.copyWith(password: newPassword));
   }
 
-  Future<void> _changeFormStatus(Emitter<LoginState> emit) async {
+  Future<void> _onFormStatusChanged(Emitter<LoginState> emit) async {
     emit(state.copyWith(formStatus: FormSubmitting()));
     try {
-      await authRepo.login();
+      await authRepo.login(state.email, state.password);
       emit(state.copyWith(formStatus: SubmissionSuccess()));
     } catch (e) {
       emit(state.copyWith(formStatus: SubmissionFailed(Exception(e))));

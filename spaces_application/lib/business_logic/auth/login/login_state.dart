@@ -1,8 +1,9 @@
 import 'package:spaces_application/business_logic/auth/form_submission_status.dart';
+import 'package:email_validator/email_validator.dart';
 
 class LoginState {
-  final String username;
-  bool get isValidUsername => username.length > 3;
+  final String email;
+  bool get isValidEmail => (EmailValidator.validate(email));
 
   final String password;
   bool get isValidPassword => password.length > 6;
@@ -10,18 +11,18 @@ class LoginState {
   final FormSubmissionStatus formStatus;
 
   LoginState({
-    this.username = '',
+    this.email = '',
     this.password = '',
     this.formStatus = const InitialFormStatus(),
   });
 
   LoginState copyWith({
-    String? username,
+    String? email,
     String? password,
     FormSubmissionStatus? formStatus,
   }) {
     return LoginState(
-      username: username ?? this.username,
+      email: email ?? this.email,
       password: password ?? this.password,
       formStatus: formStatus ?? this.formStatus,
     );

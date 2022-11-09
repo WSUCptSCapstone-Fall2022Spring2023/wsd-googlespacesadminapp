@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 class AuthRepository {
-  Future<void> login() async {
-    print('attenpting login');
-    await Future.delayed(Duration(seconds: 3));
+  final auth = FirebaseAuth.instance;
+  Future<void> login(String email, String password) async {
+    print('attempting login');
+    await auth.signInWithEmailAndPassword(email: email, password: password);
     print('loggin in');
-    throw Exception('failed to login');
   }
 }
