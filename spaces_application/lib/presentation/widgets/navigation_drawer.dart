@@ -70,9 +70,8 @@ class NavigationDrawer extends StatelessWidget {
                 title: Text('Logout', style: TextStyle(color: Colors.white)),
                 // onTap: () => {Navigator.of(context).pop()},
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => HomePage(),
-                  ));
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  // may have to change this if users are automatically logged in.
                 }),
           ],
         ));
