@@ -6,6 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:spaces_application/presentation/views/homeView.dart';
 import 'package:spaces_application/presentation/views/registerView.dart';
 
+import 'business_logic/auth/login/login_bloc.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -15,12 +17,14 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Home Page',
-        home: RepositoryProvider(
-            create: (context) => AuthRepository(), child: LoginView()),
-        //create: (context) => AuthRepository(),
-        //child: RegisterView()),
-        theme: ThemeData(fontFamily: 'Circular'));
+    return RepositoryProvider(
+      create: (context) => AuthRepository(),
+      child: MaterialApp(
+          title: 'Home Page',
+          home: LoginView(),
+          theme: ThemeData(fontFamily: 'Circular')),
+      //create: (context) => AuthRepository(),
+      //child: RegisterView()),
+    );
   }
 }
