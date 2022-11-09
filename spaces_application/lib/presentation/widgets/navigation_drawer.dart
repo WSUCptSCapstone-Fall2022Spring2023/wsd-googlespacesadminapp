@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spaces_application/presentation/views/loginView.dart';
+import 'package:spaces_application/presentation/views/homePageView.dart';
 
 final Color bgColor = Color(0xFF4A4A57);
 
@@ -17,65 +18,61 @@ class NavigationDrawer extends StatelessWidget {
               currentAccountPicture: Icon(Icons.account_circle, size: 80),
             ),
             ListTile(
-              leading: Icon(Icons.home, color: Colors.white),
-              title: Text('Home', style: TextStyle(color: Colors.white)),
-              onTap: () => {},
-              // onTap: () {
-              //   Navigator.pop(context);
-              //   Navigator.push(context,
-              //       MaterialPageRoute(builder: (context) => HomePageView()));
-              // }
-            ),
+                leading: Icon(Icons.home, color: Colors.white),
+                title: Text('Home', style: TextStyle(color: Colors.white)),
+                //onTap: () => {Navigator.of(context).pop()},
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ));
+                }),
             ListTile(
                 leading: Icon(Icons.person, color: Colors.white),
                 title:
                     Text('View Profile', style: TextStyle(color: Colors.white)),
-                onTap: () => {Navigator.of(context).pop()}
-                // onTap: () {
-                //   Navigator.pop(context),
-                //   Navigator.push(context,
-                //     MaterialPageRoute(builder: ((context) => ProfilePageView()))
-                // }
-                ),
+                // onTap: () => {Navigator.of(context).pop()}
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ));
+                }),
             ListTile(
                 leading: Icon(Icons.school, color: Colors.white),
                 title: Text('Classes', style: TextStyle(color: Colors.white)),
-                onTap: () => {Navigator.of(context).pop()}
-                // onTap: () {
-                //   Navigator.pop(context),
-                //   Navigator.push(context,
-                //     MaterialPageRoute(builder: ((context) => ClassesPageView()))
-                // }
-                ),
+                // onTap: () => {Navigator.of(context).pop()}
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ));
+                }),
             ListTile(
                 leading: Icon(Icons.add_alert, color: Colors.white),
                 title: Text('Notifications',
                     style: TextStyle(color: Colors.white)),
-                onTap: () => {Navigator.of(context).pop()}
-                // onTap: () {
-                //   Navigator.pop(context),
-                //   Navigator.push(context,
-                //     MaterialPageRoute(builder: ((context) => NotificationsPageView()))
-                // }
-                ),
+                // onTap: () => {Navigator.of(context).pop()}
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ));
+                }),
             ListTile(
                 leading: Icon(Icons.settings, color: Colors.white),
                 title: Text('Settings', style: TextStyle(color: Colors.white)),
-                onTap: () => {Navigator.of(context).pop()}
-                // onTap: () {
-                //   Navigator.pop(context),
-                //   Navigator.push(context,
-                //     MaterialPageRoute(builder: ((context) => SettingsPageView()))
-                // }
-                ),
+                // onTap: () => {Navigator.of(context).pop()}
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ));
+                }),
+            //
             ListTile(
                 leading: Icon(Icons.exit_to_app, color: Colors.white),
                 title: Text('Logout', style: TextStyle(color: Colors.white)),
                 // onTap: () => {Navigator.of(context).pop()},
                 onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: ((context) => LoginView())));
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ));
                 }),
           ],
         ));
