@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Home Page',
         home: RepositoryProvider(
-            create: (context) => AuthRepository(), child: HomePage()),
+            create: (context) => AuthRepository(), child: LoginView()),
         theme: ThemeData(fontFamily: 'Circular'));
   }
 }

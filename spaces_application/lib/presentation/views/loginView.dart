@@ -32,10 +32,19 @@ class LoginView extends StatelessWidget {
 
   Widget _loginForm() {
     return BlocListener<LoginBloc, LoginState>(
+        listenWhen: (previous, current) {
+          if (current.formStatus == previous.formStatus)
+            return false;
+          else
+            return true;
+        },
         listener: (context, state) {
           final formStatus = state.formStatus;
           if (formStatus is SubmissionFailed) {
             MiscWidgets.showException(context, formStatus.exception.toString());
+          } else if (formStatus is SubmissionSuccess) {
+            // Navigate to new page
+            MiscWidgets.showException(context, "LOGIN SUCCESS");
           }
         },
         child: Form(
@@ -45,19 +54,19 @@ class LoginView extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _usernameField(),
+                    _emailField(),
                     _passwordField(),
                     _loginButton(),
                   ],
                 ))));
   }
 
-  Widget _usernameField() {
+  Widget _emailField() {
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
       return TextFormField(
         decoration: InputDecoration(
           icon: Icon(Icons.person),
-          hintText: 'Username',
+          hintText: 'Email',
         ),
         // validator returns null when valid value is passed
         // alternative syntax:
@@ -67,11 +76,9 @@ class LoginView extends StatelessWidget {
         //   else
         //     return "Username is too short";
         // }
-        validator: (value) =>
-            state.isValidUsername ? null : 'Username is too short',
-        onChanged: (value) => context
-            .read<LoginBloc>()
-            .add(LoginUsernameChanged(username: value)),
+        validator: (value) => state.isValidEmail ? null : 'Not a valid Email',
+        onChanged: (value) =>
+            context.read<LoginBloc>().add(LoginEmailChanged(email: value)),
       );
     });
   }
