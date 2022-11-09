@@ -1,14 +1,10 @@
-import 'dart:ffi';
-import 'dart:math';
-
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spaces_application/business_logic/auth/login/login_bloc.dart';
-import 'package:spaces_application/business_logic/auth/login/login_event.dart';
-import 'package:spaces_application/business_logic/auth/login/login_state.dart';
+import 'package:spaces_application/business_logic/auth/register/register_bloc.dart';
+import 'package:spaces_application/business_logic/auth/register/register_event.dart';
+import 'package:spaces_application/business_logic/auth/register/register_state.dart';
 import 'package:spaces_application/data/repositories/auth_repository.dart';
-import 'package:spaces_application/presentation/views/homePageView.dart';
+import 'package:spaces_application/presentation/views/homeView.dart';
 import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
 
 import '../../business_logic/auth/form_submission_status.dart';
@@ -17,7 +13,7 @@ final Color bgColor = Color(0xFF4A4A57);
 final Color boxColor = Color.fromRGBO(60, 60, 60, 1);
 
 class RegisterView extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +65,9 @@ class RegisterView extends StatelessWidget {
             MiscWidgets.showException(context, formStatus.exception.toString());
           } else if (formStatus is SubmissionSuccess) {
             // Navigate to new page
-            Navigator.of(context).push(
+            Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (context) => HomePage(),
+                builder: (context) => HomeView(),
               ),
             );
             MiscWidgets.showException(context, "ACCOUNT CREATION SUCCESS");
@@ -112,8 +108,9 @@ class RegisterView extends StatelessWidget {
         //     return "Username is too short";
         // }
         validator: (value) => state.isValidEmail ? null : 'Not a valid Email',
-        onChanged: (value) =>
-            context.read<RegisterBloc>().add(LoginEmailChanged(email: value)),
+        onChanged: (value) => context
+            .read<RegisterBloc>()
+            .add(RegisterEmailChanged(email: value)),
       );
     });
   }
@@ -146,7 +143,7 @@ class RegisterView extends StatelessWidget {
           : ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  context.read<RegisterBloc>().add(LoginSubmitted());
+                  context.read<RegisterBloc>().add(RegisterSubmitted());
                 }
               },
               child: Text('Register Account'),

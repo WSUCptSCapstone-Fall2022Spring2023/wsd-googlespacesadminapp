@@ -3,7 +3,7 @@ import 'package:spaces_application/data/repositories/auth_repository.dart';
 import 'package:spaces_application/presentation/views/loginView.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:spaces_application/presentation/views/homePageView.dart';
+import 'package:spaces_application/presentation/views/homeView.dart';
 import 'package:spaces_application/presentation/views/registerView.dart';
 
 Future<void> main() async {
@@ -18,9 +18,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Home Page',
         home: RepositoryProvider(
-            //create: (context) => AuthRepository(), child: LoginView()),
-            create: (context) => AuthRepository(),
-            child: RegisterView()),
+            create: (context) => AuthRepository(), child: LoginView()),
+        //create: (context) => AuthRepository(),
+        //child: RegisterView()),
         theme: ThemeData(fontFamily: 'Circular'));
   }
 }
