@@ -98,7 +98,6 @@ class LoginView extends StatelessWidget {
             icon: Icon(Icons.person, color: Colors.white),
             hintText: 'Email',
             hintStyle: TextStyle(color: Colors.white)),
-        ),
         // validator returns null when valid value is passed
         // alternative syntax:
         // String TextFormField.validator(value) {
