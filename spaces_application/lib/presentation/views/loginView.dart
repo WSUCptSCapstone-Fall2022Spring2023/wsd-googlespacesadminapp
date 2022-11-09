@@ -30,7 +30,7 @@ class LoginView extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(40)),
                 color: Color.fromRGBO(40, 40, 40, 1),
               ),
-              width: 400,
+              width: 500,
               height: 350,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -101,7 +101,7 @@ class LoginView extends StatelessWidget {
         decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.white, width: 0.0)),
-            icon: Icon(Icons.person, color: Colors.white),
+            icon: Icon(Icons.email, color: Colors.white),
             hintText: 'Email',
             hintStyle: TextStyle(color: Colors.white)),
         // validator returns null when valid value is passed

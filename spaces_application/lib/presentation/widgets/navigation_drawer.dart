@@ -16,6 +16,10 @@ class NavigationDrawer extends StatelessWidget {
               accountName: Text('User'),
               accountEmail: Text('user@email.com'),
               currentAccountPicture: Icon(Icons.account_circle, size: 80),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage(
+                          "assets\images\exampleprofilebackgroundpicture.jpg"))),
             ),
             ListTile(
                 leading: Icon(Icons.home, color: Colors.white),
