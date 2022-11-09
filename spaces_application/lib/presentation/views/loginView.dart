@@ -8,6 +8,7 @@ import 'package:spaces_application/business_logic/auth/login/login_bloc.dart';
 import 'package:spaces_application/business_logic/auth/login/login_event.dart';
 import 'package:spaces_application/business_logic/auth/login/login_state.dart';
 import 'package:spaces_application/data/repositories/auth_repository.dart';
+import 'package:spaces_application/presentation/views/homePageView.dart';
 import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
 
 import '../../business_logic/auth/form_submission_status.dart';
@@ -69,6 +70,11 @@ class LoginView extends StatelessWidget {
             MiscWidgets.showException(context, formStatus.exception.toString());
           } else if (formStatus is SubmissionSuccess) {
             // Navigate to new page
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => HomePage(),
+              ),
+            );
             MiscWidgets.showException(context, "LOGIN SUCCESS");
           }
         },
