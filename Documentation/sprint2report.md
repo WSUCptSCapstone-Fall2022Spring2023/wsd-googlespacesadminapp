@@ -1,4 +1,4 @@
-# Sprint 2 Report (10/10/2022 - 11/9/2022)
+# Sprint 2 Report (10/10/2022 - 11/9/2022) 
 
 ## What's New (User Facing)
  * Testing and Acceptance document
