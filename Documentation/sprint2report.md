@@ -26,6 +26,7 @@ There are no incomplete issues for Sprint 2.
 ## Code Files for Review
 Please review the following important code files, which were actively developed/created during this sprint, for quality:
  * [pubspec.yaml]
+
 Business Logic
  * [lib/business_logic/auth/login/login_bloc.dart]
  * [lib/business_logic/auth/login/login_event.dart]
@@ -34,8 +35,10 @@ Business Logic
  * [lib/business_logic/auth/register/register_event.dart]
  * [lib/business_logic/auth/register/register_state.dart]
  * [lib/business_logic/auth/form_submission_status.dart]
+
 Data
  * [lib/data/repositories/auth_repository.dart]
+
 Presentation
  * [lib/presentation/views/homeView.dart]
  * [lib/presentation/views/loginView.dart]
@@ -44,7 +47,8 @@ Presentation
  * [lib/presentaiton/widgets/miscWidgets.dart]
  * [lib/presentaiton/widgets/navigation_drawer]
  * [lib/presentation/main.dart]
- Documentation
+
+Documentation
  * [Testing_and_Acceptance_plans.docx.pdf]
 
 ## Retrospective Summary
