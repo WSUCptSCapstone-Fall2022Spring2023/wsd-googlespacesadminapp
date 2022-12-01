@@ -14,6 +14,7 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    bool con = true;
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<AuthRepository>(
