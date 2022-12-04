@@ -1,17 +1,35 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:spaces_application/data/models/userData.dart';
 
 class AuthRepository {
   final auth = FirebaseAuth.instance;
+  final ref = FirebaseDatabase.instance.ref("UserData/");
+  UserData? currentUser;
+
   Future<void> login(String email, String password) async {
-    print('attempting login');
     await auth.signInWithEmailAndPassword(email: email, password: password);
-    print('loggin in');
+    String uid = auth.currentUser!.uid;
+
+    // On login, this snippet checks whether the current user exists in the realtime db
+    // Since Faculty users are created by direct insertion to auth db, they do not yet exist in the realtime db
+    // If the logged in user does not exist in the realtime db, they must be a Faculty user, so the isFaculty field is updated to true
+    DataSnapshot snapshot = await ref.child(uid).get();
+    // Only triggered when user is not in the realtime db
+    if (!snapshot.exists) {
+      await ref.child(uid).update({"isFaculty": true, "email": email});
+    }
+
+    snapshot = await ref.child(uid).get();
+    currentUser = UserData.fromFirebase(snapshot);
   }
 
   Future<void> register(String email) async {
-    print('attempting register');
-    await auth.createUserWithEmailAndPassword(
+    final userCredential = await auth.createUserWithEmailAndPassword(
         email: email, password: "password");
-    print('registering');
+    String uid = userCredential.user!.uid;
+    // creates student user instances in realtime db
+    // sets isFaculty field to false
+    await ref.child(uid).update({"isFaculty": false, "email": email});
   }
 }

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:spaces_application/data/models/userData.dart';
+import 'package:spaces_application/data/repositories/auth_repository.dart';
+import 'package:spaces_application/presentation/views/create_spaceView.dart';
 import 'package:spaces_application/presentation/views/loginView.dart';
 import 'package:spaces_application/presentation/views/homeView.dart';
 import 'package:spaces_application/presentation/views/registerView.dart';
@@ -8,12 +12,15 @@ final Color bgColor = Color(0xFF4A4A57);
 class NavigationDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    UserData currentUser =
+        context.read<AuthRepository>().currentUser as UserData;
+    bool condition = false;
     return Drawer(
         backgroundColor: bgColor,
         child: ListView(padding: EdgeInsets.zero, children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text('User'),
-            accountEmail: Text('user@email.com'),
+            accountName: Text(currentUser.firstName),
+            accountEmail: Text(currentUser.email),
             currentAccountPicture: Icon(Icons.account_circle, size: 80),
             decoration: BoxDecoration(
                 image: DecorationImage(
@@ -29,16 +36,28 @@ class NavigationDrawer extends StatelessWidget {
                   builder: (context) => HomeView(),
                 ));
               }),
-          ListTile(
-              leading: Icon(Icons.person, color: Colors.white),
-              title: Text('Create Student Profile',
-                  style: TextStyle(color: Colors.white)),
-              // onTap: () => {Navigator.of(context).pop()}
-              onTap: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => RegisterView(),
-                ));
-              }),
+          if (currentUser.isFaculty == true)
+            ListTile(
+                leading: Icon(Icons.person, color: Colors.white),
+                title: Text('Create a Student Profile',
+                    style: TextStyle(color: Colors.white)),
+                // onTap: () => {Navigator.of(context).pop()}
+                onTap: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => RegisterView(),
+                  ));
+                }),
+          if (currentUser.isFaculty == true)
+            ListTile(
+                leading: Icon(Icons.space_dashboard, color: Colors.white),
+                title: Text('Create a New Space',
+                    style: TextStyle(color: Colors.white)),
+                // onTap: () => {Navigator.of(context).pop()}
+                onTap: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => CreateSpaceView(),
+                  ));
+                }),
           ListTile(
               leading: Icon(Icons.school, color: Colors.white),
               title: Text('Classes', style: TextStyle(color: Colors.white)),
