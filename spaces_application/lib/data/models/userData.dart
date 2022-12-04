@@ -13,18 +13,7 @@ class UserData {
   UserData(this.uid, this.isFaculty, this.email, this.parentEmail,
       this.firstName, this.lastName, this.displayName, this.grade);
 
-/*
-  UserData.empty() {
-    uid = null;
-    isFaculty = null;
-    email = null;
-    parentEmail = null;
-    firstName = null;
-    lastName = null;
-    displayName = null;
-    grade = null;
-  }
-*/
+  UserData.empty();
 
   UserData.fromFirebase(DataSnapshot snapshot) {
     uid = snapshot.key as String;
