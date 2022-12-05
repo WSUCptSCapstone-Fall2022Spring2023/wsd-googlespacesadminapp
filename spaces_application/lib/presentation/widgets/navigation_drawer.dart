@@ -7,9 +7,11 @@ import 'package:spaces_application/presentation/views/loginView.dart';
 import 'package:spaces_application/presentation/views/homeView.dart';
 import 'package:spaces_application/presentation/views/registerView.dart';
 
-final Color bgColor = Color(0xFF4A4A57);
-
 class NavigationDrawer extends StatelessWidget {
+  final Color bgColor = Color.fromARGB(255, 12, 12, 12);
+  final Color textColor = Color.fromARGB(255, 255, 255, 240);
+  final Color boxColor = Color.fromARGB(255, 60, 60, 60);
+
   @override
   Widget build(BuildContext context) {
     UserData currentUser =
@@ -28,8 +30,8 @@ class NavigationDrawer extends StatelessWidget {
                         "assets\images\exampleprofilebackgroundpicture.jpg"))),
           ),
           ListTile(
-              leading: Icon(Icons.home, color: Colors.white),
-              title: Text('Home', style: TextStyle(color: Colors.white)),
+              leading: Icon(Icons.home, color: textColor),
+              title: Text('Home', style: TextStyle(color: textColor)),
               //onTap: () => {Navigator.of(context).pop()},
               onTap: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -38,9 +40,9 @@ class NavigationDrawer extends StatelessWidget {
               }),
           if (currentUser.isFaculty == true)
             ListTile(
-                leading: Icon(Icons.person, color: Colors.white),
+                leading: Icon(Icons.person, color: textColor),
                 title: Text('Create a Student Profile',
-                    style: TextStyle(color: Colors.white)),
+                    style: TextStyle(color: textColor)),
                 // onTap: () => {Navigator.of(context).pop()}
                 onTap: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -49,9 +51,9 @@ class NavigationDrawer extends StatelessWidget {
                 }),
           if (currentUser.isFaculty == true)
             ListTile(
-                leading: Icon(Icons.space_dashboard, color: Colors.white),
+                leading: Icon(Icons.space_dashboard, color: textColor),
                 title: Text('Create a New Space',
-                    style: TextStyle(color: Colors.white)),
+                    style: TextStyle(color: textColor)),
                 // onTap: () => {Navigator.of(context).pop()}
                 onTap: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -59,8 +61,8 @@ class NavigationDrawer extends StatelessWidget {
                   ));
                 }),
           ListTile(
-              leading: Icon(Icons.school, color: Colors.white),
-              title: Text('Classes', style: TextStyle(color: Colors.white)),
+              leading: Icon(Icons.school, color: textColor),
+              title: Text('Classes', style: TextStyle(color: textColor)),
               // onTap: () => {Navigator.of(context).pop()}
               onTap: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -68,9 +70,8 @@ class NavigationDrawer extends StatelessWidget {
                 ));
               }),
           ListTile(
-              leading: Icon(Icons.add_alert, color: Colors.white),
-              title:
-                  Text('Notifications', style: TextStyle(color: Colors.white)),
+              leading: Icon(Icons.add_alert, color: textColor),
+              title: Text('Notifications', style: TextStyle(color: textColor)),
               // onTap: () => {Navigator.of(context).pop()}
               onTap: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -78,8 +79,8 @@ class NavigationDrawer extends StatelessWidget {
                 ));
               }),
           ListTile(
-              leading: Icon(Icons.settings, color: Colors.white),
-              title: Text('Settings', style: TextStyle(color: Colors.white)),
+              leading: Icon(Icons.settings, color: textColor),
+              title: Text('Settings', style: TextStyle(color: textColor)),
               // onTap: () => {Navigator.of(context).pop()}
               onTap: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -88,8 +89,8 @@ class NavigationDrawer extends StatelessWidget {
               }),
           //
           ListTile(
-              leading: Icon(Icons.exit_to_app, color: Colors.white),
-              title: Text('Logout', style: TextStyle(color: Colors.white)),
+              leading: Icon(Icons.exit_to_app, color: textColor),
+              title: Text('Logout', style: TextStyle(color: textColor)),
               // onTap: () => {Navigator.of(context).pop()},
               onTap: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(

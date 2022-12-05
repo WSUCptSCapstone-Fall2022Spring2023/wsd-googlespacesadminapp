@@ -9,11 +9,12 @@ import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
 
 import '../../business_logic/auth/form_submission_status.dart';
 
-final Color bgColor = Color(0xFF4A4A57);
-final Color boxColor = Color.fromRGBO(60, 60, 60, 1);
-
 class LoginView extends StatelessWidget {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final Color bgColor = Color.fromARGB(255, 12, 12, 12);
+  final Color textColor = Color.fromARGB(255, 255, 255, 240);
+  final Color boxColor = Color.fromARGB(255, 60, 60, 60);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class LoginView extends StatelessWidget {
           child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(40)),
-                color: Color.fromRGBO(40, 40, 40, 1),
+                color: boxColor,
               ),
               width: 500,
               height: 350,
@@ -34,11 +35,10 @@ class LoginView extends StatelessWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Icon(Icons.cyclone_outlined,
-                          size: 50, color: Colors.white),
+                      Icon(Icons.cyclone_outlined, size: 50, color: textColor),
                       Text("<Application Name>",
                           textScaleFactor: 2,
-                          style: TextStyle(color: Colors.white)),
+                          style: TextStyle(color: textColor)),
                     ],
                   ),
                   BlocProvider(
@@ -93,13 +93,13 @@ class LoginView extends StatelessWidget {
   Widget _emailField() {
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
       return TextFormField(
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: textColor),
         decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white, width: 0.0)),
-            icon: Icon(Icons.email, color: Colors.white),
+                borderSide: BorderSide(color: textColor, width: 0.0)),
+            icon: Icon(Icons.email, color: textColor),
             hintText: 'Email',
-            hintStyle: TextStyle(color: Colors.white)),
+            hintStyle: TextStyle(color: textColor)),
         // validator returns null when valid value is passed
         // alternative syntax:
         // String TextFormField.validator(value) {
@@ -118,14 +118,14 @@ class LoginView extends StatelessWidget {
   Widget _passwordField() {
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
       return TextFormField(
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: textColor),
         obscureText: true,
         decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white, width: 0.0)),
-            icon: Icon(Icons.lock, color: Colors.white),
+                borderSide: BorderSide(color: textColor, width: 0.0)),
+            icon: Icon(Icons.lock, color: textColor),
             hintText: 'Password',
-            hintStyle: TextStyle(color: Colors.white)),
+            hintStyle: TextStyle(color: textColor)),
         // validator returns null when valid value is passed
         validator: (value) =>
             state.isValidPassword ? null : 'Password is too short',
