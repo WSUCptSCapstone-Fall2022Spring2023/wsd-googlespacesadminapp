@@ -26,8 +26,8 @@ class RegisterView extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(40)),
                 color: Color.fromRGBO(40, 40, 40, 1),
               ),
-              width: 500,
-              height: 300,
+              width: 700,
+              height: 400,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -82,8 +82,12 @@ class RegisterView extends StatelessWidget {
                   children: [
                     _emailField(),
                     Padding(padding: EdgeInsets.all(4)),
-                    //_passwordField(),
-                    //Padding(padding: EdgeInsets.all(2)),
+                    _parentEmailField(),
+                    Padding(padding: EdgeInsets.all(4)),
+                    _firstNameField(),
+                    Padding(padding: EdgeInsets.all(4)),
+                    _lastNameField(),
+                    Padding(padding: EdgeInsets.all(4)),
                     _registerButton(),
                   ],
                 ))));
@@ -115,26 +119,88 @@ class RegisterView extends StatelessWidget {
     });
   }
 
-  // Widget _passwordField() {
-  //   return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
-  //     return TextFormField(
-  //       style: TextStyle(color: Colors.white),
-  //       obscureText: true,
-  //       decoration: InputDecoration(
-  //           enabledBorder: OutlineInputBorder(
-  //               borderSide: BorderSide(color: Colors.white, width: 0.0)),
-  //           icon: Icon(Icons.lock, color: Colors.white),
-  //           hintText: 'Password',
-  //           hintStyle: TextStyle(color: Colors.white)),
-  //       // validator returns null when valid value is passed
-  //       validator: (value) =>
-  //           state.isValidPassword ? null : 'Password is too short',
-  //       onChanged: (value) => context
-  //           .read<RegisterBloc>()
-  //           .add(LoginPasswordChanged(password: value)),
-  //     );
-  //   });
-  // }
+  Widget _parentEmailField() {
+    return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
+      return TextFormField(
+        style: TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white, width: 0.0)),
+            icon: Icon(Icons.email, color: Colors.white),
+            hintText: 'Parent Email',
+            hintStyle: TextStyle(color: Colors.white)),
+        // validator returns null when valid value is passed
+        // alternative syntax:
+        // String TextFormField.validator(value) {
+        //   if state.isValidUsername()
+        //     return null;
+        //   else
+        //     return "Username is too short";
+        // }
+        validator: (value) =>
+            state.isValidParentEmail ? null : 'Not a valid Parent Email',
+        onChanged: (value) => context
+            .read<RegisterBloc>()
+            .add(RegisterParentEmailChanged(parentEmail: value)),
+      );
+    });
+  }
+
+  Widget _firstNameField() {
+    return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
+      return TextFormField(
+        style: TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white, width: 0.0)),
+            icon: Icon(Icons.person, color: Colors.white),
+            hintText: 'First Name',
+            hintStyle: TextStyle(color: Colors.white)),
+        // validator returns null when valid value is passed
+        // alternative syntax:
+        // String TextFormField.validator(value) {
+        //   if state.isValidUsername()
+        //     return null;
+        //   else
+        //     return "Username is too short";
+        // }
+        validator: (value) => state.isValidfirstName
+            ? null
+            : 'First Name must be between 2 -20 characters',
+        onChanged: (value) => context
+            .read<RegisterBloc>()
+            .add(RegisterFirstNameChanged(firstName: value)),
+      );
+    });
+  }
+
+  Widget _lastNameField() {
+    return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
+      return TextFormField(
+        style: TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white, width: 0.0)),
+            icon: Icon(Icons.person, color: Colors.white),
+            hintText: 'Last Name',
+            hintStyle: TextStyle(color: Colors.white)),
+        // validator returns null when valid value is passed
+        // alternative syntax:
+        // String TextFormField.validator(value) {
+        //   if state.isValidUsername()
+        //     return null;
+        //   else
+        //     return "Username is too short";
+        // }
+        validator: (value) => state.isValidlastName
+            ? null
+            : 'Last Name must be between 2 -20 characters',
+        onChanged: (value) => context
+            .read<RegisterBloc>()
+            .add(RegisterLastNameChanged(lastName: value)),
+      );
+    });
+  }
 
   Widget _registerButton() {
     return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {

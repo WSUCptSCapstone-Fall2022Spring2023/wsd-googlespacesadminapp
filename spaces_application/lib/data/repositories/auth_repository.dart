@@ -24,12 +24,21 @@ class AuthRepository {
     currentUser = UserData.fromFirebase(snapshot);
   }
 
-  Future<void> register(String email) async {
+  Future<void> register(String email, String parentEmail, String firstName,
+      String lastName) async {
     final userCredential = await auth.createUserWithEmailAndPassword(
         email: email, password: "password");
     String uid = userCredential.user!.uid;
+    String displayName = '$firstName${lastName[0]}.';
     // creates student user instances in realtime db
     // sets isFaculty field to false
-    await ref.child(uid).update({"isFaculty": false, "email": email});
+    await ref.child(uid).update({
+      "isFaculty": false,
+      "email": email,
+      'parentEmail': parentEmail,
+      'firstName': firstName,
+      'lastName': lastName,
+      'displayName': displayName
+    });
   }
 }

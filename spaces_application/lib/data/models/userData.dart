@@ -5,13 +5,13 @@ class UserData {
   bool isFaculty = false;
   String email = "";
   String parentEmail = "";
-  String firstName = "Ben";
+  String firstName = "";
   String lastName = "";
   String displayName = "";
-  int grade = 0;
+  List spacesJoined = [];
 
   UserData(this.uid, this.isFaculty, this.email, this.parentEmail,
-      this.firstName, this.lastName, this.displayName, this.grade);
+      this.firstName, this.lastName, this.displayName, this.spacesJoined);
 
   UserData.empty();
 
@@ -30,10 +30,10 @@ class UserData {
         lastName = child.value as String;
       } else if (child.key == "displayName") {
         displayName = child.value as String;
-      } else if (child.key == "grade;") {
-        //grade = child.value as int;
+      } else if (child.key == "spacesJoined") {
+        spacesJoined.add(child.value);
       } else {
-        throw Exception("Invalid data import");
+        throw Exception("Invalid UserData import");
       }
     }
   }
