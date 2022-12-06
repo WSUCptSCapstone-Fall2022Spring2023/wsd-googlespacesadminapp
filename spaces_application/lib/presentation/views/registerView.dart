@@ -52,6 +52,22 @@ class RegisterView extends StatelessWidget {
         ));
   }
 
+  // TO-DO: Pop-up window for form instead of seperate page
+  // @override
+  // Widget build(BuildContext context) {
+  //   return AlertDialog(
+  //       title: Text("Student Registration"),
+  //       backgroundColor: boxColor,
+  //       insetPadding: EdgeInsets.all(10),
+  //       content: BlocProvider(
+  //         create: (context) => RegisterBloc(
+  //           //!!!!!!!!!!!!!!!!!
+  //           authRepo: context.read<AuthRepository>(),
+  //         ),
+  //         child: _registerForm(),
+  //       ));
+  // }
+
   Widget _registerForm() {
     return BlocListener<RegisterBloc, RegisterState>(
         listenWhen: (previous, current) {

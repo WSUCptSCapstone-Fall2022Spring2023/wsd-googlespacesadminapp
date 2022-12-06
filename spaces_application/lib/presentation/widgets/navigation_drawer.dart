@@ -48,6 +48,11 @@ class NavigationDrawer extends StatelessWidget {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => RegisterView(),
                   ));
+                  // showDialog(
+                  //     context: context,
+                  //     builder: (context) {
+                  //       return RegisterView();
+                  //     });
                 }),
           if (currentUser.isFaculty == true)
             ListTile(
