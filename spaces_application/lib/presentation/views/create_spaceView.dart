@@ -8,14 +8,15 @@ import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
 
 import '../../business_logic/auth/form_submission_status.dart';
 import '../../business_logic/create_space/create_space_bloc.dart';
+import '../../business_logic/create_space/create_space_event.dart';
+import '../../business_logic/create_space/create_space_state.dart';
 import '../../data/repositories/space_repository.dart';
-
-final Color bgColor = Color(0xFF4A4A57);
-final Color boxColor = Color.fromRGBO(60, 60, 60, 1);
 
 class CreateSpaceView extends StatelessWidget {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  final Color bgColor = Color.fromARGB(255, 12, 12, 12);
+  final Color textColor = Color.fromARGB(255, 255, 255, 240);
+  final Color boxColor = Color.fromARGB(255, 60, 60, 60);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +26,7 @@ class CreateSpaceView extends StatelessWidget {
           child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(40)),
-                color: Color.fromRGBO(40, 40, 40, 1),
+                color: boxColor,
               ),
               width: 500,
               height: 350,
@@ -35,11 +36,10 @@ class CreateSpaceView extends StatelessWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Icon(Icons.cyclone_outlined,
-                          size: 50, color: Colors.white),
-                      Text("<Application Name>",
+                      Icon(Icons.space_dashboard, size: 50, color: textColor),
+                      Text("Create a Space",
                           textScaleFactor: 2,
-                          style: TextStyle(color: Colors.white)),
+                          style: TextStyle(color: textColor)),
                     ],
                   ),
                   BlocProvider(
@@ -54,7 +54,7 @@ class CreateSpaceView extends StatelessWidget {
   }
 
   Widget _createSpaceForm() {
-    return BlocListener<LoginBloc, LoginState>(
+    return BlocListener<CreateSpaceBloc, CreateSpaceState>(
         listenWhen: (previous, current) {
           if (current.formStatus == previous.formStatus)
             return false;
@@ -72,7 +72,7 @@ class CreateSpaceView extends StatelessWidget {
                 builder: (context) => HomeView(),
               ),
             );
-            MiscWidgets.showException(context, "LOGIN SUCCESS");
+            MiscWidgets.showException(context, "SPACE CREATION SUCCESS");
           }
         },
         child: Form(
@@ -82,25 +82,27 @@ class CreateSpaceView extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _emailField(),
+                    _spaceNameField(),
                     Padding(padding: EdgeInsets.all(4)),
-                    _passwordField(),
+                    _spaceDescriptionField(),
                     Padding(padding: EdgeInsets.all(2)),
-                    _loginButton(),
+                    // _isPrivateCheckbox(),
+                    Padding(padding: EdgeInsets.all(2)),
+                    _createSpaceButton(),
                   ],
                 ))));
   }
 
-  Widget _emailField() {
-    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+  Widget _spaceNameField() {
+    return BlocBuilder<CreateSpaceBloc, CreateSpaceState>(
+        builder: (context, state) {
       return TextFormField(
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: textColor),
         decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white, width: 0.0)),
-            icon: Icon(Icons.email, color: Colors.white),
-            hintText: 'Email',
-            hintStyle: TextStyle(color: Colors.white)),
+                borderSide: BorderSide(color: textColor, width: 0.0)),
+            hintText: 'Space Name',
+            hintStyle: TextStyle(color: textColor)),
         // validator returns null when valid value is passed
         // alternative syntax:
         // String TextFormField.validator(value) {
@@ -109,45 +111,66 @@ class CreateSpaceView extends StatelessWidget {
         //   else
         //     return "Username is too short";
         // }
-        validator: (value) => state.isValidEmail ? null : 'Not a valid Email',
-        onChanged: (value) =>
-            context.read<LoginBloc>().add(LoginEmailChanged(email: value)),
-      );
-    });
-  }
-
-  Widget _passwordField() {
-    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-      return TextFormField(
-        style: TextStyle(color: Colors.white),
-        obscureText: true,
-        decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white, width: 0.0)),
-            icon: Icon(Icons.lock, color: Colors.white),
-            hintText: 'Password',
-            hintStyle: TextStyle(color: Colors.white)),
-        // validator returns null when valid value is passed
-        validator: (value) =>
-            state.isValidPassword ? null : 'Password is too short',
         onChanged: (value) => context
-            .read<LoginBloc>()
-            .add(LoginPasswordChanged(password: value)),
+            .read<CreateSpaceBloc>()
+            .add(CreateSpaceNameChanged(name: value)),
       );
     });
   }
 
-  Widget _loginButton() {
-    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+  Widget _spaceDescriptionField() {
+    return BlocBuilder<CreateSpaceBloc, CreateSpaceState>(
+        builder: (context, state) {
+      return TextFormField(
+          style: TextStyle(color: textColor),
+          obscureText: false,
+          decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: textColor, width: 0.0)),
+              hintText: 'Space Description',
+              hintStyle: TextStyle(color: textColor)),
+          keyboardType: TextInputType.multiline,
+          minLines: 4,
+          maxLines: 10,
+          onChanged: (value) => context
+              .read<CreateSpaceBloc>()
+              .add(CreateSpaceDescriptionChanged(description: value)));
+    });
+  }
+
+  // Widget _isPrivateCheckbox() {
+  //   // bool _value = false;
+
+  //   return BlocBuilder<CreateSpaceBloc, CreateSpaceState>(
+  //     builder: ((context, state) {
+  //       return CheckboxListTile(
+  //           selected: false,
+  //           value: false,
+  //           title: Text('Make Space Private?'),
+  //           // onChanged: (value) => context
+  //           //     .read()<CreateSpaceBloc>()
+  //           //     .add(CreateSpaceIsPrivateChanged(isPrivate: _value)));
+  //           onChanged: (newBool) {
+  //             context
+  //                 .read<CreateSpaceBloc>()
+  //                 .add(CreateSpaceIsPrivateChanged(isPrivate: newBool));
+  //           });
+  //     }),
+  //   );
+  // }
+
+  Widget _createSpaceButton() {
+    return BlocBuilder<CreateSpaceBloc, CreateSpaceState>(
+        builder: (context, state) {
       return state.formStatus is FormSubmitting
           ? CircularProgressIndicator()
           : ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  context.read<LoginBloc>().add(LoginSubmitted());
+                  context.read<CreateSpaceBloc>().add(CreateSpaceSubmitted());
                 }
               },
-              child: Text('Login'),
+              child: Text('Create Space'),
               style: ElevatedButton.styleFrom());
     });
   }

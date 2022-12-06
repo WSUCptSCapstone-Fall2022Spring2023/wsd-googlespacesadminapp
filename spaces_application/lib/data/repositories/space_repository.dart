@@ -5,13 +5,16 @@ import 'package:spaces_application/data/models/userData.dart';
 class SpaceRepository {
   final auth = FirebaseAuth.instance;
 
-  Future<void> createSpace(String name) async {
+  Future<void> createSpace(String name, String description) async {
     DatabaseReference ref = FirebaseDatabase.instance.ref();
 
     // creates a key for the new space (id)
     final newPostKey = ref.child("Spaces/").push().key;
     // gives the space a name under its key
-    await ref.child("Spaces/").child(newPostKey!).set({"spaceName": name});
+    await ref
+        .child("Spaces/")
+        .child(newPostKey!)
+        .set({"spaceName": name, "spaceDescription": description});
 
     // gets currentUser data
     final snapshot =

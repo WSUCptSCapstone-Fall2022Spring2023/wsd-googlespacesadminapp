@@ -9,11 +9,12 @@ import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
 
 import '../../business_logic/auth/form_submission_status.dart';
 
-final Color bgColor = Color(0xFF4A4A57);
-final Color boxColor = Color.fromRGBO(60, 60, 60, 1);
-
 class RegisterView extends StatelessWidget {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final Color bgColor = Color.fromARGB(255, 12, 12, 12);
+  final Color textColor = Color.fromARGB(255, 255, 255, 240);
+  final Color boxColor = Color.fromARGB(255, 60, 60, 60);
 
   @override
   Widget build(BuildContext context) {
