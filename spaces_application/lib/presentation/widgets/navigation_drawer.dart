@@ -39,25 +39,36 @@ class NavigationDrawer extends StatelessWidget {
                   builder: (context) => HomeView(),
                 ));
               }),
-          ListTile(
-              leading: Icon(Icons.person, color: Colors.white),
-              title: Text('Create Student Profile',
-                  style: TextStyle(color: Colors.white)),
-              // onTap: () => {Navigator.of(context).pop()}
-              onTap: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => RegisterView(),
-                ));
-              }),
-          ListTile(
-              leading: Icon(Icons.school, color: Colors.white),
-              title: Text('Classes', style: TextStyle(color: Colors.white)),
-              // onTap: () => {Navigator.of(context).pop()}
-              onTap: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => HomeView(),
-                ));
-              }),
+          if (currentUser.isFaculty)
+            ListTile(
+                leading: Icon(Icons.person, color: Colors.white),
+                title: Text('Create Student Profile',
+                    style: TextStyle(color: Colors.white)),
+                // onTap: () => {Navigator.of(context).pop()}
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => RegisterView(),
+                  );
+                  // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  //   builder: (context) => RegisterView(),
+                  // ));
+                }),
+          if (currentUser.isFaculty)
+            ListTile(
+                leading: Icon(Icons.space_dashboard, color: Colors.white),
+                title: Text('Create a new Space',
+                    style: TextStyle(color: Colors.white)),
+                // onTap: () => {Navigator.of(context).pop()}
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => CreateSpaceView(),
+                  );
+                  // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  //   builder: (context) => RegisterView(),
+                  // ));
+                }),
           ListTile(
               leading: Icon(Icons.add_alert, color: textColor),
               title: Text('Notifications', style: TextStyle(color: textColor)),
