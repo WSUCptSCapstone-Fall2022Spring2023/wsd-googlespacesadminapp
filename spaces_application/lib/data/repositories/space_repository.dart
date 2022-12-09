@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:spaces_application/data/models/spaceData.dart';
 import 'package:spaces_application/data/models/userData.dart';
 
 class SpaceRepository {
   final auth = FirebaseAuth.instance;
+  DatabaseReference ref = FirebaseDatabase.instance.ref();
 
   Future<void> createSpace(String name, String description) async {
-    DatabaseReference ref = FirebaseDatabase.instance.ref();
-
     // creates a key for the new space (id)
     final newPostKey = ref.child("Spaces/").push().key;
     // gives the space a name under its key
@@ -25,7 +25,7 @@ class SpaceRepository {
     await ref
         .child("Spaces/")
         .child(newPostKey)
-        .child("members/")
+        .child("membersPermissions/")
         .child(currentUser.uid)
         .set({
       "canComment": true,
@@ -39,7 +39,7 @@ class SpaceRepository {
     await ref
         .child("UserData/")
         .child(currentUser.uid)
-        .child("spacesJoined/")
+        .child("spacesPermissions/")
         .child(newPostKey)
         .set({
       "canComment": true,
@@ -50,4 +50,6 @@ class SpaceRepository {
       "canDelete": true
     });
   }
+
+  // returns a list of spaces searched for by spacesJoined field in UserData
 }

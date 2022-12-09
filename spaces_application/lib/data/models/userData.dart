@@ -1,4 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:spaces_application/data/models/permissionData.dart';
+import 'package:spaces_application/data/models/spaceData.dart';
 
 class UserData {
   String uid = "";
@@ -8,10 +10,12 @@ class UserData {
   String firstName = "";
   String lastName = "";
   String displayName = "";
-  List spacesJoined = [];
+  List<PermissionData> spacesPermissions =
+      List<PermissionData>.empty(growable: true);
+  //List<SpaceData> spacesJoined = List<SpaceData>.empty();
 
   UserData(this.uid, this.isFaculty, this.email, this.parentEmail,
-      this.firstName, this.lastName, this.displayName, this.spacesJoined);
+      this.firstName, this.lastName, this.displayName, this.spacesPermissions);
 
   UserData.empty();
 
@@ -30,8 +34,10 @@ class UserData {
         lastName = child.value as String;
       } else if (child.key == "displayName") {
         displayName = child.value as String;
-      } else if (child.key == "spacesJoined") {
-        spacesJoined.add(child.value);
+      } else if (child.key == "spacesPermissions") {
+        for (final permission in child.children) {
+          spacesPermissions.add(PermissionData.fromUser(permission));
+        }
       } else {
         throw Exception("Invalid UserData import");
       }

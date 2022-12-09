@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spaces_application/data/repositories/auth_repository.dart';
+import 'package:spaces_application/data/repositories/userData_repository.dart';
 import 'package:spaces_application/presentation/views/homeView.dart';
 import 'package:spaces_application/presentation/views/loginView.dart';
 import 'package:spaces_application/presentation/views/create_spaceView.dart';
@@ -25,11 +26,13 @@ class MyApp extends StatelessWidget {
             create: (context) => AuthRepository()),
         RepositoryProvider<SpaceRepository>(
             create: (context) => SpaceRepository()),
+        // RepositoryProvider<UserDataRepository>(
+        //     create: (context) => UserDataRepository()),
       ],
       child: MaterialApp(
           title: 'Home Page',
           home: LoginView(),
-          theme: ThemeData(fontFamily: 'Circular')),
+          theme: ThemeData(fontFamily: 'Circular', primarySwatch: Colors.red)),
       //create: (context) => AuthRepository(),
       //child: RegisterView()),
     );

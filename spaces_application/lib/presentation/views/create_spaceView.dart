@@ -17,40 +17,76 @@ class CreateSpaceView extends StatelessWidget {
   final Color bgColor = Color.fromARGB(255, 12, 12, 12);
   final Color textColor = Color.fromARGB(255, 255, 255, 240);
   final Color boxColor = Color.fromARGB(255, 60, 60, 60);
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //       backgroundColor: bgColor,
+  //       body: Container(
+  //         alignment: Alignment.center,
+  //         child: Container(
+  //             decoration: BoxDecoration(
+  //               borderRadius: BorderRadius.all(Radius.circular(40)),
+  //               color: boxColor,
+  //             ),
+  //             width: 500,
+  //             height: 350,
+  //             child: Column(
+  //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //               children: [
+  //                 Column(
+  //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                   children: [
+  //                     Icon(Icons.space_dashboard, size: 50, color: textColor),
+  //                     Text("Create a Space",
+  //                         textScaleFactor: 2,
+  //                         style: TextStyle(color: textColor)),
+  //                   ],
+  //                 ),
+  //                 BlocProvider(
+  //                   create: (context) => CreateSpaceBloc(
+  //                     spaceRepo: context.read<SpaceRepository>(),
+  //                   ),
+  //                   child: _createSpaceForm(),
+  //                 )
+  //               ],
+  //             )),
+  //       ));
+  // }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: bgColor,
-        body: Container(
-          alignment: Alignment.center,
-          child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(40)),
-                color: boxColor,
-              ),
-              width: 500,
-              height: 350,
-              child: Column(
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(50))),
+      backgroundColor: boxColor,
+      insetPadding: EdgeInsets.all(10),
+      content: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(40)),
+            color: boxColor,
+          ),
+          width: 500,
+          height: 350,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Icon(Icons.space_dashboard, size: 50, color: textColor),
-                      Text("Create a Space",
-                          textScaleFactor: 2,
-                          style: TextStyle(color: textColor)),
-                    ],
-                  ),
-                  BlocProvider(
-                    create: (context) => CreateSpaceBloc(
-                      spaceRepo: context.read<SpaceRepository>(),
-                    ),
-                    child: _createSpaceForm(),
-                  )
+                  Icon(Icons.space_dashboard, size: 50, color: textColor),
+                  Text("Create a Space",
+                      textScaleFactor: 2, style: TextStyle(color: textColor)),
                 ],
-              )),
-        ));
+              ),
+              BlocProvider(
+                create: (context) => CreateSpaceBloc(
+                  spaceRepo: context.read<SpaceRepository>(),
+                ),
+                child: _createSpaceForm(),
+              )
+            ],
+          )),
+    );
   }
 
   Widget _createSpaceForm() {
@@ -82,13 +118,19 @@ class CreateSpaceView extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _spaceNameField(),
+                    Padding(
+                        padding: EdgeInsets.only(top: 5),
+                        child: _spaceNameField()),
                     Padding(padding: EdgeInsets.all(4)),
                     _spaceDescriptionField(),
                     Padding(padding: EdgeInsets.all(2)),
                     // _isPrivateCheckbox(),
                     Padding(padding: EdgeInsets.all(2)),
-                    _createSpaceButton(),
+                    // _isPrivateCheckbox(),
+                    Padding(padding: EdgeInsets.all(2)),
+                    Padding(
+                        padding: EdgeInsets.only(top: 5),
+                        child: _createSpaceButton()),
                   ],
                 ))));
   }
