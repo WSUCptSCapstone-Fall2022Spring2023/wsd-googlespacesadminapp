@@ -8,6 +8,7 @@ import 'package:spaces_application/presentation/views/homeView.dart';
 import 'package:spaces_application/presentation/views/registerView.dart';
 
 import '../../data/repositories/userData_repository.dart';
+import '../views/spaceView.dart';
 
 class NavigationDrawer extends StatelessWidget {
   final Color bgColor = Color.fromARGB(255, 49, 49, 49);
@@ -18,7 +19,7 @@ class NavigationDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     UserData currentUser =
         context.read<UserDataRepository>().currentUserData as UserData;
-    final List spacesPermissions = currentUser.spacesPermissions;
+    final List spacesJoined = currentUser.spacesJoined;
     return Drawer(
         backgroundColor: bgColor,
         child: ListView(padding: EdgeInsets.zero, children: <Widget>[
@@ -104,12 +105,16 @@ class NavigationDrawer extends StatelessWidget {
               width: 1000,
               child: ListView.builder(
                   //shrinkWrap: true,
-                  itemCount: spacesPermissions.length,
+                  itemCount: spacesJoined.length,
                   itemBuilder: (context, index) {
                     return Container(
                         child: ListTile(
-                            title:
-                                Text('${spacesPermissions[index].spaceID}')));
+                            onTap: () => Navigator.of(context)
+                                    .pushReplacement(MaterialPageRoute(
+                                  builder: (context) =>
+                                      SpaceView(space: spacesJoined[index]),
+                                )),
+                            title: Text('${spacesJoined[index].spaceName}')));
                   }))
         ]));
   }
