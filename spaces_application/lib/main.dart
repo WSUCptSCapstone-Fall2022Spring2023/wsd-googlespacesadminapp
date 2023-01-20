@@ -26,8 +26,8 @@ class MyApp extends StatelessWidget {
             create: (context) => AuthRepository()),
         RepositoryProvider<SpaceRepository>(
             create: (context) => SpaceRepository()),
-        // RepositoryProvider<UserDataRepository>(
-        //     create: (context) => UserDataRepository()),
+        RepositoryProvider<UserDataRepository>(
+            create: (context) => UserDataRepository()),
       ],
       child: MaterialApp(
           title: 'Home Page',

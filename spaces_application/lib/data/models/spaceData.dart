@@ -7,7 +7,8 @@ class SpaceData {
   String sid = "";
   String spaceDescription = "";
   String spaceName = "";
-  List<PermissionData> membersPermissions = List<PermissionData>.empty();
+  List<PermissionData> membersPermissions =
+      List<PermissionData>.empty(growable: true);
 
   SpaceData(this.sid, this.spaceDescription, this.spaceName);
 

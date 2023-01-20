@@ -7,6 +7,8 @@ import 'package:spaces_application/presentation/views/loginView.dart';
 import 'package:spaces_application/presentation/views/homeView.dart';
 import 'package:spaces_application/presentation/views/registerView.dart';
 
+import '../../data/repositories/userData_repository.dart';
+
 class NavigationDrawer extends StatelessWidget {
   final Color bgColor = Color.fromARGB(255, 49, 49, 49);
   final Color textColor = Color.fromARGB(255, 255, 255, 240);
@@ -15,7 +17,7 @@ class NavigationDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserData currentUser =
-        context.read<AuthRepository>().currentUser as UserData;
+        context.read<UserDataRepository>().currentUserData as UserData;
     final List spacesPermissions = currentUser.spacesPermissions;
     return Drawer(
         backgroundColor: bgColor,
