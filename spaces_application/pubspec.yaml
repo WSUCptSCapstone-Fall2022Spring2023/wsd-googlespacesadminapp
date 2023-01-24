@@ -62,7 +62,7 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-      - assets/nav_drawer_background.jfif
+      - assets/images/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -73,10 +73,10 @@ flutter:
 fonts:
   - family: Circular
     fonts:
-      - asset: fonts\CircularStd-Medium.ttf
-      - asset: fonts\CircularAir-Light.ttf
+      - asset: assets/fonts/CircularStd-Medium.ttf
+      - asset: assets.fonts/CircularAir-Light.ttf
         weight: 100
-      - asset: fonts\CircularStd-Bold.ttf
+      - asset: assets/fonts/CircularStd-Bold.ttf
         weight: 500
 
   # To add assets to your application, add an assets section, like this:
