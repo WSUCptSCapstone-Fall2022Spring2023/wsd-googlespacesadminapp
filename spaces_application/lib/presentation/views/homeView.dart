@@ -1,16 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spaces_application/business_logic/auth/login/login_bloc.dart';
-import 'package:spaces_application/business_logic/auth/login/login_event.dart';
-import 'package:spaces_application/business_logic/auth/login/login_state.dart';
-import 'package:spaces_application/data/models/spaceData.dart';
-import 'package:spaces_application/data/models/userData.dart';
-import 'package:spaces_application/data/repositories/auth_repository.dart';
-import 'package:spaces_application/data/repositories/userData_repository.dart';
-import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
-import '../../business_logic/auth/form_submission_status.dart';
 import 'package:spaces_application/presentation/widgets/navigation_drawer.dart';
 
 class HomeView extends StatelessWidget {

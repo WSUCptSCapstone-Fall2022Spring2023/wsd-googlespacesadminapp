@@ -9,7 +9,7 @@ class UserDataRepository {
   UserData? currentUserData;
 
   // retrieves current userdata from firebase
-  Future<void> setCurrentUserData() async {
+  Future<void> getCurrentUserData() async {
     String uid = auth.currentUser!.uid;
     DataSnapshot snapshot = await ref.child("UserData/").child(uid).get();
     UserData currentUser = UserData.fromFirebase(snapshot);
@@ -21,6 +21,15 @@ class UserDataRepository {
     }
     currentUser.spacesJoined = spacesJoined;
     currentUserData = currentUser;
+  }
+
+  Future<void> setCurrentUserData(
+      String firstName, String lastName, String displayName) async {
+    await ref.child(currentUserData!.uid).update({
+      'firstName': firstName,
+      'lastName': lastName,
+      'displayName': displayName
+    });
   }
 
   // returns a space searched for by ID

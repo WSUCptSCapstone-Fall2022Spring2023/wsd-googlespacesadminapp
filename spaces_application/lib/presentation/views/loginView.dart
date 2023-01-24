@@ -67,7 +67,7 @@ class LoginView extends StatelessWidget {
             MiscWidgets.showException(context, formStatus.exception.toString());
           } else if (formStatus is SubmissionSuccess) {
             // Navigate to new page
-            context.read<UserDataRepository>().setCurrentUserData();
+            context.read<UserDataRepository>().getCurrentUserData();
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => HomeView(),
