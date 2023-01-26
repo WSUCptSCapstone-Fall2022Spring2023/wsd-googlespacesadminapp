@@ -82,10 +82,11 @@ class LoginView extends StatelessWidget {
   Widget _loginForm() {
     return BlocListener<LoginBloc, LoginState>(
         listenWhen: (previous, current) {
-          if (current.formStatus == previous.formStatus)
+          if (current.formStatus == previous.formStatus) {
             return false;
-          else
+          } else {
             return true;
+          }
         },
         listener: (context, state) {
           final formStatus = state.formStatus;
@@ -105,7 +106,7 @@ class LoginView extends StatelessWidget {
         child: Form(
             key: _formKey,
             child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
+                padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

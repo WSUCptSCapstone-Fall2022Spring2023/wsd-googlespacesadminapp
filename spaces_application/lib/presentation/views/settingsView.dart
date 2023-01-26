@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:spaces_application/presentation/views/settingsView.dart';
 import 'package:spaces_application/presentation/views/loginView.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:spaces_application/presentation/widgets/navigation_drawer.dart';
 
-class HomeView extends StatelessWidget {
+class SettingsView extends StatelessWidget {
   final Color bgColor = Color.fromARGB(255, 49, 49, 49);
   final Color textColor = Color.fromARGB(255, 255, 255, 240);
   final Color boxColor = Color.fromARGB(255, 60, 60, 60);
@@ -18,19 +17,13 @@ class HomeView extends StatelessWidget {
         backgroundColor: bgColor,
         drawer: NavigationDrawer(),
         appBar: AppBar(
-          elevation: 15,
-          title: const Text("Home Page"),
-          backgroundColor: bgColor,
-          actions: <Widget>[
-            IconButton(
-                icon: const Icon(Icons.settings_outlined),
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => SettingsView()));
-                })
-          ],
-        ),
-        body: Center(child: WebView(initialUrl: 'https://wahksd.k12.wa.us/')));
+            elevation: 15, title: Text("Settings"), backgroundColor: bgColor),
+        body: ElevatedButton(
+            child: const Text("Logout"),
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => LoginView()));
+            }));
   }
 
   // Future<UserData> g(context) async {
