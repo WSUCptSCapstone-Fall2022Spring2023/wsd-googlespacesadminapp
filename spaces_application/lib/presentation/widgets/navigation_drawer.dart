@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spaces_application/data/models/userData.dart';
-import 'package:spaces_application/data/repositories/auth_repository.dart';
 import 'package:spaces_application/presentation/views/create_spaceView.dart';
 import 'package:spaces_application/presentation/views/loginView.dart';
 import 'package:spaces_application/presentation/views/homeView.dart';

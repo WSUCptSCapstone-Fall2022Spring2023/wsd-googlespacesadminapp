@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spaces_application/business_logic/auth/form_submission_status.dart';
 import 'package:spaces_application/business_logic/create_space/create_space_event.dart';
 import 'package:spaces_application/business_logic/create_space/create_space_state.dart';
-import 'package:spaces_application/data/repositories/auth_repository.dart';
 import 'package:spaces_application/data/repositories/space_repository.dart';
 
 class CreateSpaceBloc extends Bloc<CreateSpaceEvent, CreateSpaceState> {
