@@ -12,7 +12,7 @@ class UserData {
   String displayName = "";
   List<PermissionData> spacesPermissions =
       List<PermissionData>.empty(growable: true);
-  //List<SpaceData> spacesJoined = List<SpaceData>.empty();
+  List<SpaceData> spacesJoined = List<SpaceData>.empty();
 
   UserData(this.uid, this.isFaculty, this.email, this.parentEmail,
       this.firstName, this.lastName, this.displayName, this.spacesPermissions);

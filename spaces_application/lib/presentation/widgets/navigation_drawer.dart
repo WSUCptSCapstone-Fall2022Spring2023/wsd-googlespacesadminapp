@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spaces_application/data/models/userData.dart';
-import 'package:spaces_application/data/repositories/auth_repository.dart';
 import 'package:spaces_application/presentation/views/create_spaceView.dart';
 import 'package:spaces_application/presentation/views/loginView.dart';
 import 'package:spaces_application/presentation/views/homeView.dart';
 import 'package:spaces_application/presentation/views/registerView.dart';
 import 'package:spaces_application/presentation/views/profileView.dart';
 import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
+
+import '../../data/repositories/userData_repository.dart';
+import '../views/spaceView.dart';
 
 class NavigationDrawer extends StatelessWidget {
   final Color navyBlue = Color.fromARGB(255, 14, 4, 104);
@@ -21,8 +23,8 @@ class NavigationDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserData currentUser =
-        context.read<AuthRepository>().currentUser as UserData;
-    final List spacesPermissions = currentUser.spacesPermissions;
+        context.read<UserDataRepository>().currentUserData as UserData;
+    final List spacesJoined = currentUser.spacesJoined;
     return Drawer(
         child: ListView(
             padding: const EdgeInsets.symmetric(vertical: 50),
@@ -219,12 +221,16 @@ class NavigationDrawer extends StatelessWidget {
               width: 1000,
               child: ListView.builder(
                   //shrinkWrap: true,
-                  itemCount: spacesPermissions.length,
+                  itemCount: spacesJoined.length,
                   itemBuilder: (context, index) {
                     return Container(
                         child: ListTile(
-                            title:
-                                Text('${spacesPermissions[index].spaceID}')));
+                            onTap: () => Navigator.of(context)
+                                    .pushReplacement(MaterialPageRoute(
+                                  builder: (context) =>
+                                      SpaceView(space: spacesJoined[index]),
+                                )),
+                            title: Text('${spacesJoined[index].spaceName}')));
                   }))
         ]));
   }

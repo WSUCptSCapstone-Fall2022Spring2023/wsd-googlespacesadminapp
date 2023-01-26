@@ -4,17 +4,19 @@ import 'package:spaces_application/presentation/views/homeView.dart';
 import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
 
 import '../../business_logic/auth/form_submission_status.dart';
-import '../../business_logic/create_space/create_space_bloc.dart';
-import '../../business_logic/create_space/create_space_event.dart';
-import '../../business_logic/create_space/create_space_state.dart';
-import '../../data/repositories/space_repository.dart';
+import '../../business_logic/edit_profile/edit_space_bloc.dart';
+import '../../business_logic/edit_profile/edit_space_event.dart';
+import '../../business_logic/edit_profile/edit_space_state.dart';
+import '../../data/models/userData.dart';
 import '../../data/repositories/userData_repository.dart';
 
-class CreateSpaceView extends StatelessWidget {
+class EditProfileView extends StatelessWidget {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Color bgColor = Color.fromARGB(255, 12, 12, 12);
   final Color textColor = Color.fromARGB(255, 255, 255, 240);
   final Color boxColor = Color.fromARGB(255, 60, 60, 60);
+  late UserData currentUser;
+
   // @override
   // Widget build(BuildContext context) {
   //   return Scaffold(
@@ -41,7 +43,7 @@ class CreateSpaceView extends StatelessWidget {
   //                   ],
   //                 ),
   //                 BlocProvider(
-  //                   create: (context) => CreateSpaceBloc(
+  //                   create: (context) => EditProfileBloc(
   //                     spaceRepo: context.read<SpaceRepository>(),
   //                   ),
   //                   child: _createSpaceForm(),
@@ -53,6 +55,8 @@ class CreateSpaceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    currentUser =
+        context.read<UserDataRepository>().currentUserData as UserData;
     return AlertDialog(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(50))),
@@ -63,8 +67,8 @@ class CreateSpaceView extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(40)),
             color: boxColor,
           ),
-          width: 500,
-          height: 350,
+          width: 1000,
+          height: 650,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -72,13 +76,13 @@ class CreateSpaceView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Icon(Icons.space_dashboard, size: 50, color: textColor),
-                  Text("Create a Space",
+                  Text("Edit Profile",
                       textScaleFactor: 2, style: TextStyle(color: textColor)),
                 ],
               ),
               BlocProvider(
-                create: (context) => CreateSpaceBloc(
-                  spaceRepo: context.read<SpaceRepository>(),
+                create: (context) => EditProfileBloc(
+                  userRepo: context.read<UserDataRepository>(),
                 ),
                 child: _createSpaceForm(),
               )
@@ -88,7 +92,7 @@ class CreateSpaceView extends StatelessWidget {
   }
 
   Widget _createSpaceForm() {
-    return BlocListener<CreateSpaceBloc, CreateSpaceState>(
+    return BlocListener<EditProfileBloc, EditProfileState>(
         listenWhen: (previous, current) {
           if (current.formStatus == previous.formStatus)
             return false;
@@ -119,99 +123,131 @@ class CreateSpaceView extends StatelessWidget {
                   children: [
                     Padding(
                         padding: EdgeInsets.only(top: 5),
-                        child: _spaceNameField()),
+                        child: _firstNameField(currentUser)),
                     Padding(padding: EdgeInsets.all(4)),
-                    _spaceDescriptionField(),
                     Padding(padding: EdgeInsets.all(2)),
-                    // _isPrivateCheckbox(),
+                    _lastNameField(currentUser),
                     Padding(padding: EdgeInsets.all(2)),
-                    // _isPrivateCheckbox(),
+                    _displayNameField(currentUser),
+                    Padding(padding: EdgeInsets.all(2)),
+                    _emailField(currentUser),
+                    Padding(padding: EdgeInsets.all(2)),
+                    _parentEmailField(currentUser),
                     Padding(padding: EdgeInsets.all(2)),
                     Padding(
                         padding: EdgeInsets.only(top: 5),
-                        child: _createSpaceButton()),
+                        child: _editProfileButton()),
                   ],
                 ))));
   }
 
-  Widget _spaceNameField() {
-    return BlocBuilder<CreateSpaceBloc, CreateSpaceState>(
+  Widget _firstNameField(UserData currentUser) {
+    return BlocBuilder<EditProfileBloc, EditProfileState>(
         builder: (context, state) {
       return TextFormField(
+        initialValue: currentUser.firstName,
+        readOnly: !(currentUser.isFaculty),
         style: TextStyle(color: textColor),
         decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: textColor, width: 0.0)),
-            hintText: 'Space Name',
+            hintText: "First Name",
             hintStyle: TextStyle(color: textColor)),
-        // validator returns null when valid value is passed
-        // alternative syntax:
-        // String TextFormField.validator(value) {
-        //   if state.isValidUsername()
-        //     return null;
-        //   else
-        //     return "Username is too short";
-        // }
+        validator: (value) =>
+            state.isValidFirstName ? null : 'Must be between 2 - 20 characters',
         onChanged: (value) => context
-            .read<CreateSpaceBloc>()
-            .add(CreateSpaceNameChanged(name: value)),
+            .read<EditProfileBloc>()
+            .add(ProfileFirstNameChanged(firstName: value)),
       );
     });
   }
 
-  Widget _spaceDescriptionField() {
-    return BlocBuilder<CreateSpaceBloc, CreateSpaceState>(
+  Widget _lastNameField(UserData currentUser) {
+    return BlocBuilder<EditProfileBloc, EditProfileState>(
         builder: (context, state) {
       return TextFormField(
-          style: TextStyle(color: textColor),
-          obscureText: false,
-          decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: textColor, width: 0.0)),
-              hintText: 'Space Description',
-              hintStyle: TextStyle(color: textColor)),
-          keyboardType: TextInputType.multiline,
-          minLines: 4,
-          maxLines: 10,
-          onChanged: (value) => context
-              .read<CreateSpaceBloc>()
-              .add(CreateSpaceDescriptionChanged(description: value)));
+        initialValue: currentUser.lastName,
+        readOnly: !(currentUser.isFaculty),
+        style: TextStyle(color: textColor),
+        decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: textColor, width: 0.0)),
+            hintText: "Last Name",
+            hintStyle: TextStyle(color: textColor)),
+        validator: (value) =>
+            state.isValidLastName ? null : 'Must be between 2 - 20 characters',
+        onChanged: (value) => context
+            .read<EditProfileBloc>()
+            .add(ProfileLastNameChanged(lastName: value)),
+      );
     });
   }
 
-  // Widget _isPrivateCheckbox() {
-  //   // bool _value = false;
+  Widget _emailField(UserData currentUser) {
+    return BlocBuilder<EditProfileBloc, EditProfileState>(
+        builder: (context, state) {
+      return TextFormField(
+        initialValue: currentUser.email,
+        readOnly: true,
+        style: TextStyle(color: textColor),
+        decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: textColor, width: 0.0)),
+            hintText: "Email",
+            hintStyle: TextStyle(color: textColor)),
+      );
+    });
+  }
 
-  //   return BlocBuilder<CreateSpaceBloc, CreateSpaceState>(
-  //     builder: ((context, state) {
-  //       return CheckboxListTile(
-  //           selected: false,
-  //           value: false,
-  //           title: Text('Make Space Private?'),
-  //           // onChanged: (value) => context
-  //           //     .read()<CreateSpaceBloc>()
-  //           //     .add(CreateSpaceIsPrivateChanged(isPrivate: _value)));
-  //           onChanged: (newBool) {
-  //             context
-  //                 .read<CreateSpaceBloc>()
-  //                 .add(CreateSpaceIsPrivateChanged(isPrivate: newBool));
-  //           });
-  //     }),
-  //   );
-  // }
+  Widget _displayNameField(UserData currentUser) {
+    return BlocBuilder<EditProfileBloc, EditProfileState>(
+        builder: (context, state) {
+      return TextFormField(
+        initialValue: currentUser.displayName,
+        style: TextStyle(color: textColor),
+        decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: textColor, width: 0.0)),
+            hintText: "Display Name",
+            hintStyle: TextStyle(color: textColor)),
+        validator: (value) => state.isValidDisplayName
+            ? null
+            : 'Must be between 2 - 25 characters',
+        onChanged: (value) => context
+            .read<EditProfileBloc>()
+            .add(ProfileDisplayNameChanged(displayName: value)),
+      );
+    });
+  }
 
-  Widget _createSpaceButton() {
-    return BlocBuilder<CreateSpaceBloc, CreateSpaceState>(
+  Widget _parentEmailField(UserData currentUser) {
+    return BlocBuilder<EditProfileBloc, EditProfileState>(
+        builder: (context, state) {
+      return TextFormField(
+        initialValue: currentUser.isFaculty ? "N/A" : currentUser.parentEmail,
+        readOnly: true,
+        style: TextStyle(color: textColor),
+        decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: textColor, width: 0.0)),
+            hintText: "Parent Email",
+            hintStyle: TextStyle(color: textColor)),
+      );
+    });
+  }
+
+  Widget _editProfileButton() {
+    return BlocBuilder<EditProfileBloc, EditProfileState>(
         builder: (context, state) {
       return state.formStatus is FormSubmitting
           ? CircularProgressIndicator()
           : ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  context.read<CreateSpaceBloc>().add(CreateSpaceSubmitted());
+                  context.read<EditProfileBloc>().add(ProfileSubmitted());
                 }
               },
-              child: Text('Create Space'),
+              child: Text('Submit  Profile'),
               style: ElevatedButton.styleFrom());
     });
   }
