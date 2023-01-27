@@ -11,6 +11,7 @@ import 'package:spaces_application/presentation/views/homeView.dart';
 import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
 
 import '../../business_logic/auth/form_submission_status.dart';
+import '../../data/models/userData.dart';
 import '../../data/repositories/userData_repository.dart';
 
 class LoginView extends StatelessWidget {
@@ -95,9 +96,13 @@ class LoginView extends StatelessWidget {
           } else if (formStatus is SubmissionSuccess) {
             // Navigate to new page
             context.read<UserDataRepository>().getCurrentUserData();
+            UserData currentUserData =
+                context.read<UserDataRepository>().currentUserData as UserData;
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (context) => HomeView(),
+                builder: (context) => HomeView(
+                  currentUserData: currentUserData,
+                ),
               ),
             );
             MiscWidgets.showException(context, "LOGIN SUCCESS");

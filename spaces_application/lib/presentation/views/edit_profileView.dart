@@ -11,11 +11,12 @@ import '../../data/models/userData.dart';
 import '../../data/repositories/userData_repository.dart';
 
 class EditProfileView extends StatelessWidget {
+  EditProfileView({required this.currentUserData});
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Color bgColor = Color.fromARGB(255, 12, 12, 12);
   final Color textColor = Color.fromARGB(255, 255, 255, 240);
   final Color boxColor = Color.fromARGB(255, 60, 60, 60);
-  late UserData currentUser;
+  final UserData currentUserData;
 
   // @override
   // Widget build(BuildContext context) {
@@ -55,8 +56,6 @@ class EditProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    currentUser =
-        context.read<UserDataRepository>().currentUserData as UserData;
     return AlertDialog(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(50))),
@@ -108,7 +107,9 @@ class EditProfileView extends StatelessWidget {
             context.read<UserDataRepository>().getCurrentUserData();
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (context) => HomeView(),
+                builder: (context) => HomeView(
+                  currentUserData: currentUserData,
+                ),
               ),
             );
             MiscWidgets.showException(context, "SPACE CREATION SUCCESS");
@@ -123,16 +124,16 @@ class EditProfileView extends StatelessWidget {
                   children: [
                     Padding(
                         padding: EdgeInsets.only(top: 5),
-                        child: _firstNameField(currentUser)),
+                        child: _firstNameField(currentUserData)),
                     Padding(padding: EdgeInsets.all(4)),
                     Padding(padding: EdgeInsets.all(2)),
-                    _lastNameField(currentUser),
+                    _lastNameField(currentUserData),
                     Padding(padding: EdgeInsets.all(2)),
-                    _displayNameField(currentUser),
+                    _displayNameField(currentUserData),
                     Padding(padding: EdgeInsets.all(2)),
-                    _emailField(currentUser),
+                    _emailField(currentUserData),
                     Padding(padding: EdgeInsets.all(2)),
-                    _parentEmailField(currentUser),
+                    _parentEmailField(currentUserData),
                     Padding(padding: EdgeInsets.all(2)),
                     Padding(
                         padding: EdgeInsets.only(top: 5),

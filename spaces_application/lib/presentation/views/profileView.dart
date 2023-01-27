@@ -14,6 +14,8 @@ import '../../business_logic/auth/form_submission_status.dart';
 import 'package:spaces_application/presentation/widgets/navigation_drawer.dart';
 
 class ProfileView extends StatelessWidget {
+  final UserData currentUserData;
+  ProfileView({required this.currentUserData});
   final Color darkViolet = const Color.fromARGB(255, 9, 5, 5);
   final Color navyBlue = const Color.fromARGB(255, 14, 4, 104);
   final Color picoteeBlue = const Color.fromARGB(255, 45, 40, 138);
@@ -25,11 +27,11 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserData currentUser =
-        context.read<AuthRepository>().currentUser as UserData;
     return Scaffold(
         backgroundColor: Colors.white,
-        drawer: NavigationDrawer(),
+        drawer: NavigationDrawer(
+          currentUserData: currentUserData,
+        ),
         appBar: AppBar(
           elevation: 15,
           title: const Text("Your Profile Page"),
@@ -40,16 +42,16 @@ class ProfileView extends StatelessWidget {
             children: <Widget>[
               Icon(Icons.account_circle, size: 150, color: salmon),
               const SizedBox(height: 15),
-              Text("${currentUser.firstName} ${currentUser.lastName}",
+              Text("${currentUserData.firstName} ${currentUserData.lastName}",
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                       color: Colors.black, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
-              Text(currentUser.email,
+              Text(currentUserData.email,
                   textAlign: TextAlign.center,
                   style: const TextStyle(color: Colors.black)),
               const SizedBox(height: 10),
-              Text("Display Name: ${currentUser.displayName}",
+              Text("Display Name: ${currentUserData.displayName}",
                   textAlign: TextAlign.center,
                   style: const TextStyle(color: Colors.black)),
               const SizedBox(height: 10),

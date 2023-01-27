@@ -5,7 +5,7 @@ import 'package:spaces_application/data/models/userData.dart';
 class AuthRepository {
   final auth = FirebaseAuth.instance;
   final ref = FirebaseDatabase.instance.ref("UserData/");
-  UserData? currentUser;
+  late User currentUser;
 
   Future<void> login(String email, String password) async {
     await auth.signInWithEmailAndPassword(email: email, password: password);
@@ -21,7 +21,7 @@ class AuthRepository {
     }
 
     snapshot = await ref.child(uid).get();
-    currentUser = UserData.fromFirebase(snapshot);
+    currentUser = auth.currentUser!;
   }
 
   Future<void> register(String email, String parentEmail, String firstName,

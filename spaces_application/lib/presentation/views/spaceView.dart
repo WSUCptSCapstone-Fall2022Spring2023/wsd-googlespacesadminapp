@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spaces_application/business_logic/auth/login/login_bloc.dart';
-import 'package:spaces_application/business_logic/auth/login/login_event.dart';
-import 'package:spaces_application/business_logic/auth/login/login_state.dart';
-import 'package:spaces_application/data/repositories/auth_repository.dart';
-import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-
-import '../../business_logic/auth/form_submission_status.dart';
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:spaces_application/presentation/widgets/navigation_drawer.dart';
 
 import '../../data/models/spaceData.dart';
+import '../../data/models/userData.dart';
 
 class SpaceView extends StatelessWidget {
-  SpaceView({required this.space});
+  SpaceView({required this.space, required this.currentUserData});
   final SpaceData space;
+  final UserData currentUserData;
   final Color bgColor = Color.fromARGB(255, 49, 49, 49);
   final Color textColor = Color.fromARGB(255, 246, 246, 176);
   final Color boxColor = Color.fromARGB(255, 60, 60, 60);
@@ -24,13 +19,22 @@ class SpaceView extends StatelessWidget {
     var ScreenHeight = MediaQuery.of(context).size.height;
     var ScreenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: bgColor,
+      drawer: NavigationDrawer(
+        currentUserData: currentUserData,
+      ),
+      appBar: AppBar(
+        elevation: 15,
+        title: Text(space.spaceName),
         backgroundColor: bgColor,
-        drawer: NavigationDrawer(),
-        appBar: AppBar(
-          elevation: 15,
-          title: Text(space.spaceName),
-          backgroundColor: bgColor,
-        ),
-        body: Center(child: Text(space.spaceDescription)));
+      ),
+      body: 
+      Chat(
+        messages: ,
+        showUserAvatars: true,
+        showUserNames: true,
+        user: types.User(id: currentUserData.uid),
+      ),
+    );
   }
 }

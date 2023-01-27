@@ -14,6 +14,8 @@ import '../views/spaceView.dart';
 import 'dart:math';
 
 class NavigationDrawer extends StatelessWidget {
+  NavigationDrawer({required this.currentUserData});
+  final UserData currentUserData;
   final Color navyBlue = Color.fromARGB(255, 14, 4, 104);
   final Color picoteeBlue = Color.fromARGB(255, 45, 40, 138);
   final Color majorelleBlue = Color.fromARGB(255, 86, 85, 221);
@@ -24,21 +26,19 @@ class NavigationDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserData currentUser =
-        context.read<UserDataRepository>().currentUserData as UserData;
-    final List spacesJoined = currentUser.spacesJoined;
+    final List spacesJoined = currentUserData.spacesJoined;
     return Drawer(
         child: ListView(
             padding: const EdgeInsets.symmetric(vertical: 50),
             children: <Widget>[
           Icon(Icons.account_circle, size: 150, color: salmon),
           const SizedBox(height: 15),
-          Text(currentUser.firstName,
+          Text(currentUserData.firstName,
               textAlign: TextAlign.center,
               style: const TextStyle(
                   color: Colors.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: 10),
-          Text(currentUser.email,
+          Text(currentUserData.email,
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.black)),
           const SizedBox(height: 15),
@@ -60,7 +60,9 @@ class NavigationDrawer extends StatelessWidget {
               //onTap: () => {Navigator.of(context).pop()},
               onTap: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => HomeView(),
+                  builder: (context) => HomeView(
+                    currentUserData: currentUserData,
+                  ),
                 ));
               }),
           ListTile(
@@ -71,7 +73,9 @@ class NavigationDrawer extends StatelessWidget {
                     color: Colors.black, fontWeight: FontWeight.normal)),
             onTap: () {
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => ProfileView(),
+                builder: (context) => ProfileView(
+                  currentUserData: currentUserData,
+                ),
               ));
             },
           ),
@@ -93,16 +97,18 @@ class NavigationDrawer extends StatelessWidget {
                         style: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.normal)),
-                    onTap: () => Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
+                    onTap: () =>
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) => SpaceView(
-                                space: spacesJoined[index].spaceName))),
+                                  space: spacesJoined[index].spaceName,
+                                  currentUserData: currentUserData,
+                                ))),
                   );
                 },
               ),
             ],
           ),
-          if (currentUser.isFaculty)
+          if (currentUserData.isFaculty)
             ExpansionTile(
               leading: const Icon(Icons.admin_panel_settings_outlined,
                   color: Colors.black),
