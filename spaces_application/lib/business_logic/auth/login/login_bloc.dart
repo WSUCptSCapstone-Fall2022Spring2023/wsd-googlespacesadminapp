@@ -3,11 +3,16 @@ import 'package:spaces_application/business_logic/auth/form_submission_status.da
 import 'package:spaces_application/business_logic/auth/login/login_event.dart';
 import 'package:spaces_application/business_logic/auth/login/login_state.dart';
 import 'package:spaces_application/data/repositories/auth_repository.dart';
+import 'package:spaces_application/data/repositories/userData_repository.dart';
+
+import '../../../data/models/userData.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthRepository authRepo;
+  final UserDataRepository userRepo;
 
-  LoginBloc({required this.authRepo}) : super(LoginState()) {
+  LoginBloc({required this.authRepo, required this.userRepo})
+      : super(LoginState()) {
     on<LoginEmailChanged>((event, emit) async {
       await _onEmailChanged(event.email, emit);
     });
@@ -33,7 +38,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(state.copyWith(formStatus: FormSubmitting()));
     try {
       await authRepo.login(state.email, state.password);
-      emit(state.copyWith(formStatus: SubmissionSuccess()));
+      UserData currentUser = await userRepo.getCurrentUserData();
+      emit(state.copyWith(
+          formStatus: SubmissionSuccess(), currentUser: currentUser));
     } catch (e) {
       emit(state.copyWith(formStatus: SubmissionFailed(Exception(e))));
     }

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +9,6 @@ import 'package:spaces_application/presentation/views/homeView.dart';
 import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
 
 import '../../business_logic/auth/form_submission_status.dart';
-import '../../data/models/userData.dart';
 import '../../data/repositories/userData_repository.dart';
 
 class LoginView extends StatelessWidget {
@@ -55,6 +52,7 @@ class LoginView extends StatelessWidget {
                 BlocProvider(
                   create: (context) => LoginBloc(
                     authRepo: context.read<AuthRepository>(),
+                    userRepo: context.read<UserDataRepository>(),
                   ),
                   child: _loginForm(),
                 ),
@@ -95,13 +93,10 @@ class LoginView extends StatelessWidget {
             MiscWidgets.showException(context, formStatus.exception.toString());
           } else if (formStatus is SubmissionSuccess) {
             // Navigate to new page
-            context.read<UserDataRepository>().getCurrentUserData();
-            UserData currentUserData =
-                context.read<UserDataRepository>().currentUserData as UserData;
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => HomeView(
-                  currentUserData: currentUserData,
+                  currentUserData: state.currentUser!,
                 ),
               ),
             );

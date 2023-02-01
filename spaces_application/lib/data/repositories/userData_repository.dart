@@ -6,10 +6,10 @@ import 'package:spaces_application/data/models/userData.dart';
 class UserDataRepository {
   final auth = FirebaseAuth.instance;
   final ref = FirebaseDatabase.instance.ref();
-  UserData? currentUserData;
+  late UserData currentUserData;
 
   // retrieves current userdata from firebase
-  Future<void> getCurrentUserData() async {
+  Future<UserData> getCurrentUserData() async {
     String uid = auth.currentUser!.uid;
     DataSnapshot snapshot = await ref.child("UserData/").child(uid).get();
     UserData currentUser = UserData.fromFirebase(snapshot);
@@ -21,6 +21,7 @@ class UserDataRepository {
     }
     currentUser.spacesJoined = spacesJoined;
     currentUserData = currentUser;
+    return currentUser;
   }
 
   Future<void> setCurrentUserData(

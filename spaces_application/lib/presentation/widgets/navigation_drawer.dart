@@ -100,7 +100,7 @@ class NavigationDrawer extends StatelessWidget {
                     onTap: () =>
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) => SpaceView(
-                                  space: spacesJoined[index].spaceName,
+                                  space: spacesJoined[index],
                                   currentUserData: currentUserData,
                                 ))),
                   );
