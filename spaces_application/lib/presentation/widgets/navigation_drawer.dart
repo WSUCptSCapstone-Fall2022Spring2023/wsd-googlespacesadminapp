@@ -10,6 +10,7 @@ import 'package:spaces_application/presentation/views/profileView.dart';
 import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
 
 import '../../data/repositories/userData_repository.dart';
+import '../views/edit_profileView.dart';
 import '../views/spaceView.dart';
 import 'dart:math';
 
@@ -40,7 +41,7 @@ class NavigationDrawer extends StatelessWidget {
           const SizedBox(height: 10),
           Text(currentUserData.email,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.black)),
+              style: const TextStyle(color: Colors.black, fontSize: 18)),
           const SizedBox(height: 15),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 10),
@@ -53,10 +54,14 @@ class NavigationDrawer extends StatelessWidget {
           //       Icon(Icons.account_circle, size: 80, color: Colors.white),
           // ),
           ListTile(
-              leading: const Icon(Icons.home_outlined, color: Colors.black),
+              //visualDensity: VisualDensity(vertical: 1),
+              leading: const Icon(Icons.home_outlined,
+                  color: Colors.black, size: 34),
               title: const Text('Home',
                   style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.normal)),
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 22)),
               //onTap: () => {Navigator.of(context).pop()},
               onTap: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -66,24 +71,33 @@ class NavigationDrawer extends StatelessWidget {
                 ));
               }),
           ListTile(
-            leading:
-                const Icon(Icons.account_circle_outlined, color: Colors.black),
+            //visualDensity: VisualDensity(vertical: 1),
+            leading: const Icon(Icons.account_circle_outlined,
+                color: Colors.black, size: 34),
             title: const Text('Profile',
                 style: TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.normal)),
+                    color: Colors.black,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 22)),
             onTap: () {
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => ProfileView(
+                builder: (context) => EditProfileView(
                   currentUserData: currentUserData,
                 ),
               ));
             },
           ),
           ExpansionTile(
-            leading: const Icon(Icons.class_outlined, color: Colors.black),
+            leading: const Icon(
+              Icons.class_outlined,
+              color: Colors.black,
+              size: 34,
+            ),
             title: const Text('Your Spaces',
                 style: TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.normal)),
+                    color: Colors.black,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 22)),
             children: <Widget>[
               ListView.builder(
                 shrinkWrap: true,
@@ -96,7 +110,8 @@ class NavigationDrawer extends StatelessWidget {
                     title: Text('${spacesJoined[index].spaceName}',
                         style: const TextStyle(
                             color: Colors.black,
-                            fontWeight: FontWeight.normal)),
+                            fontWeight: FontWeight.normal,
+                            fontSize: 18)),
                     onTap: () =>
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) => SpaceView(
@@ -111,10 +126,12 @@ class NavigationDrawer extends StatelessWidget {
           if (currentUserData.isFaculty)
             ExpansionTile(
               leading: const Icon(Icons.admin_panel_settings_outlined,
-                  color: Colors.black),
+                  color: Colors.black, size: 34),
               title: const Text('Admin',
                   style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.normal)),
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 22)),
               children: <Widget>[
                 ListTile(
                     leading: const Icon(Icons.person_outline_outlined,
@@ -122,7 +139,8 @@ class NavigationDrawer extends StatelessWidget {
                     title: const Text('Create Student Profile',
                         style: TextStyle(
                             color: Colors.black,
-                            fontWeight: FontWeight.normal)),
+                            fontWeight: FontWeight.normal,
+                            fontSize: 18)),
                     onTap: () {
                       // showDialog(
                       //   context: context,
@@ -140,10 +158,11 @@ class NavigationDrawer extends StatelessWidget {
                 ListTile(
                     leading: const Icon(Icons.space_dashboard_outlined,
                         color: Colors.black),
-                    title: const Text('Create a new Space',
+                    title: const Text('Create a New Space',
                         style: TextStyle(
                             color: Colors.black,
-                            fontWeight: FontWeight.normal)),
+                            fontWeight: FontWeight.normal,
+                            fontSize: 18)),
                     onTap: () {
                       showModalBottomSheet(
                           context: context,
@@ -166,10 +185,13 @@ class NavigationDrawer extends StatelessWidget {
           //       ));
           //     }),
           ListTile(
-              leading: const Icon(Icons.help_outline, color: Colors.black),
+              leading:
+                  const Icon(Icons.help_outline, color: Colors.black, size: 34),
               title: const Text('Help',
                   style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.normal)),
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 22)),
               onTap: () {
                 showModalBottomSheet(
                     context: context,

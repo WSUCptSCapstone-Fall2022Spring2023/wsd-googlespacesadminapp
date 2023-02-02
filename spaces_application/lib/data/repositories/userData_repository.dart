@@ -26,7 +26,7 @@ class UserDataRepository {
 
   Future<void> setCurrentUserData(
       String firstName, String lastName, String displayName) async {
-    await ref.child(currentUserData!.uid).update({
+    await ref.child(currentUserData.uid).update({
       'firstName': firstName,
       'lastName': lastName,
       'displayName': displayName

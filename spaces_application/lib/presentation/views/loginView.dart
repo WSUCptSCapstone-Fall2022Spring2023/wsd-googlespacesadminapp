@@ -56,9 +56,10 @@ class LoginView extends StatelessWidget {
                   ),
                   child: _loginForm(),
                 ),
+                Padding(padding: EdgeInsets.only(top: 6)),
                 Text.rich(TextSpan(
                     text: "Need an account? ",
-                    style: const TextStyle(color: Colors.black, fontSize: 12),
+                    style: const TextStyle(color: Colors.black, fontSize: 20),
                     children: <TextSpan>[
                       TextSpan(
                           text: "Send Administration a Message",
@@ -103,20 +104,22 @@ class LoginView extends StatelessWidget {
             MiscWidgets.showException(context, "LOGIN SUCCESS");
           }
         },
-        child: Form(
-            key: _formKey,
-            child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _emailField(),
-                    const SizedBox(height: 10),
-                    _passwordField(),
-                    const SizedBox(height: 10),
-                    _loginButton(),
-                  ],
-                ))));
+        child: Container(
+            alignment: Alignment.topCenter,
+            child: Form(
+                key: _formKey,
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _emailField(),
+                        const SizedBox(height: 10),
+                        _passwordField(),
+                        const SizedBox(height: 10),
+                        _loginButton(),
+                      ],
+                    )))));
   }
 
   Widget _emailField() {
@@ -132,27 +135,30 @@ class LoginView extends StatelessWidget {
                     spreadRadius: 0,
                     offset: const Offset(2, 2))
               ]),
-          child: TextFormField(
-            style: TextStyle(color: picoteeBlue, fontSize: 13),
-            decoration: InputDecoration(
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-                prefixIcon: Icon(Icons.email, color: picoteeBlue),
-                hintText: 'Email',
-                hintStyle: TextStyle(color: picoteeBlue, fontSize: 13)),
-            // validator returns null when valid value is passed
-            // alternative syntax:
-            // String TextFormField.validator(value) {
-            //   if state.isValidUsername()
-            //     return null;
-            //   else
-            //     return "Username is too short";
-            // }
-            validator: (value) =>
-                state.isValidEmail ? null : 'Not a valid Email',
-            onChanged: (value) =>
-                context.read<LoginBloc>().add(LoginEmailChanged(email: value)),
-          ));
+          child: SizedBox(
+              width: 600,
+              child: TextFormField(
+                style: TextStyle(color: picoteeBlue, fontSize: 26),
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    prefixIcon: Icon(Icons.email, color: picoteeBlue),
+                    hintText: 'Email',
+                    hintStyle: TextStyle(color: picoteeBlue, fontSize: 26)),
+                // validator returns null when valid value is passed
+                // alternative syntax:
+                // String TextFormField.validator(value) {
+                //   if state.isValidUsername()
+                //     return null;
+                //   else
+                //     return "Username is too short";
+                // }
+                validator: (value) =>
+                    state.isValidEmail ? null : 'Not a valid Email',
+                onChanged: (value) => context
+                    .read<LoginBloc>()
+                    .add(LoginEmailChanged(email: value)),
+              )));
     });
   }
 
@@ -169,23 +175,24 @@ class LoginView extends StatelessWidget {
                     spreadRadius: 0,
                     offset: const Offset(2, 2))
               ]),
-          alignment: Alignment.center,
-          child: TextFormField(
-            style: TextStyle(color: picoteeBlue, fontSize: 13),
-            obscureText: true,
-            decoration: InputDecoration(
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-                prefixIcon: Icon(Icons.lock, color: picoteeBlue),
-                hintText: 'Password',
-                hintStyle: TextStyle(color: picoteeBlue, fontSize: 13)),
-            // validator returns null when valid value is passed
-            validator: (value) =>
-                state.isValidPassword ? null : 'Password is too short',
-            onChanged: (value) => context
-                .read<LoginBloc>()
-                .add(LoginPasswordChanged(password: value)),
-          ));
+          child: SizedBox(
+              width: 600,
+              child: TextFormField(
+                style: TextStyle(color: picoteeBlue, fontSize: 26),
+                obscureText: true,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    prefixIcon: Icon(Icons.lock, color: picoteeBlue),
+                    hintText: 'Password',
+                    hintStyle: TextStyle(color: picoteeBlue, fontSize: 26)),
+                // validator returns null when valid value is passed
+                validator: (value) =>
+                    state.isValidPassword ? null : 'Password is too short',
+                onChanged: (value) => context
+                    .read<LoginBloc>()
+                    .add(LoginPasswordChanged(password: value)),
+              )));
     });
   }
 
@@ -194,7 +201,8 @@ class LoginView extends StatelessWidget {
       return state.formStatus is FormSubmitting
           ? const CircularProgressIndicator()
           : SizedBox(
-              width: double.infinity,
+              width: 200,
+              height: 46,
               child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
@@ -206,7 +214,7 @@ class LoginView extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30))),
                   child: const Text('Login',
-                      style: TextStyle(color: Colors.white, fontSize: 13))),
+                      style: TextStyle(color: Colors.white, fontSize: 26))),
             );
     });
   }

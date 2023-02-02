@@ -9,84 +9,57 @@ import '../../business_logic/edit_profile/edit_space_event.dart';
 import '../../business_logic/edit_profile/edit_space_state.dart';
 import '../../data/models/userData.dart';
 import '../../data/repositories/userData_repository.dart';
+import '../widgets/navigation_drawer.dart';
 
 class EditProfileView extends StatelessWidget {
   EditProfileView({required this.currentUserData});
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Color bgColor = Color.fromARGB(255, 12, 12, 12);
-  final Color textColor = Color.fromARGB(255, 255, 255, 240);
+  final Color textColor = const Color.fromARGB(255, 14, 4, 104);
   final Color boxColor = Color.fromARGB(255, 60, 60, 60);
-  final UserData currentUserData;
+  final Color navyBlue = const Color.fromARGB(255, 14, 4, 104);
+  final Color salmon = const Color.fromARGB(255, 252, 117, 106);
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //       backgroundColor: bgColor,
-  //       body: Container(
-  //         alignment: Alignment.center,
-  //         child: Container(
-  //             decoration: BoxDecoration(
-  //               borderRadius: BorderRadius.all(Radius.circular(40)),
-  //               color: boxColor,
-  //             ),
-  //             width: 500,
-  //             height: 350,
-  //             child: Column(
-  //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //               children: [
-  //                 Column(
-  //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //                   children: [
-  //                     Icon(Icons.space_dashboard, size: 50, color: textColor),
-  //                     Text("Create a Space",
-  //                         textScaleFactor: 2,
-  //                         style: TextStyle(color: textColor)),
-  //                   ],
-  //                 ),
-  //                 BlocProvider(
-  //                   create: (context) => EditProfileBloc(
-  //                     spaceRepo: context.read<SpaceRepository>(),
-  //                   ),
-  //                   child: _createSpaceForm(),
-  //                 )
-  //               ],
-  //             )),
-  //       ));
-  // }
+  final UserData currentUserData;
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(50))),
-      backgroundColor: boxColor,
-      insetPadding: EdgeInsets.all(10),
-      content: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(40)),
-            color: boxColor,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      drawer: NavigationDrawer(
+        currentUserData: currentUserData,
+      ),
+      appBar: AppBar(
+        elevation: 15,
+        title: const Text("Your Profile Page"),
+        backgroundColor: navyBlue,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(vertical: 50),
+        children: <Widget>[
+          Icon(Icons.account_circle, size: 150, color: salmon),
+          const SizedBox(height: 15),
+          Text("${currentUserData.firstName} ${currentUserData.lastName}",
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                  color: Colors.black, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 10),
+          Text(currentUserData.email,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.black)),
+          const SizedBox(height: 10),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Divider(height: 0),
           ),
-          width: 1000,
-          height: 650,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(Icons.space_dashboard, size: 50, color: textColor),
-                  Text("Edit Profile",
-                      textScaleFactor: 2, style: TextStyle(color: textColor)),
-                ],
-              ),
-              BlocProvider(
-                create: (context) => EditProfileBloc(
-                  userRepo: context.read<UserDataRepository>(),
-                ),
-                child: _createSpaceForm(),
-              )
-            ],
-          )),
+          BlocProvider(
+            create: (context) => EditProfileBloc(
+              userRepo: context.read<UserDataRepository>(),
+            ),
+            child: _createSpaceForm(),
+          )
+        ],
+      ),
     );
   }
 
@@ -115,31 +88,36 @@ class EditProfileView extends StatelessWidget {
             MiscWidgets.showException(context, "SPACE CREATION SUCCESS");
           }
         },
-        child: Form(
-            key: _formKey,
-            child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                        padding: EdgeInsets.only(top: 5),
-                        child: _firstNameField(currentUserData)),
-                    Padding(padding: EdgeInsets.all(4)),
-                    Padding(padding: EdgeInsets.all(2)),
-                    _lastNameField(currentUserData),
-                    Padding(padding: EdgeInsets.all(2)),
-                    _displayNameField(currentUserData),
-                    Padding(padding: EdgeInsets.all(2)),
-                    _emailField(currentUserData),
-                    Padding(padding: EdgeInsets.all(2)),
-                    _parentEmailField(currentUserData),
-                    Padding(padding: EdgeInsets.all(2)),
-                    Padding(
-                        padding: EdgeInsets.only(top: 5),
-                        child: _editProfileButton()),
-                  ],
-                ))));
+        child: Container(
+            alignment: Alignment.topCenter,
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 100),
+            child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(width: 2, color: salmon),
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(40.0),
+                      bottomRight: Radius.circular(40.0),
+                      topLeft: Radius.circular(40.0),
+                      bottomLeft: Radius.circular(40.0)),
+                ),
+                child: Form(
+                    key: _formKey,
+                    child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _firstNameField(currentUserData),
+                            _lastNameField(currentUserData),
+                            _displayNameField(currentUserData),
+                            _emailField(currentUserData),
+                            _parentEmailField(currentUserData),
+                            Padding(
+                                padding: EdgeInsets.only(top: 5),
+                                child: _editProfileButton()),
+                          ],
+                        ))))));
   }
 
   Widget _firstNameField(UserData currentUser) {
@@ -153,7 +131,7 @@ class EditProfileView extends StatelessWidget {
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: textColor, width: 0.0)),
             hintText: "First Name",
-            hintStyle: TextStyle(color: textColor)),
+            hintStyle: TextStyle(color: navyBlue)),
         validator: (value) =>
             state.isValidFirstName ? null : 'Must be between 2 - 20 characters',
         onChanged: (value) => context
