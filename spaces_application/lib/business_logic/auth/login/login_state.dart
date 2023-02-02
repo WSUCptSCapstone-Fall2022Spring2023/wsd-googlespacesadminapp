@@ -1,9 +1,10 @@
+import 'package:equatable/equatable.dart';
 import 'package:spaces_application/business_logic/auth/form_submission_status.dart';
 import 'package:email_validator/email_validator.dart';
 
 import '../../../data/models/userData.dart';
 
-class LoginState {
+class LoginState extends Equatable {
   final String email;
   bool get isValidEmail => (EmailValidator.validate(email));
 
@@ -34,4 +35,11 @@ class LoginState {
       currentUser: currentUser ?? this.currentUser,
     );
   }
+
+  @override
+  List<Object> get props => [
+        email,
+        password,
+        formStatus,
+      ];
 }
