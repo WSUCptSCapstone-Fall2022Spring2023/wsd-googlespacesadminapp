@@ -11,7 +11,7 @@ import '../../data/repositories/space_repository.dart';
 import '../../data/repositories/userData_repository.dart';
 
 class CreateSpaceBottomSheet extends StatelessWidget {
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final Color darkViolet = const Color.fromARGB(255, 9, 5, 5);
   final Color navyBlue = const Color.fromARGB(255, 14, 4, 104);

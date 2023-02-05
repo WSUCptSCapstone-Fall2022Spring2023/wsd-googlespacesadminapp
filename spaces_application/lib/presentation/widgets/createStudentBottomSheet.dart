@@ -10,7 +10,7 @@ import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
 import '../../business_logic/auth/form_submission_status.dart';
 
 class CreateStudentBottomSheet extends StatelessWidget {
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final Color darkViolet = Color.fromARGB(255, 9, 5, 5);
   final Color navyBlue = Color.fromARGB(255, 14, 4, 104);
