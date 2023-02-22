@@ -2,68 +2,140 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:spaces_application/business_logic/post/create_post_bloc.dart';
+import 'package:spaces_application/business_logic/post/create_post_event.dart';
+import 'package:spaces_application/business_logic/post/create_post_state.dart';
+import 'package:spaces_application/data/repositories/space_repository.dart';
 import 'package:spaces_application/presentation/widgets/navigation_drawer.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../business_logic/auth/form_submission_status.dart';
+import '../../business_logic/auth/login/login_bloc.dart';
 import '../../data/models/spaceData.dart';
 import '../../data/models/userData.dart';
+import '../../data/repositories/userData_repository.dart';
+import '../widgets/miscWidgets.dart';
 
 class SpaceView extends StatelessWidget {
   SpaceView({required this.space, required this.currentUserData});
   final SpaceData space;
   final UserData currentUserData;
+  static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Color bgColor = Color.fromARGB(255, 49, 49, 49);
   final Color textColor = Color.fromARGB(255, 246, 246, 176);
   final Color boxColor = Color.fromARGB(255, 60, 60, 60);
-  List<types.Message> _messages = [];
+  final Color darkViolet = Color.fromARGB(255, 9, 5, 5);
+  final Color navyBlue = Color.fromARGB(255, 14, 4, 104);
+  final Color picoteeBlue = Color.fromARGB(255, 45, 40, 138);
+  final Color majorelleBlue = Color.fromARGB(255, 86, 85, 221);
+  final Color salmon = Color.fromARGB(255, 252, 117, 106);
+  final Color phthaloBlue = Color.fromARGB(255, 22, 12, 113);
+  final Color lightPink = Color.fromARGB(255, 243, 171, 174);
+  final Color offWhite = Color.fromARGB(255, 255, 255, 240);
 
   @override
   Widget build(BuildContext context) {
     var ScreenHeight = MediaQuery.of(context).size.height;
     var ScreenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: bgColor,
-      drawer: NavigationDrawer(
-        currentUserData: currentUserData,
-      ),
-      appBar: AppBar(
-        elevation: 15,
-        title: Text(space.spaceName),
         backgroundColor: bgColor,
-      ),
-      body: Chat(
-        messages: _messages,
-        showUserAvatars: true,
-        showUserNames: true,
-        user: types.User(id: currentUserData.uid),
-        onSendPressed: (PartialText) {},
-      ),
-    );
+        drawer: NavigationDrawer(
+          currentUserData: currentUserData,
+        ),
+        appBar: AppBar(
+          elevation: 15,
+          title: Text(space.spaceName),
+          backgroundColor: bgColor,
+        ),
+        body: BlocProvider(
+            create: (context) => CreatePostBloc(
+                spaceRepo: context.read<SpaceRepository>(),
+                userRepo: context.read<UserDataRepository>()),
+            child: Container(child: _createPostForm())));
   }
 
-  void _handleSendPressed(types.PartialText message) {
-    final textMessage = types.TextMessage(
-      author: types.User(id: currentUserData.uid),
-      createdAt: DateTime.now().millisecondsSinceEpoch,
-      id: const Uuid().v4(),
-      text: message.text,
-    );
-
-    _addMessage(textMessage);
+  Widget _createPostForm() {
+    return BlocListener<CreatePostBloc, CreatePostState>(
+        listenWhen: (previous, current) {
+          if (current.formStatus == previous.formStatus) {
+            return false;
+          } else {
+            return true;
+          }
+        },
+        listener: (context, state) {
+          final formStatus = state.formStatus;
+          if (formStatus is SubmissionFailed) {
+            MiscWidgets.showException(context, formStatus.exception.toString());
+          } else if (formStatus is SubmissionSuccess) {
+            MiscWidgets.showException(context, "POST SUCCESS");
+          }
+        },
+        child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _messageField(),
+                const SizedBox(height: 10),
+                Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: _createPostButton()),
+              ],
+            )));
   }
 
-  void _loadMessages() async {
-    final response = await rootBundle.loadString('assets/messages.json');
-    final messages = (jsonDecode(response) as List)
-        .map((e) => types.Message.fromJson(e as Map<String, dynamic>))
-        .toList();
-
-    _messages = messages;
+  Widget _messageField() {
+    return BlocBuilder<CreatePostBloc, CreatePostState>(
+        builder: (context, state) {
+      return Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+          ),
+          child: TextFormField(
+            style: const TextStyle(color: Colors.black, fontSize: 13),
+            decoration: InputDecoration(
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+                hintText: 'Message',
+                hintStyle: const TextStyle(color: Colors.black, fontSize: 13)),
+            onChanged: (value) => context
+                .read<CreatePostBloc>()
+                .add(PostMessageChanged(message: value)),
+          ));
+    });
   }
 
-  void _addMessage(types.Message message) {
-    _messages.insert(0, message);
+  Widget _createPostButton() {
+    return BlocBuilder<CreatePostBloc, CreatePostState>(
+        builder: (context, state) {
+      return state.formStatus is FormSubmitting
+          ? const CircularProgressIndicator()
+          : SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                  onPressed: () {
+                    context
+                        .read<CreatePostBloc>()
+                        .add(PostUserIDChanged(userID: currentUserData.uid));
+                    context
+                        .read<CreatePostBloc>()
+                        .add(PostSpaceIDChanged(spaceID: space.sid));
+                    if (_formKey.currentState!.validate()) {
+                      context.read<CreatePostBloc>().add(CreatePostSubmitted());
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: salmon,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30))),
+                  child: const Text('Create Post',
+                      style: TextStyle(color: Colors.white, fontSize: 13))),
+            );
+    });
   }
 }

@@ -42,6 +42,7 @@ class CreateSpaceBottomSheet extends StatelessWidget {
             BlocProvider(
               create: (context) => CreateSpaceBloc(
                 spaceRepo: context.read<SpaceRepository>(),
+                userRepo: context.read<UserDataRepository>(),
               ),
               child: _createSpaceForm(),
             )
@@ -65,13 +66,19 @@ class CreateSpaceBottomSheet extends StatelessWidget {
             MiscWidgets.showException(context, formStatus.exception.toString());
           } else if (formStatus is SubmissionSuccess) {
             // Navigate to new page
-            context.read<UserDataRepository>().getCurrentUserData();
             // Navigator.of(context).pushReplacement(
             //   MaterialPageRoute(
             //     builder: (context) => HomeView(),
             //   ),
             // );
             Navigator.pop(context);
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => HomeView(
+                  currentUserData: state.currentUser!,
+                ),
+              ),
+            );
             MiscWidgets.showException(context, "SPACE CREATION SUCCESS");
           }
         },
@@ -142,9 +149,9 @@ class CreateSpaceBottomSheet extends StatelessWidget {
                     OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                 hintText: 'Space Description',
                 hintStyle: const TextStyle(color: Colors.black, fontSize: 13)),
-            keyboardType: TextInputType.multiline,
-            minLines: 4,
-            maxLines: 10,
+            //keyboardType: TextInputType.multiline,
+            //minLines: 4,
+            //maxLines: 10,
             onChanged: (value) => context
                 .read<CreateSpaceBloc>()
                 .add(CreateSpaceDescriptionChanged(description: value))),
