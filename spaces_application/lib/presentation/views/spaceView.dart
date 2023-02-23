@@ -20,8 +20,8 @@ import '../../data/repositories/userData_repository.dart';
 import '../widgets/miscWidgets.dart';
 
 class SpaceView extends StatelessWidget {
-  SpaceView({required this.space, required this.currentUserData});
-  final SpaceData space;
+  SpaceView({required this.currentSpace, required this.currentUserData});
+  SpaceData currentSpace;
   final UserData currentUserData;
   static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Color bgColor = Color.fromARGB(255, 49, 49, 49);
@@ -47,18 +47,25 @@ class SpaceView extends StatelessWidget {
         ),
         appBar: AppBar(
           elevation: 15,
-          title: Text(space.spaceName),
+          title: Text(currentSpace.spaceName),
           backgroundColor: bgColor,
         ),
         body: BlocProvider(
-            create: (context) => CreatePostBloc(
+            create: (context) {
+              return PostBloc(
                 spaceRepo: context.read<SpaceRepository>(),
-                userRepo: context.read<UserDataRepository>()),
+                userRepo: context.read<UserDataRepository>(),
+                currentUserData: currentUserData,
+              );
+            },
             child: Container(child: _createPostForm())));
   }
+// Need to find a way to call:
+// context.read<PostBloc>().add(LoadCurrentSpace(currentSpace: currentSpace));
+// upon initialization
 
   Widget _createPostForm() {
-    return BlocListener<CreatePostBloc, CreatePostState>(
+    return BlocListener<PostBloc, PostState>(
         listenWhen: (previous, current) {
           if (current.formStatus == previous.formStatus) {
             return false;
@@ -89,8 +96,7 @@ class SpaceView extends StatelessWidget {
   }
 
   Widget _messageField() {
-    return BlocBuilder<CreatePostBloc, CreatePostState>(
-        builder: (context, state) {
+    return BlocBuilder<PostBloc, PostState>(builder: (context, state) {
       return Container(
           decoration: const BoxDecoration(
             color: Colors.white,
@@ -104,29 +110,22 @@ class SpaceView extends StatelessWidget {
                 hintText: 'Message',
                 hintStyle: const TextStyle(color: Colors.black, fontSize: 13)),
             onChanged: (value) => context
-                .read<CreatePostBloc>()
+                .read<PostBloc>()
                 .add(PostMessageChanged(message: value)),
           ));
     });
   }
 
   Widget _createPostButton() {
-    return BlocBuilder<CreatePostBloc, CreatePostState>(
-        builder: (context, state) {
+    return BlocBuilder<PostBloc, PostState>(builder: (context, state) {
       return state.formStatus is FormSubmitting
           ? const CircularProgressIndicator()
           : SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                   onPressed: () {
-                    context
-                        .read<CreatePostBloc>()
-                        .add(PostUserIDChanged(userID: currentUserData.uid));
-                    context
-                        .read<CreatePostBloc>()
-                        .add(PostSpaceIDChanged(spaceID: space.sid));
                     if (_formKey.currentState!.validate()) {
-                      context.read<CreatePostBloc>().add(CreatePostSubmitted());
+                      context.read<PostBloc>().add(PostSubmitted());
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -137,5 +136,13 @@ class SpaceView extends StatelessWidget {
                       style: TextStyle(color: Colors.white, fontSize: 13))),
             );
     });
+  }
+
+  void checkForNewPosts() {
+    BlocListener(
+      listener: (context, state) => context
+          .read<PostBloc>()
+          .add(LoadCurrentSpace(currentSpace: currentSpace)),
+    );
   }
 }
