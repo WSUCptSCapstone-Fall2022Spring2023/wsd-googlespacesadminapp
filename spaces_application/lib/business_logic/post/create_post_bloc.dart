@@ -24,9 +24,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<LoadCurrentSpace>((event, emit) async {
       await _onLoadSpacePosts(event.currentSpace, emit);
     });
-    // on<CreateSpaceIsPrivateChanged>((event, emit) async {
-    //   await _onIsPrivateChanged(event.isPrivate, emit);
-    // });
     on<PostSubmitted>((event, emit) async {
       await _onFormStatusChanged(emit);
     });
