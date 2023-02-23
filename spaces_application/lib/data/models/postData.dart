@@ -10,16 +10,10 @@ class PostData {
 
   PostData.empty();
 
-  PostData.fromSpace(DataSnapshot snapshot) {
-    postedTime = DateTime.parse(snapshot.key as String);
-    for (final child in snapshot.children) {
-      if (child.key == "userID") {
-        postUser = UserData.fromFirebase(child);
-      } else if (child.key == "contents") {
-        contents = child.value as String;
-      } else {
-        throw Exception("Invalid PostData import");
-      }
-    }
+  PostData.fromFirebase(DataSnapshot snapshot) {
+    String timeString = snapshot.key as String;
+    postedTime = DateTime.parse(
+        timeString.replaceFirst(':', '.', timeString.lastIndexOf(':')));
+    contents = snapshot.child('contents/').value as String;
   }
 }

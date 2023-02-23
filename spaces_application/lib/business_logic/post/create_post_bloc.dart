@@ -2,45 +2,50 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spaces_application/business_logic/auth/form_submission_status.dart';
 import 'package:spaces_application/business_logic/post/create_post_event.dart';
 import 'package:spaces_application/business_logic/post/create_post_state.dart';
+import 'package:spaces_application/data/models/userData.dart';
 import 'package:spaces_application/data/repositories/space_repository.dart';
 import 'package:spaces_application/data/repositories/userData_repository.dart';
 
-class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
+import '../../data/models/spaceData.dart';
+
+class PostBloc extends Bloc<PostEvent, PostState> {
   final SpaceRepository spaceRepo;
   final UserDataRepository userRepo;
+  final UserData currentUserData;
 
-  CreatePostBloc({required this.spaceRepo, required this.userRepo})
-      : super(CreatePostState()) {
+  PostBloc(
+      {required this.spaceRepo,
+      required this.userRepo,
+      required this.currentUserData})
+      : super(PostState()) {
     on<PostMessageChanged>((event, emit) async {
       await _onMessageChanged(event.message, emit);
     });
-    on<PostUserIDChanged>((event, emit) async {
-      await _onUserIDChanged(event.userID, emit);
-    });
-    on<PostSpaceIDChanged>((event, emit) async {
-      await _onSpaceIDChanged(event.spaceID, emit);
+    on<LoadCurrentSpace>((event, emit) async {
+      await _onLoadSpacePosts(event.currentSpace, emit);
     });
     // on<CreateSpaceIsPrivateChanged>((event, emit) async {
     //   await _onIsPrivateChanged(event.isPrivate, emit);
     // });
-    on<CreatePostSubmitted>((event, emit) async {
+    on<PostSubmitted>((event, emit) async {
       await _onFormStatusChanged(emit);
     });
   }
 
   Future<void> _onMessageChanged(
-      String newMessage, Emitter<CreatePostState> emit) async {
+      String newMessage, Emitter<PostState> emit) async {
     emit(state.copyWith(message: newMessage));
   }
 
-  Future<void> _onUserIDChanged(
-      String newUserID, Emitter<CreatePostState> emit) async {
-    emit(state.copyWith(userID: newUserID));
-  }
-
-  Future<void> _onSpaceIDChanged(
-      String newSpaceID, Emitter<CreatePostState> emit) async {
-    emit(state.copyWith(spaceID: newSpaceID));
+  Future<void> _onLoadSpacePosts(
+      SpaceData newSpace, Emitter<PostState> emit) async {
+    try {
+      final posts = await spaceRepo.getSpacePosts(newSpace.sid);
+      newSpace.spacePosts = posts;
+      emit(state.copyWith(currentSpace: newSpace));
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 
   // Future<void> _onIsPrivateChanged(
@@ -48,10 +53,11 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
   //   emit(state.copyWith(isPrivate: newIsPrivate));
   // }
 
-  Future<void> _onFormStatusChanged(Emitter<CreatePostState> emit) async {
+  Future<void> _onFormStatusChanged(Emitter<PostState> emit) async {
     emit(state.copyWith(formStatus: FormSubmitting()));
     try {
-      await spaceRepo.createPost(state.message, state.userID, state.spaceID);
+      await spaceRepo.createPost(
+          state.message, currentUserData.uid, state.currentSpace!.sid);
       emit(state.copyWith(formStatus: SubmissionSuccess()));
     } catch (e) {
       emit(state.copyWith(formStatus: SubmissionFailed(Exception(e))));
