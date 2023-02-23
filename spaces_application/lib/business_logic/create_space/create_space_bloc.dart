@@ -4,10 +4,15 @@ import 'package:spaces_application/business_logic/create_space/create_space_even
 import 'package:spaces_application/business_logic/create_space/create_space_state.dart';
 import 'package:spaces_application/data/repositories/space_repository.dart';
 
+import '../../data/models/userData.dart';
+import '../../data/repositories/userData_repository.dart';
+
 class CreateSpaceBloc extends Bloc<CreateSpaceEvent, CreateSpaceState> {
   final SpaceRepository spaceRepo;
+  final UserDataRepository userRepo;
 
-  CreateSpaceBloc({required this.spaceRepo}) : super(CreateSpaceState()) {
+  CreateSpaceBloc({required this.spaceRepo, required this.userRepo})
+      : super(CreateSpaceState()) {
     on<CreateSpaceNameChanged>((event, emit) async {
       await _onNameChanged(event.name, emit);
     });
@@ -41,7 +46,9 @@ class CreateSpaceBloc extends Bloc<CreateSpaceEvent, CreateSpaceState> {
     emit(state.copyWith(formStatus: FormSubmitting()));
     try {
       await spaceRepo.createSpace(state.name, state.description);
-      emit(state.copyWith(formStatus: SubmissionSuccess()));
+      UserData currentUser = await userRepo.getCurrentUserData();
+      emit(state.copyWith(
+          formStatus: SubmissionSuccess(), currentUser: currentUser));
     } catch (e) {
       emit(state.copyWith(formStatus: SubmissionFailed(Exception(e))));
     }

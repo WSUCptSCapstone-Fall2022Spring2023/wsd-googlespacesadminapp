@@ -8,11 +8,11 @@ class SpaceRepository {
 
   Future<void> createSpace(String name, String description) async {
     // creates a key for the new space (id)
-    final newPostKey = ref.child("Spaces/").push().key;
+    final newSpaceKey = ref.child("Spaces/").push().key;
     // gives the space a name under its key
     await ref
         .child("Spaces/")
-        .child(newPostKey!)
+        .child(newSpaceKey!)
         .set({"spaceName": name, "spaceDescription": description});
 
     // gets currentUser data
@@ -23,7 +23,7 @@ class SpaceRepository {
     // stores permissions under both the user and the space
     await ref
         .child("Spaces/")
-        .child(newPostKey)
+        .child(newSpaceKey)
         .child("membersPermissions/")
         .child(currentUser.uid)
         .set({
@@ -39,7 +39,7 @@ class SpaceRepository {
         .child("UserData/")
         .child(currentUser.uid)
         .child("spacesPermissions/")
-        .child(newPostKey)
+        .child(newSpaceKey)
         .set({
       "canComment": true,
       "canEdit": true,
@@ -48,6 +48,15 @@ class SpaceRepository {
       "canPost": true,
       "canDelete": true
     });
+  }
+
+  Future<void> createPost(String message, String userID, String spaceID) async {
+    final currentTime = DateTime.now().toString().replaceAll('.', ':');
+    await ref
+        .child("Posts/")
+        .child(spaceID)
+        .child(currentTime)
+        .set({"userID": userID, "contents": message});
   }
 
   // returns a list of spaces searched for by spacesJoined field in UserData
