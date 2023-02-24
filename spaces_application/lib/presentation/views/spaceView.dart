@@ -51,16 +51,16 @@ class SpaceView extends StatelessWidget {
           backgroundColor: bgColor,
         ),
         body: BlocProvider(
+            // Loads posts into state.currentSpace.spacePosts upon initialization
             create: (context) => PostBloc(
                   spaceRepo: context.read<SpaceRepository>(),
                   userRepo: context.read<UserDataRepository>(),
                   currentUserData: currentUserData,
                 )..add(LoadCurrentSpace(currentSpace: currentSpace)),
-            child: Container(child: _createPostForm())));
+            child: Container(
+                alignment: AlignmentDirectional.bottomCenter,
+                child: _createPostForm())));
   }
-// Need to find a way to call:
-// context.read<PostBloc>().add(LoadCurrentSpace(currentSpace: currentSpace));
-// upon initialization
 
   Widget _createPostForm() {
     return BlocListener<PostBloc, PostState>(

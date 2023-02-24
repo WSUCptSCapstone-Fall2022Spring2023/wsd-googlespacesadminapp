@@ -9,7 +9,6 @@ class AuthRepository {
   Future<void> login(String email, String password) async {
     await auth.signInWithEmailAndPassword(email: email, password: password);
     String uid = auth.currentUser!.uid;
-
     // On login, this snippet checks whether the current user exists in the realtime db
     // Since Faculty users are created by direct insertion to auth db, they do not yet exist in the realtime db
     // If the logged in user does not exist in the realtime db, they must be a Faculty user, so the isFaculty field is updated to true
@@ -27,6 +26,7 @@ class AuthRepository {
       String lastName) async {
     final userCredential = await auth.createUserWithEmailAndPassword(
         email: email, password: "password");
+    await auth.sendPasswordResetEmail(email: email);
     String uid = userCredential.user!.uid;
     String displayName = '$firstName${lastName[0]}.';
     // creates student user instances in realtime db
