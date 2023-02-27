@@ -21,12 +21,15 @@ class HomeView extends StatelessWidget {
     var ScreenHeight = MediaQuery.of(context).size.height;
     var ScreenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-        backgroundColor: bgColor,
-        drawer: NavigationDrawer(currentUserData: currentUserData),
+        backgroundColor: Colors.white,
+        drawer: NavigationDrawer(
+          currentUserData: currentUserData,
+        ),
         appBar: AppBar(
           elevation: 15,
           title: const Text("Home Page"),
-          backgroundColor: bgColor,
+          iconTheme: IconThemeData(color: Colors.black, size: 30),
+          backgroundColor: Colors.white,
           actions: <Widget>[
             IconButton(
                 icon: const Icon(Icons.settings_outlined),

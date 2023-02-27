@@ -45,6 +45,7 @@ dependencies:
   email_validator: '^2.1.16'
   uuid: ^3.0.7
   webview_flutter: ^3.0.4
+  url_launcher: ^6.1.10
 
 dev_dependencies:
   flutter_test:

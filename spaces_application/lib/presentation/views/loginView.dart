@@ -14,14 +14,14 @@ import '../../data/repositories/userData_repository.dart';
 class LoginView extends StatelessWidget {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final Color darkViolet = Color.fromARGB(255, 9, 5, 5);
-  final Color navyBlue = Color.fromARGB(255, 14, 4, 104);
-  final Color picoteeBlue = Color.fromARGB(255, 45, 40, 138);
-  final Color majorelleBlue = Color.fromARGB(255, 86, 85, 221);
-  final Color salmon = Color.fromARGB(255, 252, 117, 106);
-  final Color phthaloBlue = Color.fromARGB(255, 22, 12, 113);
-  final Color lightPink = Color.fromARGB(255, 243, 171, 174);
-  final Color offWhite = Color.fromARGB(255, 255, 255, 240);
+  final Color darkViolet = const Color.fromARGB(255, 9, 5, 5);
+  final Color navyBlue = const Color.fromARGB(255, 14, 4, 104);
+  final Color picoteeBlue = const Color.fromARGB(255, 45, 40, 138);
+  final Color majorelleBlue = const Color.fromARGB(255, 86, 85, 221);
+  final Color salmon = const Color.fromARGB(255, 252, 117, 106);
+  final Color phthaloBlue = const Color.fromARGB(255, 22, 12, 113);
+  final Color lightPink = const Color.fromARGB(255, 243, 171, 174);
+  final Color offWhite = const Color.fromARGB(255, 255, 255, 240);
 
   @override
   Widget build(BuildContext context) {
@@ -34,17 +34,17 @@ class LoginView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                FittedBox(
+                const FittedBox(
                     fit: BoxFit.fitWidth,
                     alignment: Alignment.center,
                     child: Text("Welcome to Slate",
                         textScaleFactor: 5,
                         style: TextStyle(
-                          color: picoteeBlue,
+                          color: Colors.black,
                         ))),
                 const SizedBox(height: 25),
                 Image.asset(
-                  'assets/images/landingPageImage.jpg',
+                  'assets/images/wahkiakumSchoolDistrictLogo.png',
                   width: 400,
                   height: 400,
                 ),
@@ -56,7 +56,7 @@ class LoginView extends StatelessWidget {
                   ),
                   child: _loginForm(),
                 ),
-                Padding(padding: EdgeInsets.only(top: 6)),
+                const Padding(padding: EdgeInsets.only(top: 15)),
                 Text.rich(TextSpan(
                     text: "Need an account? ",
                     style: const TextStyle(color: Colors.black, fontSize: 20),
@@ -116,7 +116,7 @@ class LoginView extends StatelessWidget {
                         _emailField(),
                         const SizedBox(height: 10),
                         _passwordField(),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 20),
                         _loginButton(),
                       ],
                     )))));
@@ -125,26 +125,27 @@ class LoginView extends StatelessWidget {
   Widget _emailField() {
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
       return Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              borderRadius: BorderRadius.all(Radius.circular(5)),
               boxShadow: [
                 BoxShadow(
-                    color: picoteeBlue,
+                    color: Colors.black,
                     blurRadius: 1,
                     spreadRadius: 0,
-                    offset: const Offset(2, 2))
+                    offset: Offset(2, 2))
               ]),
           child: SizedBox(
               width: 600,
               child: TextFormField(
-                style: TextStyle(color: picoteeBlue, fontSize: 26),
+                style: const TextStyle(color: Colors.black, fontSize: 26),
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5)),
-                    prefixIcon: Icon(Icons.email, color: picoteeBlue),
+                    prefixIcon: const Icon(Icons.email, color: Colors.black),
                     hintText: 'Email',
-                    hintStyle: TextStyle(color: picoteeBlue, fontSize: 26)),
+                    hintStyle:
+                        const TextStyle(color: Colors.black, fontSize: 26)),
                 // validator returns null when valid value is passed
                 // alternative syntax:
                 // String TextFormField.validator(value) {
@@ -165,27 +166,28 @@ class LoginView extends StatelessWidget {
   Widget _passwordField() {
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
       return Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              borderRadius: BorderRadius.all(Radius.circular(5)),
               boxShadow: [
                 BoxShadow(
-                    color: picoteeBlue,
+                    color: Colors.black,
                     blurRadius: 1,
                     spreadRadius: 0,
-                    offset: const Offset(2, 2))
+                    offset: Offset(2, 2))
               ]),
           child: SizedBox(
               width: 600,
               child: TextFormField(
-                style: TextStyle(color: picoteeBlue, fontSize: 26),
+                style: const TextStyle(color: Colors.black, fontSize: 26),
                 obscureText: true,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5)),
-                    prefixIcon: Icon(Icons.lock, color: picoteeBlue),
+                    prefixIcon: const Icon(Icons.lock, color: Colors.black),
                     hintText: 'Password',
-                    hintStyle: TextStyle(color: picoteeBlue, fontSize: 26)),
+                    hintStyle:
+                        const TextStyle(color: Colors.black, fontSize: 26)),
                 // validator returns null when valid value is passed
                 validator: (value) =>
                     state.isValidPassword ? null : 'Password is too short',
@@ -210,7 +212,7 @@ class LoginView extends StatelessWidget {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: salmon,
+                      backgroundColor: Colors.red,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30))),
                   child: const Text('Login',
