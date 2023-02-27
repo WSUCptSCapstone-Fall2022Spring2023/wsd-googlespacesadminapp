@@ -3,8 +3,8 @@ import 'package:spaces_application/data/repositories/auth_repository.dart';
 import 'package:spaces_application/data/repositories/userData_repository.dart';
 import 'package:spaces_application/presentation/views/homeView.dart';
 import 'package:spaces_application/presentation/views/loginView.dart';
-import 'package:spaces_application/presentation/widgets/createSpaceBottomSheet.dart';
-import 'package:spaces_application/presentation/widgets/createStudentBottomSheet.dart';
+import 'package:spaces_application/presentation/widgets/createSpacePopUpDialog.dart';
+import 'package:spaces_application/presentation/widgets/createStudentPopUpDialog.dart';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
