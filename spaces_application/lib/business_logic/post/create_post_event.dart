@@ -1,21 +1,19 @@
-abstract class CreatePostEvent {}
+import 'package:spaces_application/data/models/spaceData.dart';
 
-class PostMessageChanged extends CreatePostEvent {
+import '../../data/models/userData.dart';
+
+abstract class PostEvent {}
+
+class PostMessageChanged extends PostEvent {
   final String message;
 
   PostMessageChanged({required this.message});
 }
 
-class PostUserIDChanged extends CreatePostEvent {
-  final String userID;
+class LoadCurrentSpace extends PostEvent {
+  SpaceData currentSpace;
 
-  PostUserIDChanged({required this.userID});
+  LoadCurrentSpace({required this.currentSpace});
 }
 
-class PostSpaceIDChanged extends CreatePostEvent {
-  final String spaceID;
-
-  PostSpaceIDChanged({required this.spaceID});
-}
-
-class CreatePostSubmitted extends CreatePostEvent {}
+class PostSubmitted extends PostEvent {}

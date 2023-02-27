@@ -1,34 +1,29 @@
 import 'package:spaces_application/business_logic/auth/form_submission_status.dart';
 
+import '../../data/models/spaceData.dart';
 import '../../data/models/userData.dart';
 
-class CreatePostState {
+class PostState {
   final String message;
-  final String userID;
-  final String spaceID;
   final FormSubmissionStatus formStatus;
-  UserData? currentUser;
+  SpaceData? currentSpace;
 
-  CreatePostState(
-      {this.message = '',
-      this.userID = '',
-      this.spaceID = '',
-      this.formStatus = const InitialFormStatus(),
-      this.currentUser});
+  PostState({
+    this.message = '',
+    this.formStatus = const InitialFormStatus(),
+    this.currentSpace,
+  });
 
-  CreatePostState copyWith({
+  PostState copyWith({
     String? message,
-    String? userID,
-    String? spaceID,
     FormSubmissionStatus? formStatus,
     UserData? currentUser,
+    SpaceData? currentSpace,
   }) {
-    return CreatePostState(
+    return PostState(
       message: message ?? this.message,
-      userID: userID ?? this.userID,
-      spaceID: spaceID ?? this.spaceID,
       formStatus: formStatus ?? this.formStatus,
-      currentUser: currentUser ?? this.currentUser,
+      currentSpace: currentSpace ?? this.currentSpace,
     );
   }
 }

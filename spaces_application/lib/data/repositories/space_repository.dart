@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:spaces_application/data/models/userData.dart';
+import 'package:spaces_application/data/repositories/userData_repository.dart';
+
+import '../models/postData.dart';
 
 class SpaceRepository {
   final auth = FirebaseAuth.instance;
@@ -60,4 +63,21 @@ class SpaceRepository {
   }
 
   // returns a list of spaces searched for by spacesJoined field in UserData
+
+  Future<PostData> getPost(DataSnapshot snapshot) async {
+    PostData post = PostData.fromFirebase(snapshot);
+    String uid = snapshot.child("userID/").value as String;
+    DataSnapshot userSnapshot = await ref.child("UserData/").child(uid).get();
+    post.postUser = UserData.fromFirebase(userSnapshot);
+    return post;
+  }
+
+  Future<List<PostData>> getSpacePosts(String spaceID) async {
+    final snapshot = await ref.child("Posts/").child(spaceID).get();
+    List<PostData> spacePosts = List<PostData>.empty(growable: true);
+    for (final post in snapshot.children) {
+      spacePosts.add(await getPost(post));
+    }
+    return spacePosts;
+  }
 }
