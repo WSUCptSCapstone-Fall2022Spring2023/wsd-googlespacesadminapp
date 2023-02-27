@@ -81,9 +81,7 @@ class NavigationDrawer extends StatelessWidget {
                     fontSize: 22)),
             onTap: () {
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => EditProfileView(
-                  currentUserData: currentUserData,
-                ),
+                builder: (context) => EditProfileView(title: "title"),
               ));
             },
           ),
