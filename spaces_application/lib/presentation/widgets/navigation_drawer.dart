@@ -54,6 +54,7 @@ class NavigationDrawer extends StatelessWidget {
               //   currentAccountPicture:
               //       Icon(Icons.account_circle, size: 80, color: Colors.white),
               // ),
+              const SizedBox(height: 10),
               ListTile(
                   //visualDensity: VisualDensity(vertical: 1),
                   leading: const Icon(Icons.home_outlined,
@@ -71,6 +72,7 @@ class NavigationDrawer extends StatelessWidget {
                       ),
                     ));
                   }),
+              const SizedBox(height: 10),
               ListTile(
                 //visualDensity: VisualDensity(vertical: 1),
                 leading: const Icon(Icons.account_circle_outlined,
@@ -88,6 +90,7 @@ class NavigationDrawer extends StatelessWidget {
                   ));
                 },
               ),
+              const SizedBox(height: 10),
               ExpansionTile(
                 leading: const Icon(
                   Icons.class_outlined,
@@ -100,6 +103,7 @@ class NavigationDrawer extends StatelessWidget {
                         fontWeight: FontWeight.normal,
                         fontSize: 22)),
                 children: <Widget>[
+                  const SizedBox(height: 10),
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: spacesJoined.length,
@@ -124,55 +128,59 @@ class NavigationDrawer extends StatelessWidget {
                   ),
                 ],
               ),
-              if (currentUserData.isFaculty)
-                ExpansionTile(
-                  leading: const Icon(Icons.admin_panel_settings_outlined,
-                      color: Colors.black, size: 34),
-                  title: const Text('Admin',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22)),
-                  children: <Widget>[
-                    ListTile(
-                        leading: const Icon(Icons.person_outline_outlined,
-                            color: Colors.black),
-                        title: const Text('Create Student Profile',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 18)),
-                        onTap: () {
-                          // showDialog(
-                          //   context: context,
-                          //   builder: (context) => RegisterView(),
-                          // );
-                          showModalBottomSheet(
-                              context: context,
-                              builder: (context) {
-                                return CreateStudentBottomSheet();
-                              });
-                          // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          //   builder: (context) => RegisterView(),
-                          // ));
-                        }),
-                    ListTile(
-                        leading: const Icon(Icons.space_dashboard_outlined,
-                            color: Colors.black),
-                        title: const Text('Create a New Space',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 18)),
-                        onTap: () {
-                          showModalBottomSheet(
-                              context: context,
-                              builder: (context) {
-                                return CreateSpaceBottomSheet();
-                              });
-                        }),
-                  ],
-                ),
+              if (currentUserData.isFaculty) const SizedBox(height: 10),
+              ExpansionTile(
+                leading: const Icon(Icons.admin_panel_settings_outlined,
+                    color: Colors.black, size: 34),
+                title: const Text('Admin',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 22)),
+                children: <Widget>[
+                  const SizedBox(height: 10),
+                  ListTile(
+                      leading: const Icon(Icons.person_outline_outlined,
+                          color: Colors.black),
+                      title: const Text('Create Student Profile',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 18)),
+                      onTap: () {
+                        // showDialog(
+                        //   context: context,
+                        //   builder: (context) => RegisterView(),
+                        // );
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) {
+                              return CreateStudentPopUpDialog();
+                            });
+                        // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        //   builder: (context) => RegisterView(),
+                        // ));
+                      }),
+                  const SizedBox(height: 10),
+                  ListTile(
+                      leading: const Icon(Icons.space_dashboard_outlined,
+                          color: Colors.black),
+                      title: const Text('Create a New Space',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 18)),
+                      onTap: () {
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) {
+                              return CreateSpacePopUpDialog();
+                            });
+                      }),
+                ],
+              ),
               // ListTile(
               //     leading:
               //         const Icon(Icons.notifications_outlined, color: Colors.black),
@@ -185,6 +193,7 @@ class NavigationDrawer extends StatelessWidget {
               //         builder: (context) => HomeView(),
               //       ));
               //     }),
+              const SizedBox(height: 10),
               ListTile(
                   leading: const Icon(Icons.help_outline,
                       color: Colors.black, size: 34),
@@ -194,10 +203,11 @@ class NavigationDrawer extends StatelessWidget {
                           fontWeight: FontWeight.normal,
                           fontSize: 22)),
                   onTap: () {
-                    showModalBottomSheet(
+                    showDialog(
+                        barrierDismissible: true,
                         context: context,
                         builder: (context) {
-                          return HelpBottomSheet();
+                          return HelpPopUpDialog();
                         });
                   }),
             ]));
