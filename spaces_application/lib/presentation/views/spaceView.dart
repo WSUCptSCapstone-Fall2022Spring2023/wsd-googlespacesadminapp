@@ -81,16 +81,27 @@ class SpaceView extends StatelessWidget {
                       height: double.infinity,
                       child: BlocBuilder<PostBloc, PostState>(
                         builder: ((context, state) {
-                          return ListView.builder(
-                              shrinkWrap: false,
-                              itemCount: state.currentSpace!.spacePosts.length,
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                    title: Text(state.currentSpace!
-                                        .spacePosts[index].contents));
-                              });
-                          // return Text(
-                          //     state.currentSpace!.spacePosts[0].contents);
+                          if (state.currentSpace == null) {
+                            return Container(
+                                height: 10,
+                                width: 10,
+                                child: CircularProgressIndicator());
+                          } else if (state.currentSpace!.spacePosts.length ==
+                              0) {
+                            return Text("Space has no Posts. ");
+                          } else {
+                            return ListView.builder(
+                                shrinkWrap: false,
+                                itemCount:
+                                    state.currentSpace!.spacePosts.length,
+                                itemBuilder: (context, index) {
+                                  return ListTile(
+                                      title: Text(state.currentSpace!
+                                          .spacePosts[index].contents));
+                                });
+                            // return Text(
+                            //     state.currentSpace!.spacePosts[0].contents);
+                          }
                         }),
                       )),
                 ),
