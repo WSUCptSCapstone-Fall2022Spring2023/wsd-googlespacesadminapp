@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttermoji/fluttermoji.dart';
 import 'package:spaces_application/business_logic/auth/form_submission_status.dart';
 import 'package:spaces_application/data/repositories/userData_repository.dart';
 import 'edit_space_event.dart';
@@ -6,6 +7,8 @@ import 'edit_space_state.dart';
 
 class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
   final UserDataRepository userRepo;
+  final FluttermojiFunctions functions = FluttermojiFunctions();
+  final FluttermojiController controller = FluttermojiController();
 
   EditProfileBloc({required this.userRepo}) : super(EditProfileState()) {
     on<ProfileFirstNameChanged>((event, emit) async {
@@ -40,9 +43,15 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
   Future<void> _onFormStatusChanged(Emitter<EditProfileState> emit) async {
     emit(state.copyWith(formStatus: FormSubmitting()));
     try {
-      await userRepo.setCurrentUserData(
-          state.firstName, state.lastName, state.displayName);
-      emit(state.copyWith(formStatus: SubmissionSuccess()));
+      final profilePicString = await functions.encodeMySVGtoString();
+      await userRepo.setCurrentUserData(profilePicString, state.displayName);
+      final currentUserData = await userRepo.getCurrentUserData();
+      //final pp = functions.decodeFluttermojifromString(
+      //  userRepo.currentUserData.profilePicString);
+      //await controller.setFluttermoji(
+      //  fluttermojiNew: userRepo.currentUserData.profilePicString);
+      emit(state.copyWith(
+          formStatus: SubmissionSuccess(), currentUser: currentUserData));
     } catch (e) {
       emit(state.copyWith(formStatus: SubmissionFailed(Exception(e))));
     }

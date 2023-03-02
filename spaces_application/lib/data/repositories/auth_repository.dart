@@ -15,7 +15,10 @@ class AuthRepository {
     DataSnapshot snapshot = await ref.child(uid).get();
     // Only triggered when user is not in the realtime db
     if (!snapshot.exists) {
-      await ref.child(uid).update({"isFaculty": true, "email": email});
+      String profilePic =
+          '{"topType":24,"accessoriesType":0,"hairColor":1,"facialHairType":0,"facialHairColor":1,"clotheType":4,"eyeType":6,"eyebrowType":10,"mouthType":8,"skinColor":3,"clotheColor":8,"style":0,"graphicType":0}';
+      await ref.child(uid).update(
+          {"isFaculty": true, "email": email, 'profilePic': profilePic});
     }
 
     snapshot = await ref.child(uid).get();
@@ -28,7 +31,9 @@ class AuthRepository {
         email: email, password: "password");
     await auth.sendPasswordResetEmail(email: email);
     String uid = userCredential.user!.uid;
-    String displayName = '$firstName${lastName[0]}.';
+    String displayName = '$firstName $lastName';
+    String profilePic =
+        '{"topType":24,"accessoriesType":0,"hairColor":1,"facialHairType":0,"facialHairColor":1,"clotheType":4,"eyeType":6,"eyebrowType":10,"mouthType":8,"skinColor":3,"clotheColor":8,"style":0,"graphicType":0}';
     // creates student user instances in realtime db
     // sets isFaculty field to false
     await ref.child(uid).update({
@@ -37,7 +42,8 @@ class AuthRepository {
       'parentEmail': parentEmail,
       'firstName': firstName,
       'lastName': lastName,
-      'displayName': displayName
+      'displayName': displayName,
+      'profilePic': profilePic
     });
   }
 }

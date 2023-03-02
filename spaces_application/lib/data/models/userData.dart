@@ -10,6 +10,7 @@ class UserData {
   String firstName = "";
   String lastName = "";
   String displayName = "";
+  String profilePicString = "";
   List<PermissionData> spacesPermissions =
       List<PermissionData>.empty(growable: true);
   List<SpaceData> spacesJoined = List<SpaceData>.empty();
@@ -34,6 +35,8 @@ class UserData {
         lastName = child.value as String;
       } else if (child.key == "displayName") {
         displayName = child.value as String;
+      } else if (child.key == "profilePic") {
+        profilePicString = child.value as String;
       } else if (child.key == "spacesPermissions") {
         for (final permission in child.children) {
           spacesPermissions.add(PermissionData.fromUser(permission));
