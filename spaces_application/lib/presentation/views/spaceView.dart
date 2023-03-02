@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:spaces_application/presentation/views/settingsView.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:spaces_application/business_logic/post/create_post_bloc.dart';
@@ -41,14 +42,27 @@ class SpaceView extends StatelessWidget {
     var ScreenHeight = MediaQuery.of(context).size.height;
     var ScreenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-        backgroundColor: bgColor,
+        backgroundColor: Colors.white,
         drawer: NavigationDrawer(
           currentUserData: currentUserData,
         ),
         appBar: AppBar(
           elevation: 15,
-          title: Text(currentSpace.spaceName),
-          backgroundColor: bgColor,
+          // title: Text(currentSpace.spaceName,
+          title: Text(currentSpace.spacePosts.length.toString(),
+              style: TextStyle(color: Colors.black)),
+          iconTheme: IconThemeData(color: Colors.black, size: 30),
+          backgroundColor: Colors.white,
+          actions: <Widget>[
+            IconButton(
+                icon: const Icon(Icons.settings_outlined),
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => SettingsView(
+                            currentUserData: currentUserData,
+                          )));
+                })
+          ],
         ),
         body: BlocProvider(
             // Loads posts into state.currentSpace.spacePosts upon initialization
@@ -58,8 +72,45 @@ class SpaceView extends StatelessWidget {
                   currentUserData: currentUserData,
                 )..add(LoadCurrentSpace(currentSpace: currentSpace)),
             child: Container(
-                alignment: AlignmentDirectional.bottomCenter,
-                child: _createPostForm())));
+              padding: const EdgeInsets.all(8.0),
+              child: Column(children: [
+                Flexible(
+                  child: Container(
+                      color: Colors.deepOrangeAccent,
+                      width: double.infinity,
+                      height: double.infinity,
+                      child: BlocBuilder<PostBloc, PostState>(
+                        builder: ((context, state) {
+                          if (state.currentSpace == null) {
+                            return Container(
+                                height: 10,
+                                width: 10,
+                                child: CircularProgressIndicator());
+                          } else if (state.currentSpace!.spacePosts.length ==
+                              0) {
+                            return Text("Space has no Posts. ");
+                          } else {
+                            return ListView.builder(
+                                shrinkWrap: false,
+                                itemCount:
+                                    state.currentSpace!.spacePosts.length,
+                                itemBuilder: (context, index) {
+                                  return ListTile(
+                                      title: Text(state.currentSpace!
+                                          .spacePosts[index].contents));
+                                });
+                            // return Text(
+                            //     state.currentSpace!.spacePosts[0].contents);
+                          }
+                        }),
+                      )),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: _createPostForm())
+              ]),
+            )));
   }
 
   Widget _createPostForm() {
@@ -77,40 +128,44 @@ class SpaceView extends StatelessWidget {
             MiscWidgets.showException(context, formStatus.exception.toString());
           } else if (formStatus is SubmissionSuccess) {
             MiscWidgets.showException(context, "POST SUCCESS");
+            // _formKey.currentState!.reset();
           }
         },
         child: Form(
             key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Row(
               children: [
                 _messageField(),
-                const SizedBox(height: 10),
-                Padding(
-                    padding: const EdgeInsets.only(top: 5),
-                    child: _createPostButton()),
+                const SizedBox(width: 10),
+                _createPostButton(),
               ],
             )));
   }
 
   Widget _messageField() {
     return BlocBuilder<PostBloc, PostState>(builder: (context, state) {
-      return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-          ),
-          child: TextFormField(
-            style: const TextStyle(color: Colors.black, fontSize: 13),
-            decoration: InputDecoration(
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-                hintText: 'Message',
-                hintStyle: const TextStyle(color: Colors.black, fontSize: 13)),
-            onChanged: (value) => context
-                .read<PostBloc>()
-                .add(PostMessageChanged(message: value)),
-          ));
+      return Flexible(
+        child: Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+            ),
+            child: TextFormField(
+              style: const TextStyle(color: Colors.black, fontSize: 13),
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  hintText: 'Message ${currentSpace.spaceName}',
+                  hintStyle: const TextStyle(color: Colors.grey, fontSize: 13)),
+              onChanged: (value) => context
+                  .read<PostBloc>()
+                  .add(PostMessageChanged(message: value)),
+              onFieldSubmitted: (value) => context
+                  .read<PostBloc>()
+                  .add(PostMessageChanged(message: value)),
+            )),
+      );
     });
   }
 
@@ -118,21 +173,19 @@ class SpaceView extends StatelessWidget {
     return BlocBuilder<PostBloc, PostState>(builder: (context, state) {
       return state.formStatus is FormSubmitting
           ? const CircularProgressIndicator()
-          : SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      context.read<PostBloc>().add(PostSubmitted());
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: salmon,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30))),
-                  child: const Text('Create Post',
-                      style: TextStyle(color: Colors.white, fontSize: 13))),
-            );
+          : ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  context.read<PostBloc>().add(PostSubmitted());
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  side: const BorderSide(color: Colors.black, width: 0.5),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5))),
+              child: const Text('Post',
+                  style: TextStyle(color: Colors.black, fontSize: 13)));
     });
   }
 }
