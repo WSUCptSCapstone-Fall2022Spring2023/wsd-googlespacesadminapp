@@ -41,8 +41,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           title: 'Home Page',
           home: LoginView(),
-          theme: ThemeData(
-              fontFamily: 'Circular', primarySwatch: Colors.deepPurple)),
+          theme: ThemeData(fontFamily: 'Circular', primarySwatch: Colors.red)),
       //create: (context) => AuthRepository(),
       //child: RegisterView()),
     );

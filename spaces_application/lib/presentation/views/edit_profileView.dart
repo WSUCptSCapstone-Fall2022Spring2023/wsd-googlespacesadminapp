@@ -58,6 +58,48 @@ class EditProfileView extends StatelessWidget {
                   backgroundColor: Colors.grey[200],
                 ),
               ),
+              if (currentUserData.isFaculty)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(currentUserData.email,
+                        style: TextStyle(color: Colors.black, fontSize: 22)),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Icon(Icons.circle, color: Colors.red, size: 12)),
+                    Text("Faculty User",
+                        style: TextStyle(color: Colors.black, fontSize: 22)),
+                  ],
+                ),
+              if (currentUserData.isFaculty == false)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                        currentUserData.firstName +
+                            ' ' +
+                            currentUserData.lastName,
+                        style: TextStyle(color: Colors.black, fontSize: 22)),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Icon(Icons.circle, color: Colors.red, size: 12)),
+                    Text(currentUserData.email,
+                        style: TextStyle(color: Colors.black, fontSize: 22)),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Icon(Icons.circle, color: Colors.red, size: 12)),
+                    Text(currentUserData.parentEmail,
+                        style: TextStyle(color: Colors.black, fontSize: 22)),
+                  ],
+                ),
+              if (currentUserData.isFaculty == false)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Student User",
+                        style: TextStyle(color: Colors.black, fontSize: 22)),
+                  ],
+                ),
               BlocProvider(
                   create: (context) => EditProfileBloc(
                         userRepo: context.read<UserDataRepository>(),
@@ -111,10 +153,13 @@ class EditProfileView extends StatelessWidget {
         child: Form(
             key: _formKey,
             child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
                 child: Row(
                   children: [
+                    const Padding(padding: EdgeInsets.only(left: 15)),
                     _displayNameField(currentUserData),
+                    const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10)),
                     _editProfileButton()
                   ],
                 ))));
@@ -124,12 +169,12 @@ class EditProfileView extends StatelessWidget {
     return BlocBuilder<EditProfileBloc, EditProfileState>(
         builder: (context, state) {
       return Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: const BorderRadius.all(Radius.circular(5)),
               boxShadow: [
                 BoxShadow(
-                    color: picoteeBlue,
+                    color: Colors.black,
                     blurRadius: 1,
                     spreadRadius: 0,
                     offset: const Offset(2, 2))
@@ -138,12 +183,12 @@ class EditProfileView extends StatelessWidget {
               width: 400,
               child: TextFormField(
                 initialValue: currentUser.displayName,
-                style: TextStyle(color: picoteeBlue, fontSize: 26),
+                style: const TextStyle(color: Colors.black, fontSize: 26),
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5)),
-                    //hintText: 'Display Name',
-                    hintStyle: TextStyle(color: picoteeBlue, fontSize: 26)),
+                    hintText: 'Display Name',
+                    hintStyle: TextStyle(color: Colors.black, fontSize: 26)),
                 validator: (value) {
                   if (state.isValidDisplayName) {
                     return null;
@@ -164,6 +209,7 @@ class EditProfileView extends StatelessWidget {
       return state.formStatus is FormSubmitting
           ? CircularProgressIndicator()
           : IconButton(
+              iconSize: 50,
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   context.read<EditProfileBloc>().add(ProfileSubmitted());
