@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class AuthRepository {
@@ -27,8 +28,12 @@ class AuthRepository {
 
   Future<void> register(String email, String parentEmail, String firstName,
       String lastName) async {
-    final userCredential = await auth.createUserWithEmailAndPassword(
-        email: email, password: "password");
+    FirebaseApp app = await Firebase.initializeApp(
+        name: 'Secondary', options: Firebase.app().options);
+    final userCredential = await FirebaseAuth.instanceFor(app: app)
+        .createUserWithEmailAndPassword(email: email, password: "password");
+    // has to do this in order to create a user without logging in
+    await app.delete();
     await auth.sendPasswordResetEmail(email: email);
     String uid = userCredential.user!.uid;
     String displayName = '$firstName $lastName';

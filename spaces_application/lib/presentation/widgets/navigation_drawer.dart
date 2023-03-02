@@ -38,19 +38,19 @@ class NavigationDrawer extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 50),
             children: <Widget>[
               CircleAvatar(
-                radius: 60,
-                backgroundColor: offWhite,
+                radius: 75,
+                backgroundColor: Colors.grey[200],
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(
                     Radius.circular(
-                      120,
+                      150,
                     ),
                   ),
                   child: SvgPicture.string(
                     FluttermojiFunctions().decodeFluttermojifromString(
                         currentUserData.profilePicString),
-                    height: 120,
-                    width: 120,
+                    height: 150,
+                    width: 150,
                   ),
                 ),
               ),

@@ -23,46 +23,50 @@ class CreateStudentPopUpDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-        insetPadding: EdgeInsets.symmetric(horizontal: 250, vertical: 225),
-        backgroundColor: Colors.white,
-        child: Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(20),
-                child: Column(children: [
-                  Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: Icon(Icons.close, color: Colors.black, size: 25),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      )),
-                  const Align(
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Dialog(
+          insetPadding: EdgeInsets.symmetric(horizontal: 250, vertical: 225),
+          backgroundColor: Colors.white,
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(20),
+                  child: Column(children: [
+                    Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                          icon:
+                              Icon(Icons.close, color: Colors.black, size: 25),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        )),
+                    const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("Student Creation",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 35))),
+                    const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        child: Divider(height: 0)),
+                    Align(
                       alignment: Alignment.centerLeft,
-                      child: Text("Student Creation",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 35))),
-                  const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      child: Divider(height: 0)),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: BlocProvider(
-                      create: (context) => RegisterBloc(
-                        authRepo: context.read<AuthRepository>(),
+                      child: BlocProvider(
+                        create: (context) => RegisterBloc(
+                          authRepo: context.read<AuthRepository>(),
+                        ),
+                        child: _registerForm(context),
                       ),
-                      child: _registerForm(context),
-                    ),
-                  )
-                ]))
-          ],
-        ));
+                    )
+                  ]))
+            ],
+          )),
+    );
   }
 
   Widget _registerForm(BuildContext context) {

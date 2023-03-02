@@ -26,51 +26,54 @@ class CreateSpacePopUpDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-        insetPadding:
-            const EdgeInsets.symmetric(horizontal: 150, vertical: 250),
-        backgroundColor: Colors.white,
-        child: Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                        icon: const Icon(Icons.close,
-                            color: Colors.black, size: 25),
-                        onPressed: (() {
-                          Navigator.pop(context);
-                        })),
-                  ),
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text("Create a Space",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 35)),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    child: Divider(height: 0),
-                  ),
-                  BlocProvider(
-                    create: (context) => CreateSpaceBloc(
-                      spaceRepo: context.read<SpaceRepository>(),
-                      userRepo: context.read<UserDataRepository>(),
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Dialog(
+          insetPadding:
+              const EdgeInsets.symmetric(horizontal: 150, vertical: 250),
+          backgroundColor: Colors.white,
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                          icon: const Icon(Icons.close,
+                              color: Colors.black, size: 25),
+                          onPressed: (() {
+                            Navigator.pop(context);
+                          })),
                     ),
-                    child: _createSpaceForm(context),
-                  )
-                ],
-              ),
-            )
-          ],
-        ));
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("Create a Space",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 35)),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Divider(height: 0),
+                    ),
+                    BlocProvider(
+                      create: (context) => CreateSpaceBloc(
+                        spaceRepo: context.read<SpaceRepository>(),
+                        userRepo: context.read<UserDataRepository>(),
+                      ),
+                      child: _createSpaceForm(context),
+                    )
+                  ],
+                ),
+              )
+            ],
+          )),
+    );
   }
 
   Widget _createSpaceForm(BuildContext context) {
@@ -198,7 +201,8 @@ class CreateSpacePopUpDialog extends StatelessWidget {
                     OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                 hintText: 'Space Description',
                 hintStyle: const TextStyle(color: Colors.grey, fontSize: 20)),
-            keyboardType: TextInputType.multiline,
+            //keyboardType: TextInputType.multiline,
+            keyboardType: TextInputType.text,
             minLines: 4,
             maxLines: 16,
             onChanged: (value) => context
