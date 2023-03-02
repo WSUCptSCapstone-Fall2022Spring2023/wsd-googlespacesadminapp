@@ -61,7 +61,8 @@ class EditProfileView extends StatelessWidget {
               BlocProvider(
                   create: (context) => EditProfileBloc(
                         userRepo: context.read<UserDataRepository>(),
-                      ),
+                      )..add(ProfileDisplayNameChanged(
+                          displayName: currentUserData.displayName)),
                   child: SizedBox(
                     width: 600,
                     child: Container(width: 550, child: _createSpaceForm()),
@@ -143,9 +144,13 @@ class EditProfileView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(5)),
                     //hintText: 'Display Name',
                     hintStyle: TextStyle(color: picoteeBlue, fontSize: 26)),
-                validator: (value) => state.isValidDisplayName
-                    ? null
-                    : 'Must be between 2 - 25 characters',
+                validator: (value) {
+                  if (state.isValidDisplayName) {
+                    return null;
+                  } else {
+                    return 'Must be between 2 - 25 characters';
+                  }
+                },
                 onChanged: (value) => context
                     .read<EditProfileBloc>()
                     .add(ProfileDisplayNameChanged(displayName: value)),

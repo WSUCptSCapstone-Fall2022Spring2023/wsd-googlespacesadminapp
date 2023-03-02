@@ -7,9 +7,17 @@ class EditProfileState {
   bool get isValidFirstName => firstName.length > 1 && firstName.length < 21;
   final String lastName;
   bool get isValidLastName => lastName.length > 1 && lastName.length < 21;
-  final String displayName;
-  bool get isValidDisplayName =>
-      displayName.length > 1 && displayName.length < 26;
+  final String? displayName;
+
+  bool get isValidDisplayName {
+    if (displayName == null) {
+      return false;
+    } else if (displayName!.length > 1 && displayName!.length < 26) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   final FormSubmissionStatus formStatus;
   UserData? currentUser;

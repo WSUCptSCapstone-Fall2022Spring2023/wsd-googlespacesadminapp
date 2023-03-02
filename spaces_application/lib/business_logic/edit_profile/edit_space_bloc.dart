@@ -44,7 +44,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     emit(state.copyWith(formStatus: FormSubmitting()));
     try {
       final profilePicString = await functions.encodeMySVGtoString();
-      await userRepo.setCurrentUserData(profilePicString, state.displayName);
+      await userRepo.setCurrentUserData(profilePicString, state.displayName!);
       final currentUserData = await userRepo.getCurrentUserData();
       //final pp = functions.decodeFluttermojifromString(
       //  userRepo.currentUserData.profilePicString);
