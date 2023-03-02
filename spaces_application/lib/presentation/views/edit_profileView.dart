@@ -11,93 +11,41 @@ import '../../data/models/userData.dart';
 import '../../data/repositories/userData_repository.dart';
 import '../widgets/navigation_drawer.dart';
 import 'package:fluttermoji/fluttermoji.dart';
+import 'package:get/get.dart';
 
-class EditProfileView extends StatefulWidget {
-  EditProfileView({this.title}) : super();
-  final String? title;
+class EditProfileView extends StatelessWidget {
+  EditProfileView({required this.currentUserData});
+  final UserData currentUserData;
+  static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final Color textColor = Color.fromARGB(255, 246, 246, 176);
+  final Color bgColor = Color.fromARGB(255, 49, 49, 49);
+  final Color boxColor = Color.fromARGB(255, 60, 60, 60);
+  final Color darkViolet = Color.fromARGB(255, 9, 5, 5);
+  final Color navyBlue = Color.fromARGB(255, 14, 4, 104);
+  final Color picoteeBlue = Color.fromARGB(255, 45, 40, 138);
+  final Color majorelleBlue = Color.fromARGB(255, 86, 85, 221);
+  final Color salmon = Color.fromARGB(255, 252, 117, 106);
+  final Color phthaloBlue = Color.fromARGB(255, 22, 12, 113);
+  final Color lightPink = Color.fromARGB(255, 243, 171, 174);
+  final Color offWhite = Color.fromARGB(255, 244, 244, 244);
 
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<EditProfileView> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title!),
-        centerTitle: true,
-      ),
-      body: ListView(
-        physics: BouncingScrollPhysics(),
-        children: <Widget>[
-          SizedBox(
-            height: 25,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              "Use your Fluttermoji anywhere\nwith the below widget",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          FluttermojiCircleAvatar(
-            backgroundColor: Colors.grey[200],
-            radius: 100,
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "and create your own page to customize them using our widgets",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          SizedBox(
-            height: 50,
-          ),
-          Row(
-            children: [
-              Spacer(flex: 2),
-              Expanded(
-                flex: 3,
-                child: Container(
-                  height: 35,
-                  child: ElevatedButton.icon(
-                    icon: Icon(Icons.edit),
-                    label: Text("Customize"),
-                    onPressed: () => Navigator.push(context,
-                        new MaterialPageRoute(builder: (context) => NewPage())),
-                  ),
-                ),
-              ),
-              Spacer(flex: 2),
-            ],
-          ),
-          SizedBox(
-            height: 100,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class NewPage extends StatelessWidget {
-  const NewPage({Key? key}) : super(key: key);
+  final FluttermojiFunctions functions = FluttermojiFunctions();
+  final FluttermojiController controller = FluttermojiController();
 
   @override
   Widget build(BuildContext context) {
     var _width = MediaQuery.of(context).size.width;
+    Get.put(FluttermojiController());
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: offWhite,
+      drawer: NavigationDrawer(
+        currentUserData: currentUserData,
+      ),
+      appBar: AppBar(
+        elevation: 15,
+        title: const Text("Profile"),
+        backgroundColor: bgColor,
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -110,25 +58,20 @@ class NewPage extends StatelessWidget {
                   backgroundColor: Colors.grey[200],
                 ),
               ),
-              SizedBox(
-                width: 600,
-                child: Row(
-                  children: [
-                    Text(
-                      "Customize:",
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    Spacer(),
-                    FluttermojiSaveWidget(),
-                  ],
-                ),
-              ),
+              BlocProvider(
+                  create: (context) => EditProfileBloc(
+                        userRepo: context.read<UserDataRepository>(),
+                      ),
+                  child: SizedBox(
+                    width: 600,
+                    child: Container(width: 550, child: _createSpaceForm()),
+                  )),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 30),
                 child: FluttermojiCustomizer(
                   scaffoldWidth: 600,
-                  autosave: false,
+                  autosave: true,
                   theme: FluttermojiThemeData(
                       boxDecoration: BoxDecoration(boxShadow: [BoxShadow()])),
                 ),
@@ -138,6 +81,98 @@ class NewPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _createSpaceForm() {
+    return BlocListener<EditProfileBloc, EditProfileState>(
+        listenWhen: (previous, current) {
+          if (current.formStatus == previous.formStatus)
+            return false;
+          else
+            return true;
+        },
+        listener: (context, state) {
+          final formStatus = state.formStatus;
+          if (formStatus is SubmissionFailed) {
+            MiscWidgets.showException(context, formStatus.exception.toString());
+          } else if (formStatus is SubmissionSuccess) {
+            // Navigate to new page
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => HomeView(
+                  currentUserData: state.currentUser!,
+                ),
+              ),
+            );
+            MiscWidgets.showException(context, "Profile Saved");
+          }
+        },
+        child: Form(
+            key: _formKey,
+            child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                child: Row(
+                  children: [
+                    _displayNameField(currentUserData),
+                    _editProfileButton()
+                  ],
+                ))));
+  }
+
+  Widget _displayNameField(UserData currentUser) {
+    return BlocBuilder<EditProfileBloc, EditProfileState>(
+        builder: (context, state) {
+      return Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              boxShadow: [
+                BoxShadow(
+                    color: picoteeBlue,
+                    blurRadius: 1,
+                    spreadRadius: 0,
+                    offset: const Offset(2, 2))
+              ]),
+          child: SizedBox(
+              width: 400,
+              child: TextFormField(
+                initialValue: currentUser.displayName,
+                style: TextStyle(color: picoteeBlue, fontSize: 26),
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    //hintText: 'Display Name',
+                    hintStyle: TextStyle(color: picoteeBlue, fontSize: 26)),
+                validator: (value) => state.isValidDisplayName
+                    ? null
+                    : 'Must be between 2 - 25 characters',
+                onChanged: (value) => context
+                    .read<EditProfileBloc>()
+                    .add(ProfileDisplayNameChanged(displayName: value)),
+              )));
+    });
+  }
+
+  Widget _editProfileButton() {
+    return BlocBuilder<EditProfileBloc, EditProfileState>(
+        builder: (context, state) {
+      return state.formStatus is FormSubmitting
+          ? CircularProgressIndicator()
+          : IconButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  context.read<EditProfileBloc>().add(ProfileSubmitted());
+                }
+              },
+              icon: FluttermojiSaveWidget(
+                onTap: () {
+                  if (_formKey.currentState!.validate()) {
+                    context.read<EditProfileBloc>().add(ProfileSubmitted());
+                  }
+                },
+              ),
+            );
+    });
   }
 }
 

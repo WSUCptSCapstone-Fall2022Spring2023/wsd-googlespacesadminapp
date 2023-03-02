@@ -135,12 +135,4 @@ class SpaceView extends StatelessWidget {
             );
     });
   }
-
-  void checkForNewPosts() {
-    BlocListener(
-      listener: (context, state) => context
-          .read<PostBloc>()
-          .add(LoadCurrentSpace(currentSpace: currentSpace)),
-    );
-  }
 }

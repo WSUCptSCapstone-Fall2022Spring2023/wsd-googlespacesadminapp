@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttermoji/fluttermoji.dart';
+import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:spaces_application/data/models/userData.dart';
 import 'package:spaces_application/presentation/widgets/createSpaceBottomSheet.dart';
 import 'package:spaces_application/presentation/views/loginView.dart';
@@ -8,7 +10,9 @@ import 'package:spaces_application/presentation/widgets/helpBottomSheet.dart';
 import 'package:spaces_application/presentation/widgets/createStudentBottomSheet.dart';
 import 'package:spaces_application/presentation/views/profileView.dart';
 import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../data/repositories/userData_repository.dart';
 import '../views/edit_profileView.dart';
 import '../views/spaceView.dart';
@@ -32,9 +36,25 @@ class NavigationDrawer extends StatelessWidget {
         child: ListView(
             padding: const EdgeInsets.symmetric(vertical: 50),
             children: <Widget>[
-          Icon(Icons.account_circle, size: 150, color: salmon),
+          CircleAvatar(
+            radius: 60,
+            backgroundColor: offWhite,
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(
+                Radius.circular(
+                  120,
+                ),
+              ),
+              child: SvgPicture.string(
+                FluttermojiFunctions().decodeFluttermojifromString(
+                    currentUserData.profilePicString),
+                height: 120,
+                width: 120,
+              ),
+            ),
+          ),
           const SizedBox(height: 15),
-          Text(currentUserData.firstName,
+          Text(currentUserData.displayName,
               textAlign: TextAlign.center,
               style: const TextStyle(
                   color: Colors.black, fontWeight: FontWeight.bold)),
@@ -81,7 +101,9 @@ class NavigationDrawer extends StatelessWidget {
                     fontSize: 22)),
             onTap: () {
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => EditProfileView(title: "title"),
+                builder: (context) => EditProfileView(
+                  currentUserData: currentUserData,
+                ),
               ));
             },
           ),
@@ -198,5 +220,10 @@ class NavigationDrawer extends StatelessWidget {
                     });
               }),
         ]));
+  }
+
+  void reset() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.clear();
   }
 }

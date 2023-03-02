@@ -25,12 +25,11 @@ class UserDataRepository {
   }
 
   Future<void> setCurrentUserData(
-      String firstName, String lastName, String displayName) async {
-    await ref.child(currentUserData.uid).update({
-      'firstName': firstName,
-      'lastName': lastName,
-      'displayName': displayName
-    });
+      String profilePicString, String displayName) async {
+    await ref
+        .child("UserData/")
+        .child(currentUserData.uid)
+        .update({'profilePic': profilePicString, 'displayName': displayName});
   }
 
   // returns a space searched for by ID
