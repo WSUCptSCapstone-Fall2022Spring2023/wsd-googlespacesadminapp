@@ -6,20 +6,27 @@ void main() {
   const email = 'test@wsu.edu';
   const password = 'password';
   group('LoginState', () {
-    test('supports value comparisons', () {
+    test(
+        'LoginInitialState - Initial landing into page, support value comparisons for defaults',
+        () {
       expect(LoginState(), LoginState());
     });
 
-    test('return same objects when no properties are passed', () {
+    test(
+        'InitialFormStatus - return same objects when no properties are passed',
+        () {
       expect(LoginState().copyWith(formStatus: const InitialFormStatus()),
           LoginState());
     });
 
-    test('returns object with updated email when email is passed', () {
+    test('EmailUpdate - returns object with updated email when email is passed',
+        () {
       expect(LoginState().copyWith(email: email), LoginState(email: email));
     });
 
-    test('returns object with updated password when password is passed', () {
+    test(
+        'PasswordUpdate - returns object with updated password when password is passed',
+        () {
       expect(LoginState().copyWith(password: password),
           LoginState(password: password));
     });

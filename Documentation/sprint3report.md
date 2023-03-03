@@ -7,7 +7,7 @@
 * Home page integration
 * Other minor Flutter/dart files
 
-## Work Smmary (Developer Facing)
+## Work Summary (Developer Facing)
 In this sprint, the team focused on configuring Post Spaces, creating a home landing page, and creating unit tests to verify proper processes and outcomes of the application. We have successfully configured the Firebase database for Pose Spaces which will allow a user to create Post Space with a title and description to commment, edit and collaborate. We have also successfuly implemented the Wahkiakhum website home page into our application's landing page. To verify the integrity of our application, we also have created unit tests for the Business_Logic login files. We are in optimal position to continue our work and prepare a prototype for presentation by early February.
 
 ## Unfinished Work
