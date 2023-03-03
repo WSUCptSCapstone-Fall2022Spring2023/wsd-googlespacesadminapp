@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttermoji/fluttermoji.dart';
 import 'package:spaces_application/presentation/views/settingsView.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -12,6 +13,7 @@ import 'package:spaces_application/business_logic/post/create_post_state.dart';
 import 'package:spaces_application/data/repositories/space_repository.dart';
 import 'package:spaces_application/presentation/widgets/navigation_drawer.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../business_logic/auth/form_submission_status.dart';
 import '../../business_logic/auth/login/login_bloc.dart';
@@ -50,7 +52,7 @@ class SpaceView extends StatelessWidget {
         appBar: AppBar(
           elevation: 15,
           // title: Text(currentSpace.spaceName,
-          title: Text(currentSpace.spacePosts.length.toString(),
+          title: Text(currentSpace.spaceName,
               style: const TextStyle(color: Colors.black)),
           iconTheme: const IconThemeData(color: Colors.black, size: 30),
           backgroundColor: Colors.white,
@@ -77,25 +79,28 @@ class SpaceView extends StatelessWidget {
               child: Column(children: [
                 Flexible(
                   child: Container(
-                      color: Colors.deepOrangeAccent,
+                      color: Colors.white,
                       width: double.infinity,
                       height: double.infinity,
                       child: BlocBuilder<PostBloc, PostState>(
                         builder: ((context, state) {
                           if (state.currentSpace == null) {
                             return const SizedBox(
-                                height: 100,
                                 width: 100,
-                                child: CircularProgressIndicator());
+                                height: 100,
+                                child:
+                                    Center(child: CircularProgressIndicator()));
                           } else if (state.currentSpace!.spacePosts.isEmpty) {
                             return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Text("Space has no Posts. Be the First!"),
                                 Image.asset(
                                   'assets/images/SchoolLearning.jpg',
                                   width: 400,
                                   height: 400,
                                 ),
+                                const Text(
+                                    "This space has no Posts. Be the First!"),
                               ],
                             );
                           } else {
@@ -104,37 +109,80 @@ class SpaceView extends StatelessWidget {
                                 itemCount:
                                     state.currentSpace!.spacePosts.length,
                                 itemBuilder: (context, index) {
-                                  return ListTile(
-                                      //leading: Image(state.currentSpace!.spacePosts[index].postUser.profilePicture), // Here, we want to lead each post by the user's profile picture
-                                      title: Text(state.currentSpace!
-                                          .spacePosts[index].contents),
-                                      subtitle: Text(
-                                          "Posted by ${state.currentSpace!.spacePosts[index].postUser} at ${state.currentSpace!.spacePosts[index].postedTime}"),
-                                      hoverColor: Colors.grey,
-                                      isThreeLine: true,
-                                      trailing: PopupMenuButton(
-                                        onSelected: ((value) {
-                                          if (value == '/edit') {
-                                            MiscWidgets.showException(
-                                                context, "Edit Message");
-                                          } else if (value == '/delete') {
-                                            MiscWidgets.showException(
-                                                context, "Delete Message");
-                                          }
-                                        }),
-                                        itemBuilder: (context) {
-                                          return const [
-                                            PopupMenuItem(
-                                                value: '/edit',
-                                                child: Text(
-                                                    "Edit (NO FUNCTIONALITY)")),
-                                            PopupMenuItem(
-                                                value: '/delete',
-                                                child: Text(
-                                                    "Delete (NO FUNCTIONALITY)"))
-                                          ];
-                                        },
-                                      ));
+                                  return Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: ListTile(
+                                        dense: true,
+                                        leading: ConstrainedBox(
+                                          constraints: const BoxConstraints(
+                                              maxHeight: 50,
+                                              maxWidth: 50,
+                                              minWidth: 50,
+                                              minHeight: 50),
+                                          child: SvgPicture.string(
+                                              FluttermojiFunctions()
+                                                  .decodeFluttermojifromString(
+                                                      state
+                                                          .currentSpace!
+                                                          .spacePosts[index]
+                                                          .postUser
+                                                          .profilePicString)),
+                                        ),
+                                        shape: const Border(
+                                            top: BorderSide(width: 5)),
+                                        title: RichText(
+                                            text: TextSpan(
+                                                style: const TextStyle(),
+                                                children: [
+                                              TextSpan(
+                                                  text: state
+                                                      .currentSpace!
+                                                      .spacePosts[index]
+                                                      .postUser
+                                                      .displayName
+                                                      .toString(),
+                                                  style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      fontSize: 25)),
+                                              TextSpan(
+                                                  text:
+                                                      "  ${state.currentSpace!.spacePosts[index].postedTime.month.toString()}/${state.currentSpace!.spacePosts[index].postedTime.day.toString()}/${state.currentSpace!.spacePosts[index].postedTime.year.toString()} ${state.currentSpace!.spacePosts[index].postedTime.hour.toString()}:${state.currentSpace!.spacePosts[index].postedTime.minute.toString()}",
+                                                  style: const TextStyle(
+                                                      color: Colors.grey))
+                                            ])),
+                                        subtitle: Text(
+                                            state.currentSpace!
+                                                .spacePosts[index].contents,
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 25,
+                                                fontWeight: FontWeight.w300)),
+                                        focusColor: Colors.grey,
+                                        isThreeLine: true,
+                                        trailing: PopupMenuButton(
+                                          onSelected: ((value) {
+                                            if (value == '/edit') {
+                                              MiscWidgets.showException(
+                                                  context, "Edit Message");
+                                            } else if (value == '/delete') {
+                                              MiscWidgets.showException(
+                                                  context, "Delete Message");
+                                            }
+                                          }),
+                                          itemBuilder: (context) {
+                                            return const [
+                                              PopupMenuItem(
+                                                  value: '/edit',
+                                                  child: Text("Edit")),
+                                              PopupMenuItem(
+                                                  value: '/delete',
+                                                  child: Text("Delete"))
+                                            ];
+                                          },
+                                        )),
+                                  );
                                 });
                             // return Text(
                             //     state.currentSpace!.spacePosts[0].contents);
