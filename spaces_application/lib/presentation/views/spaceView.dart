@@ -25,22 +25,23 @@ class SpaceView extends StatelessWidget {
   SpaceData currentSpace;
   final UserData currentUserData;
   static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final Color bgColor = Color.fromARGB(255, 49, 49, 49);
-  final Color textColor = Color.fromARGB(255, 246, 246, 176);
-  final Color boxColor = Color.fromARGB(255, 60, 60, 60);
-  final Color darkViolet = Color.fromARGB(255, 9, 5, 5);
-  final Color navyBlue = Color.fromARGB(255, 14, 4, 104);
-  final Color picoteeBlue = Color.fromARGB(255, 45, 40, 138);
-  final Color majorelleBlue = Color.fromARGB(255, 86, 85, 221);
-  final Color salmon = Color.fromARGB(255, 252, 117, 106);
-  final Color phthaloBlue = Color.fromARGB(255, 22, 12, 113);
-  final Color lightPink = Color.fromARGB(255, 243, 171, 174);
-  final Color offWhite = Color.fromARGB(255, 255, 255, 240);
+  final Color bgColor = const Color.fromARGB(255, 49, 49, 49);
+  final Color textColor = const Color.fromARGB(255, 246, 246, 176);
+  final Color boxColor = const Color.fromARGB(255, 60, 60, 60);
+  final Color darkViolet = const Color.fromARGB(255, 9, 5, 5);
+  final Color navyBlue = const Color.fromARGB(255, 14, 4, 104);
+  final Color picoteeBlue = const Color.fromARGB(255, 45, 40, 138);
+  final Color majorelleBlue = const Color.fromARGB(255, 86, 85, 221);
+  final Color salmon = const Color.fromARGB(255, 252, 117, 106);
+  final Color phthaloBlue = const Color.fromARGB(255, 22, 12, 113);
+  final Color lightPink = const Color.fromARGB(255, 243, 171, 174);
+  final Color offWhite = const Color.fromARGB(255, 255, 255, 240);
 
   @override
   Widget build(BuildContext context) {
     var ScreenHeight = MediaQuery.of(context).size.height;
     var ScreenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
         backgroundColor: Colors.white,
         drawer: NavigationDrawer(
@@ -50,8 +51,8 @@ class SpaceView extends StatelessWidget {
           elevation: 15,
           // title: Text(currentSpace.spaceName,
           title: Text(currentSpace.spacePosts.length.toString(),
-              style: TextStyle(color: Colors.black)),
-          iconTheme: IconThemeData(color: Colors.black, size: 30),
+              style: const TextStyle(color: Colors.black)),
+          iconTheme: const IconThemeData(color: Colors.black, size: 30),
           backgroundColor: Colors.white,
           actions: <Widget>[
             IconButton(
@@ -82,13 +83,21 @@ class SpaceView extends StatelessWidget {
                       child: BlocBuilder<PostBloc, PostState>(
                         builder: ((context, state) {
                           if (state.currentSpace == null) {
-                            return Container(
-                                height: 10,
-                                width: 10,
+                            return const SizedBox(
+                                height: 100,
+                                width: 100,
                                 child: CircularProgressIndicator());
-                          } else if (state.currentSpace!.spacePosts.length ==
-                              0) {
-                            return Text("Space has no Posts. ");
+                          } else if (state.currentSpace!.spacePosts.isEmpty) {
+                            return Column(
+                              children: [
+                                const Text("Space has no Posts. Be the First!"),
+                                Image.asset(
+                                  'assets/images/SchoolLearning.jpg',
+                                  width: 400,
+                                  height: 400,
+                                ),
+                              ],
+                            );
                           } else {
                             return ListView.builder(
                                 shrinkWrap: false,
@@ -96,8 +105,36 @@ class SpaceView extends StatelessWidget {
                                     state.currentSpace!.spacePosts.length,
                                 itemBuilder: (context, index) {
                                   return ListTile(
+                                      //leading: Image(state.currentSpace!.spacePosts[index].postUser.profilePicture), // Here, we want to lead each post by the user's profile picture
                                       title: Text(state.currentSpace!
-                                          .spacePosts[index].contents));
+                                          .spacePosts[index].contents),
+                                      subtitle: Text(
+                                          "Posted by ${state.currentSpace!.spacePosts[index].postUser} at ${state.currentSpace!.spacePosts[index].postedTime}"),
+                                      hoverColor: Colors.grey,
+                                      isThreeLine: true,
+                                      trailing: PopupMenuButton(
+                                        onSelected: ((value) {
+                                          if (value == '/edit') {
+                                            MiscWidgets.showException(
+                                                context, "Edit Message");
+                                          } else if (value == '/delete') {
+                                            MiscWidgets.showException(
+                                                context, "Delete Message");
+                                          }
+                                        }),
+                                        itemBuilder: (context) {
+                                          return const [
+                                            PopupMenuItem(
+                                                value: '/edit',
+                                                child: Text(
+                                                    "Edit (NO FUNCTIONALITY)")),
+                                            PopupMenuItem(
+                                                value: '/delete',
+                                                child: Text(
+                                                    "Delete (NO FUNCTIONALITY)"))
+                                          ];
+                                        },
+                                      ));
                                 });
                             // return Text(
                             //     state.currentSpace!.spacePosts[0].contents);
