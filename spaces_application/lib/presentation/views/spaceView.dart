@@ -53,9 +53,9 @@ class SpaceView extends StatelessWidget {
           elevation: 15,
           // title: Text(currentSpace.spaceName,
           title: Text(currentSpace.spaceName,
-              style: const TextStyle(color: Colors.black)),
-          iconTheme: const IconThemeData(color: Colors.black, size: 30),
-          backgroundColor: Colors.white,
+              style: const TextStyle(color: Colors.white)),
+          iconTheme: const IconThemeData(color: Colors.white, size: 30),
+          backgroundColor: bgColor,
           actions: <Widget>[
             IconButton(
                 icon: const Icon(Icons.settings_outlined),

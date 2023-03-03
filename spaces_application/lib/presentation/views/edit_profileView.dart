@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spaces_application/presentation/views/homeView.dart';
+import 'package:spaces_application/presentation/views/settingsView.dart';
 import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
 
 import '../../business_logic/auth/form_submission_status.dart';
@@ -43,8 +44,20 @@ class EditProfileView extends StatelessWidget {
       ),
       appBar: AppBar(
         elevation: 15,
-        title: const Text("Profile"),
+        // title: Text(currentSpace.spaceName,
+        title: Text("Profile", style: const TextStyle(color: Colors.white)),
+        iconTheme: const IconThemeData(color: Colors.white, size: 30),
         backgroundColor: bgColor,
+        actions: <Widget>[
+          IconButton(
+              icon: const Icon(Icons.settings_outlined),
+              onPressed: () {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => SettingsView(
+                          currentUserData: currentUserData,
+                        )));
+              })
+        ],
       ),
       body: Center(
         child: SingleChildScrollView(

@@ -8,7 +8,6 @@ import 'package:spaces_application/presentation/views/loginView.dart';
 import 'package:spaces_application/presentation/views/homeView.dart';
 import 'package:spaces_application/presentation/widgets/helpPopUpDialog.dart';
 import 'package:spaces_application/presentation/widgets/createStudentPopUpDialog.dart';
-import 'package:spaces_application/presentation/views/profileView.dart';
 import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
