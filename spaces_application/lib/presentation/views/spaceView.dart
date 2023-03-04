@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttermoji/fluttermoji.dart';
+import 'package:spaces_application/business_logic/data_retrieval_status.dart';
 import 'package:spaces_application/presentation/views/settingsView.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -73,7 +74,8 @@ class SpaceView extends StatelessWidget {
                   spaceRepo: context.read<SpaceRepository>(),
                   userRepo: context.read<UserDataRepository>(),
                   currentUserData: currentUserData,
-                )..add(LoadCurrentSpace(currentSpace: currentSpace)),
+                  currentSpaceData: currentSpace,
+                )..add(LoadPosts(currentSpace: currentSpace)),
             child: Container(
               padding: const EdgeInsets.all(8.0),
               child: Column(children: [
@@ -84,13 +86,17 @@ class SpaceView extends StatelessWidget {
                       height: double.infinity,
                       child: BlocBuilder<SpaceBloc, SpaceState>(
                         builder: ((context, state) {
-                          if (state.currentSpace == null) {
+                          // build Progress indicator when posts are being retrieved
+                          if (state.getPostsStatus is DataRetrieving) {
                             return const SizedBox(
                                 width: 100,
                                 height: 100,
                                 child:
                                     Center(child: CircularProgressIndicator()));
-                          } else if (state.currentSpace!.spacePosts.isEmpty) {
+                          }
+                          // build empty space pic/text when there are no posts
+                          else if (state.getPostsStatus is RetrievalSuccess &&
+                              state.currentSpace.spacePosts.isEmpty) {
                             return Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -103,7 +109,10 @@ class SpaceView extends StatelessWidget {
                                     "This space has no Posts. Be the First!"),
                               ],
                             );
-                          } else {
+                          }
+                          // build posts when there are posts
+                          else if (state.getPostsStatus is RetrievalSuccess &&
+                              state.currentSpace.spacePosts.isNotEmpty) {
                             return ListView.builder(
                                 shrinkWrap: false,
                                 itemCount:
@@ -184,8 +193,15 @@ class SpaceView extends StatelessWidget {
                                         )),
                                   );
                                 });
-                            // return Text(
-                            //     state.currentSpace!.spacePosts[0].contents);
+
+                            // Show error message when Retrieval fails
+                          } else if (state.getPostsStatus is RetrievalFailed) {
+                            return const Center(
+                                child: Text(
+                                    "Error with Data Retrieval. Please Refresh."));
+                            // Initial Data Retrieval Status
+                          } else {
+                            return const SizedBox.shrink();
                           }
                         }),
                       )),
@@ -201,14 +217,14 @@ class SpaceView extends StatelessWidget {
   Widget _createPostForm() {
     return BlocListener<SpaceBloc, SpaceState>(
         listenWhen: (previous, current) {
-          if (current.formStatus == previous.formStatus) {
+          if (current.postFormStatus == previous.postFormStatus) {
             return false;
           } else {
             return true;
           }
         },
         listener: (context, state) {
-          final formStatus = state.formStatus;
+          final formStatus = state.postFormStatus;
           if (formStatus is SubmissionFailed) {
             MiscWidgets.showException(context, formStatus.exception.toString());
           } else if (formStatus is SubmissionSuccess) {
@@ -256,7 +272,7 @@ class SpaceView extends StatelessWidget {
 
   Widget _createPostButton() {
     return BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
-      return state.formStatus is FormSubmitting
+      return state.postFormStatus is FormSubmitting
           ? const CircularProgressIndicator()
           : ElevatedButton(
               onPressed: () {

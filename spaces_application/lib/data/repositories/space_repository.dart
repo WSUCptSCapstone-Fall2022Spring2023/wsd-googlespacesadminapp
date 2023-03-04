@@ -79,22 +79,6 @@ class SpaceRepository {
     return spacePosts;
   }
 
-  // invites a student user to a space
-  Future<void> inviteStudentUser(String spaceID, String userID) async {
-    await ref
-        .child("Spaces/")
-        .child(spaceID)
-        .child("membersPermissions/")
-        .child(userID)
-        .set({
-      "canComment": true,
-      "canEdit": false,
-      "canInvite": false,
-      "canRemove": false,
-      "canPost": true,
-    });
-  }
-
   Future<List<UserData>> getUsersInSpace(spaceID) async {
     final snapshot = await ref
         .child("Spaces/")
