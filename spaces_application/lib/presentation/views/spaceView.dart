@@ -75,7 +75,7 @@ class SpaceView extends StatelessWidget {
                   userRepo: context.read<UserDataRepository>(),
                   currentUserData: currentUserData,
                   currentSpaceData: currentSpace,
-                )..add(LoadPosts(currentSpace: currentSpace)),
+                )..add(LoadPosts()),
             child: Container(
               padding: const EdgeInsets.all(8.0),
               child: Column(children: [

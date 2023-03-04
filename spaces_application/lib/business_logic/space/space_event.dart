@@ -10,23 +10,15 @@ class PostMessageChanged extends SpaceEvent {
   PostMessageChanged({required this.message});
 }
 
-class LoadPosts extends SpaceEvent {
-  SpaceData currentSpace;
-
-  LoadPosts({required this.currentSpace});
-}
-
-class DeleteSpace extends SpaceEvent {
-  SpaceData currentSpace;
-
-  DeleteSpace({required this.currentSpace});
-}
-
 class InviteUser extends SpaceEvent {
   UserData invitedUser;
 
   InviteUser({required this.invitedUser});
 }
+
+class LoadPosts extends SpaceEvent {}
+
+class DeleteSpace extends SpaceEvent {}
 
 class GetUsers extends SpaceEvent {}
 
