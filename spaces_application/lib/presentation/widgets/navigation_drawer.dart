@@ -148,58 +148,59 @@ class NavigationDrawer extends StatelessWidget {
                 ],
               ),
               if (currentUserData.isFaculty) const SizedBox(height: 10),
-              ExpansionTile(
-                leading: const Icon(Icons.admin_panel_settings_outlined,
-                    color: Colors.black, size: 34),
-                title: const Text('Admin',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 22)),
-                children: <Widget>[
-                  const SizedBox(height: 10),
-                  ListTile(
-                      leading: const Icon(Icons.person_outline_outlined,
-                          color: Colors.black),
-                      title: const Text('Create Student Profile',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 18)),
-                      onTap: () {
-                        // showDialog(
-                        //   context: context,
-                        //   builder: (context) => RegisterView(),
-                        // );
-                        showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (context) {
-                              return CreateStudentPopUpDialog();
-                            });
-                        // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        //   builder: (context) => RegisterView(),
-                        // ));
-                      }),
-                  const SizedBox(height: 10),
-                  ListTile(
-                      leading: const Icon(Icons.space_dashboard_outlined,
-                          color: Colors.black),
-                      title: const Text('Create a New Space',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 18)),
-                      onTap: () {
-                        showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (context) {
-                              return CreateSpacePopUpDialog();
-                            });
-                      }),
-                ],
-              ),
+              if (currentUserData.isFaculty)
+                ExpansionTile(
+                  leading: const Icon(Icons.admin_panel_settings_outlined,
+                      color: Colors.black, size: 34),
+                  title: const Text('Admin',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 22)),
+                  children: <Widget>[
+                    const SizedBox(height: 10),
+                    ListTile(
+                        leading: const Icon(Icons.person_outline_outlined,
+                            color: Colors.black),
+                        title: const Text('Create Student Profile',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 18)),
+                        onTap: () {
+                          // showDialog(
+                          //   context: context,
+                          //   builder: (context) => RegisterView(),
+                          // );
+                          showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) {
+                                return CreateStudentPopUpDialog();
+                              });
+                          // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          //   builder: (context) => RegisterView(),
+                          // ));
+                        }),
+                    const SizedBox(height: 10),
+                    ListTile(
+                        leading: const Icon(Icons.space_dashboard_outlined,
+                            color: Colors.black),
+                        title: const Text('Create a New Space',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 18)),
+                        onTap: () {
+                          showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) {
+                                return CreateSpacePopUpDialog();
+                              });
+                        }),
+                  ],
+                ),
               // ListTile(
               //     leading:
               //         const Icon(Icons.notifications_outlined, color: Colors.black),

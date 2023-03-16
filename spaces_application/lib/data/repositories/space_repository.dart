@@ -35,7 +35,6 @@ class SpaceRepository {
       "canInvite": true,
       "canRemove": true,
       "canPost": true,
-      "canDelete": true
     });
 
     await ref
@@ -49,7 +48,6 @@ class SpaceRepository {
       "canInvite": true,
       "canRemove": true,
       "canPost": true,
-      "canDelete": true
     });
   }
 
@@ -80,4 +78,122 @@ class SpaceRepository {
     }
     return spacePosts;
   }
+
+  Future<List<UserData>> getUsersInSpace(spaceID) async {
+    final snapshot = await ref
+        .child("Spaces/")
+        .child(spaceID)
+        .child("membersPermissions/")
+        .get();
+    final List<UserData> users = List<UserData>.empty(growable: true);
+    for (final child in snapshot.children) {
+      users.add(UserData.fromFirebase(child));
+    }
+    return users;
+  }
+
+  // deletes Space from db
+  Future<void> deleteSpace(String spaceID) async {
+    // gets list of all users within the space
+    final snapshot = await ref
+        .child("Spaces/")
+        .child(spaceID)
+        .child("membersPermissions/")
+        .get();
+    final List<String> userIDs = List<String>.empty(growable: true);
+    for (final child in snapshot.children) {
+      userIDs.add(child.value as String);
+    }
+    // iterates through users list and deletes the space info from within them
+    for (final userID in userIDs) {
+      await ref
+          .child("UserData/")
+          .child(userID)
+          .child("spacePermissions/")
+          .child(spaceID)
+          .remove();
+    }
+    // removes space from Spaces
+    await ref.child("Spaces/").child(spaceID).remove();
+    // removes posts from Spaces
+    await ref.child("Posts/").child(spaceID).remove();
+  }
+
+  Future<void> joinSpace(String spaceID, String userID, bool isFaculty) async {
+    if (isFaculty) {
+      await ref
+          .child("Spaces/")
+          .child(spaceID)
+          .child("membersPermissions/")
+          .child(userID)
+          .set({
+        "canComment": true,
+        "canEdit": true,
+        "canInvite": true,
+        "canRemove": true,
+        "canPost": true,
+      });
+
+      await ref
+          .child("UserData/")
+          .child(userID)
+          .child("spacesPermissions/")
+          .child(spaceID)
+          .set({
+        "canComment": true,
+        "canEdit": true,
+        "canInvite": true,
+        "canRemove": true,
+        "canPost": true,
+      });
+    } else {
+      await ref
+          .child("Spaces/")
+          .child(spaceID)
+          .child("membersPermissions/")
+          .child(userID)
+          .set({
+        "canComment": true,
+        "canEdit": false,
+        "canInvite": false,
+        "canRemove": false,
+        "canPost": true,
+      });
+
+      await ref
+          .child("UserData/")
+          .child(userID)
+          .child("spacesPermissions/")
+          .child(spaceID)
+          .set({
+        "canComment": true,
+        "canEdit": false,
+        "canInvite": false,
+        "canRemove": false,
+        "canPost": true,
+      });
+    }
+  }
+
+  Future<void> changePermissions(String spaceID, String userID) async {}
+
+  Future<void> removeUserFromSpace(String spaceID, String userID) async {
+    await ref
+        .child("UserData/")
+        .child(userID)
+        .child("spacePermissions/")
+        .child(spaceID)
+        .remove();
+
+    await ref
+        .child("Spaces/")
+        .child(spaceID)
+        .child("membersPermissions/")
+        .child(userID)
+        .remove();
+  }
+
+  //Future<List<PostData>> getUserPostHistory(String spaceID, String userID) async {
+  //}
+
 }
