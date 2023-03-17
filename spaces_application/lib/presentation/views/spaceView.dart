@@ -75,7 +75,7 @@ class SpaceView extends StatelessWidget {
                   userRepo: context.read<UserDataRepository>(),
                   currentUserData: currentUserData,
                   currentSpaceData: currentSpace,
-                )..add(LoadPosts()),
+                )..add(LoadSpacePosts()),
             child: Container(
               padding: const EdgeInsets.all(8.0),
               child: Column(children: [
@@ -115,8 +115,7 @@ class SpaceView extends StatelessWidget {
                               state.currentSpace.spacePosts.isNotEmpty) {
                             return ListView.builder(
                                 shrinkWrap: false,
-                                itemCount:
-                                    state.currentSpace!.spacePosts.length,
+                                itemCount: state.currentSpace.spacePosts.length,
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.all(10),
@@ -132,7 +131,7 @@ class SpaceView extends StatelessWidget {
                                               FluttermojiFunctions()
                                                   .decodeFluttermojifromString(
                                                       state
-                                                          .currentSpace!
+                                                          .currentSpace
                                                           .spacePosts[index]
                                                           .postUser
                                                           .profilePicString)),
@@ -146,7 +145,7 @@ class SpaceView extends StatelessWidget {
                                                 children: [
                                               TextSpan(
                                                   text: state
-                                                      .currentSpace!
+                                                      .currentSpace
                                                       .spacePosts[index]
                                                       .postUser
                                                       .displayName
@@ -158,13 +157,13 @@ class SpaceView extends StatelessWidget {
                                                       fontSize: 25)),
                                               TextSpan(
                                                   text:
-                                                      "  ${state.currentSpace!.spacePosts[index].postedTime.month.toString()}/${state.currentSpace!.spacePosts[index].postedTime.day.toString()}/${state.currentSpace!.spacePosts[index].postedTime.year.toString()} ${state.currentSpace!.spacePosts[index].postedTime.hour.toString()}:${state.currentSpace!.spacePosts[index].postedTime.minute.toString()}",
+                                                      "  ${state.currentSpace.spacePosts[index].postedTime.month.toString()}/${state.currentSpace.spacePosts[index].postedTime.day.toString()}/${state.currentSpace.spacePosts[index].postedTime.year.toString()} ${state.currentSpace.spacePosts[index].postedTime.hour.toString()}:${state.currentSpace.spacePosts[index].postedTime.minute.toString()}",
                                                   style: const TextStyle(
                                                       color: Colors.grey))
                                             ])),
                                         subtitle: Text(
-                                            state.currentSpace!
-                                                .spacePosts[index].contents,
+                                            state.currentSpace.spacePosts[index]
+                                                .contents,
                                             style: const TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 25,
@@ -229,17 +228,17 @@ class SpaceView extends StatelessWidget {
                                                                               minWidth: 50,
                                                                               minHeight: 50),
                                                                           child: SvgPicture.string(FluttermojiFunctions().decodeFluttermojifromString(state
-                                                                              .currentSpace!
+                                                                              .currentSpace
                                                                               .spacePosts[index]
                                                                               .postUser
                                                                               .profilePicString)),
                                                                         ),
                                                                         Column(
                                                                           children: [
-                                                                            Text(state.currentSpace!.spacePosts[index].postUser.displayName.toString(),
+                                                                            Text(state.currentSpace.spacePosts[index].postUser.displayName.toString(),
                                                                                 style: const TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 25)),
                                                                             Text(
-                                                                              "${state.currentSpace!.spacePosts[index].postedTime.month.toString()}/${state.currentSpace!.spacePosts[index].postedTime.day.toString()}/${state.currentSpace!.spacePosts[index].postedTime.year.toString()} ${state.currentSpace!.spacePosts[index].postedTime.hour.toString()}:${state.currentSpace!.spacePosts[index].postedTime.minute.toString()}",
+                                                                              "${state.currentSpace.spacePosts[index].postedTime.month.toString()}/${state.currentSpace.spacePosts[index].postedTime.day.toString()}/${state.currentSpace.spacePosts[index].postedTime.year.toString()} ${state.currentSpace.spacePosts[index].postedTime.hour.toString()}:${state.currentSpace.spacePosts[index].postedTime.minute.toString()}",
                                                                               style: const TextStyle(
                                                                                 color: Colors.grey,
                                                                                 fontWeight: FontWeight.normal,
@@ -283,7 +282,7 @@ class SpaceView extends StatelessWidget {
                                                                             8.0),
                                                                     child: Text(
                                                                       state
-                                                                          .currentSpace!
+                                                                          .currentSpace
                                                                           .spacePosts[
                                                                               index]
                                                                           .contents,

@@ -9,6 +9,7 @@ import 'package:spaces_application/data/models/userData.dart';
 import 'package:spaces_application/data/repositories/space_repository.dart';
 import 'package:spaces_application/data/repositories/userData_repository.dart';
 
+import '../../data/models/postData.dart';
 import '../../data/models/spaceData.dart';
 
 class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
@@ -27,7 +28,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     on<PostMessageChanged>((event, emit) async {
       await _onMessageChanged(event.message, emit);
     });
-    on<LoadPosts>((event, emit) async {
+    on<LoadSpacePosts>((event, emit) async {
       await _onLoadSpacePosts(emit);
     });
     on<PostSubmitted>((event, emit) async {
@@ -42,11 +43,25 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     on<InviteUser>((event, emit) async {
       await _inviteUser(event.invitedUser, emit);
     });
+    on<LoadPostComments>((event, emit) async {
+      await _onLoadPostComments(event.selectedPost, emit);
+    });
+    on<CommentMessageChanged>((event, emit) async {
+      await _onCommentChanged(event.message, emit);
+    });
+    on<CommentSubmitted>((event, emit) async {
+      await _submitComment(emit);
+    });
   }
 
   Future<void> _onMessageChanged(
       String newPost, Emitter<SpaceState> emit) async {
     emit(state.copyWith(newPost: newPost));
+  }
+
+  Future<void> _onCommentChanged(
+      String newComment, Emitter<SpaceState> emit) async {
+    emit(state.copyWith(newComment: newComment));
   }
 
   Future<void> _onLoadSpacePosts(Emitter<SpaceState> emit) async {
@@ -59,6 +74,20 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
           currentSpace: replaceSpace, getPostsStatus: RetrievalSuccess()));
     } catch (e) {
       emit(state.copyWith(getPostsStatus: RetrievalFailed(Exception(e))));
+    }
+  }
+
+  Future<void> _onLoadPostComments(
+      PostData selectedPost, Emitter<SpaceState> emit) async {
+    emit(state.copyWith(getCommentsStatus: DataRetrieving()));
+    try {
+      final comments = await spaceRepo.getPostComments(
+          selectedPost.postUser.uid, selectedPost.postedTime);
+      selectedPost.comments = comments;
+      emit(state.copyWith(
+          selectedPost: selectedPost, getCommentsStatus: RetrievalSuccess()));
+    } catch (e) {
+      emit(state.copyWith(getCommentsStatus: RetrievalFailed(Exception(e))));
     }
   }
 
@@ -75,6 +104,17 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       emit(state.copyWith(postFormStatus: SubmissionSuccess()));
     } catch (e) {
       emit(state.copyWith(postFormStatus: SubmissionFailed(Exception(e))));
+    }
+  }
+
+  Future<void> _submitComment(Emitter<SpaceState> emit) async {
+    emit(state.copyWith(commentFormStatus: FormSubmitting()));
+    try {
+      await spaceRepo.createComment(state.newComment, currentUserData.uid,
+          state.currentSpace.sid, state.selectedPost!.postedTime);
+      emit(state.copyWith(commentFormStatus: SubmissionSuccess()));
+    } catch (e) {
+      emit(state.copyWith(commentFormStatus: SubmissionFailed(Exception(e))));
     }
   }
 
