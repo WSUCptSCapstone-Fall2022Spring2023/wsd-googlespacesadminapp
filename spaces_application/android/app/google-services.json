@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "743951780713",
+    "firebase_url": "https://spaces-application-default-rtdb.firebaseio.com",
     "project_id": "spaces-application",
     "storage_bucket": "spaces-application.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "743951780713-dd2rgrjr1k7q53dvq5lhbk69kf4lec0r.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "743951780713-n6d5v4shtafreg88giiu822tv77dg8h2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.spacesApplication"
+              }
             }
           ]
         }
