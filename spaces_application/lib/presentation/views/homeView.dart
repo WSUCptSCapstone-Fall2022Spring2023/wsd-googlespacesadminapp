@@ -28,11 +28,11 @@ class HomeView extends StatelessWidget {
         drawer: NavigationDrawer(
           currentUserData: currentUserData,
         ),
-        endDrawer: SettingsDrawer(currentUserData: currentUserData),
+        //endDrawer: SettingsDrawer(currentUserData: currentUserData),
         appBar: AppBar(
           elevation: 15,
           // title: Text(currentSpace.spaceName,
-          title: Text("Home Page", style: const TextStyle(color: Colors.white)),
+          title: const Text("Home Page", style: TextStyle(color: Colors.white)),
           iconTheme: const IconThemeData(color: Colors.white, size: 30),
           backgroundColor: bgColor,
         ),

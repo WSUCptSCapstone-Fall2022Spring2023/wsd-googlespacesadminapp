@@ -13,6 +13,7 @@ import 'package:spaces_application/business_logic/space/space_event.dart';
 import 'package:spaces_application/business_logic/space/space_state.dart';
 import 'package:spaces_application/data/repositories/space_repository.dart';
 import 'package:spaces_application/presentation/widgets/navigation_drawer.dart';
+import 'package:spaces_application/presentation/widgets/settingsDrawer.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -50,6 +51,10 @@ class SpaceView extends StatelessWidget {
         drawer: NavigationDrawer(
           currentUserData: currentUserData,
         ),
+        endDrawer: SettingsDrawer(
+          currentUserData: currentUserData,
+          currentSpace: currentSpace,
+        ),
         appBar: AppBar(
           elevation: 15,
           // title: Text(currentSpace.spaceName,
@@ -57,15 +62,11 @@ class SpaceView extends StatelessWidget {
               style: const TextStyle(color: Colors.white)),
           iconTheme: const IconThemeData(color: Colors.white, size: 30),
           backgroundColor: bgColor,
-          actions: <Widget>[
-            IconButton(
-                icon: const Icon(Icons.settings_outlined),
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => SettingsView(
-                            currentUserData: currentUserData,
-                          )));
-                })
+          actions: [
+            Builder(
+                builder: (context) => IconButton(
+                    onPressed: () => Scaffold.of(context).openEndDrawer(),
+                    icon: const Icon(Icons.menu)))
           ],
         ),
         body: BlocProvider(
