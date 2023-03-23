@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttermoji/fluttermoji.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:spaces_application/data/models/userData.dart';
+import 'package:spaces_application/presentation/views/profileView.dart';
 import 'package:spaces_application/presentation/widgets/createSpacePopUpDialog.dart';
 import 'package:spaces_application/presentation/views/loginView.dart';
 import 'package:spaces_application/presentation/views/homeView.dart';
@@ -103,7 +104,7 @@ class NavigationDrawer extends StatelessWidget {
                         fontSize: 22)),
                 onTap: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => EditProfileView(
+                    builder: (context) => ProfileView(
                       currentUserData: currentUserData,
                     ),
                   ));

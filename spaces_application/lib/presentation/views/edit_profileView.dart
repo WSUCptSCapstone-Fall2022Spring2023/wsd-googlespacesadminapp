@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spaces_application/presentation/views/homeView.dart';
+import 'package:spaces_application/presentation/views/profileView.dart';
 import 'package:spaces_application/presentation/views/settingsView.dart';
 import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
 
@@ -155,7 +156,7 @@ class EditProfileView extends StatelessWidget {
             // Navigate to new page
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (context) => HomeView(
+                builder: (context) => ProfileView(
                   currentUserData: state.currentUser!,
                 ),
               ),
