@@ -300,150 +300,63 @@ class SpaceView extends StatelessWidget {
                                                                   ),
                                                                 ),
                                                               ),
-                                                              // Column(
-                                                              //   children: [
                                                               Flexible(
-                                                                child: Container(
-                                                                    color: Colors
-                                                                        .orangeAccent,
-                                                                    width: double
-                                                                        .infinity,
-                                                                    height: double
-                                                                        .infinity,
-                                                                    child: const Text(
-                                                                        "This is where replies and the ability to reply will be stored.")),
-                                                              ),
-                                                              // const SizedBox(
-                                                              //     height:
-                                                              //         10),
-                                                              // Container(
-                                                              //   padding: const EdgeInsets
-                                                              //           .symmetric(
-                                                              //       horizontal:
-                                                              //           8),
-                                                              //   child:
-                                                              //       _createCommentForm(),
-                                                              // )
-                                                              //   ],
-                                                              // )
-                                                              // BlocBuilder<
-                                                              //     PostBloc,
-                                                              //     PostState>(
-                                                              //   builder:
-                                                              //       (context,
-                                                              //           state) {
-                                                              //     return (const Text(
-                                                              //         "This is where replies will be stored."));
-                                                              //if (state.currentSpace.spacePosts[index].comments == null)
-                                                              //  return (const SizedBox(
-                                                              // width: 100,
-                                                              // height: 100,
-                                                              // child: Center(child: CircularProgressIndicator())));
-                                                              //}
-                                                              //else if state.currentSpace!.spacePosts[index].comments.isEmpty) {
-                                                              //  return Column(
-                                                              //    mainAxisAliginment: MainAxisAlignment.center,
-                                                              //      children: [
-                                                              //        Image.asset(
-                                                              //        '',
-                                                              //        width: 300,
-                                                              //        height 300,
-                                                              //        ),
-                                                              //        const Text(
-                                                              //          "No replies.")
-                                                              //      ],
-                                                              //  );
-                                                              // else {
-                                                              //   return ListView.builder(
-                                                              //    shrinkWrap: false,
-                                                              //    itemCount: state.currentSpace!.spacePosts.postComments.length,
-                                                              //    itemBuilder: (context, index) {
-                                                              //      return Padding(
-                                                              //        padding: const EdgeInsets.all(10),
-                                                              //        child: ListTile(
-                                                              //          dense: true,
-                                                              // leading: ConstrainedBox(
-                                                              //   constraints: const BoxConstraints(
-                                                              //       maxHeight: 50,
-                                                              //       maxWidth: 50,
-                                                              //       minWidth: 50,
-                                                              //       minHeight: 50),
-                                                              //   child: SvgPicture.string(
-                                                              //       FluttermojiFunctions()
-                                                              //           .decodeFluttermojifromString(
-                                                              //               state
-                                                              //                   .currentSpace!
-                                                              //                   .spacePosts[index]
-                                                              //                   .postComments[index].commentUser
-                                                              //                   .profilePicString)),
-                                                              // ),
-                                                              // shape: const Border(
-                                                              //     top: BorderSide(width: 5)),
-                                                              // selectedTileColor: Colors.grey,
-                                                              // title: RichText(
-                                                              //     text: TextSpan(
-                                                              //         style: const TextStyle(),
-                                                              //         children: [
-                                                              //       TextSpan(
-                                                              //           text: state
-                                                              //               .currentSpace!
-                                                              //               .spacePosts[index]
-                                                              //               .postComments[index]
-                                                              //               .commentUser
-                                                              //               .displayName
-                                                              //               .toString(),
-                                                              //           style: const TextStyle(
-                                                              //               color: Colors.black,
-                                                              //               fontWeight:
-                                                              //                   FontWeight.normal,
-                                                              //               fontSize: 25)),
-                                                              //       TextSpan(
-                                                              //           text:
-                                                              //               "  ${state.currentSpace!.spacePosts[index].postComments[index]..postedTime.month.toString()}/${state.currentSpace!.spacePosts[index].postComments[index]..postedTime.day.toString()}/${state.currentSpace!.spacePosts[index].postComments[index].postedTime.year.toString()} ${state.currentSpace!.spacePosts[index].postComments[index].postedTime.hour.toString()}:${state.currentSpace!.spacePosts[index].postComments[index].postedTime.minute.toString()}",
-                                                              //           style: const TextStyle(
-                                                              //               color: Colors.grey))
-                                                              //     ])),
-                                                              // subtitle: Text(
-                                                              //     state.currentSpace!
-                                                              //         .spacePosts[index].contents,
-                                                              //     style: const TextStyle(
-                                                              //         color: Colors.black,
-                                                              //         fontSize: 25,
-                                                              //         fontWeight: FontWeight.normal)),
-                                                              // isThreeLine: true,
-                                                              // trailing: PopupMenuButton(
-                                                              //   onSelected: ((value) {
-                                                              //     if (value == '/edit') {
-                                                              //       MiscWidgets.showException(
-                                                              //           context, "Edit Message");
-                                                              //     } else if (value == '/delete') {
-                                                              //       MiscWidgets.showException(
-                                                              //           context, "Delete Message");
-                                                              //     }
-                                                              //   }),
-                                                              //   itemBuilder: (context) {
-                                                              //     return const [
-                                                              //       PopupMenuItem(
-                                                              //           value: '/reply',
-                                                              //           child: Text("Reply")),
-                                                              //       PopupMenuItem(
-                                                              //           value: '/edit',
-                                                              //           child: Text("Edit")),
-                                                              //       PopupMenuItem(
-                                                              //           value: '/delete',
-                                                              //           child: Text("Delete"))
-                                                              //     ];
-                                                              //   },
-                                                              // )
-                                                              //        )
-                                                              //      );
-                                                              //    }
-
-                                                              //    );
-                                                              // }
-                                                              //}
-                                                              //   },
-                                                              // ))
+                                                                  child: Container(
+                                                                      color: Colors.orangeAccent,
+                                                                      width: double.infinity,
+                                                                      height: double.infinity,
+                                                                      // child: BlocBuilder<CommentBloc, CommentState>(
+                                                                      child: Column(
+                                                                        children: [
+                                                                          if (state.getCommentsStatus
+                                                                              is DataRetrieving) ...[
+                                                                            const SizedBox(
+                                                                                width: 100,
+                                                                                height: 100,
+                                                                                child: Center(child: CircularProgressIndicator()))
+                                                                          ] else if (state.getCommentsStatus is RetrievalSuccess &&
+                                                                              state.currentSpace.spacePosts[index].comments.isEmpty) ...[
+                                                                            Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: const [
+                                                                              Text("No replies")
+                                                                            ])
+                                                                          ] else if (state.getCommentsStatus is RetrievalSuccess && state.currentSpace.spacePosts[index].comments.isNotEmpty) ...[
+                                                                            ListView.builder(
+                                                                                shrinkWrap: false,
+                                                                                itemCount: state.currentSpace.spacePosts[index].comments.length,
+                                                                                itemBuilder: (context, index2) {
+                                                                                  return Padding(
+                                                                                      padding: const EdgeInsets.all(10),
+                                                                                      child: ListTile(
+                                                                                        dense: true,
+                                                                                        leading: ConstrainedBox(
+                                                                                          constraints: const BoxConstraints(maxHeight: 30, maxWidth: 30, minWidth: 30, minHeight: 30),
+                                                                                          child: SvgPicture.string(FluttermojiFunctions().decodeFluttermojifromString(state.currentSpace.spacePosts[index].comments[index2].commentUser.profilePicString)),
+                                                                                        ),
+                                                                                        shape: const Border(top: BorderSide(width: 5)),
+                                                                                        selectedTileColor: Colors.grey,
+                                                                                        title: RichText(
+                                                                                            text: TextSpan(children: [
+                                                                                          TextSpan(text: state.currentSpace.spacePosts[index].comments[index2].commentUser.displayName.toString(), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 25)),
+                                                                                          TextSpan(text: "  ${state.currentSpace.spacePosts[index].comments[index2].postedTime.month.toString()}/${state.currentSpace.spacePosts[index].comments[index2].postedTime.day.toString()}/${state.currentSpace.spacePosts[index].comments[index2].postedTime.year.toString()} ${state.currentSpace.spacePosts[index].comments[index2].postedTime.hour.toString()}:${state.currentSpace.spacePosts[index].comments[index2].postedTime.minute.toString()}", style: const TextStyle(color: Colors.grey))
+                                                                                        ])),
+                                                                                        subtitle: Text(state.currentSpace.spacePosts[index].comments[index2].contents),
+                                                                                      ));
+                                                                                })
+                                                                          ] else if (state.getCommentsStatus is RetrievalFailed) ...[
+                                                                            const Center(child: Text("Error with Data Retrieval. Please Refresh."))
+                                                                          ] else ...[
+                                                                            const SizedBox(
+                                                                                width: 300,
+                                                                                height: 100,
+                                                                                child: Text(
+                                                                                  "Else Block",
+                                                                                  style: TextStyle(color: Colors.blue, fontSize: 40),
+                                                                                ))
+                                                                          ]
+                                                                        ],
+                                                                      )
+                                                                      // ]
+                                                                      )),
                                                             ],
                                                           ))
                                                     ],
@@ -551,7 +464,7 @@ class SpaceView extends StatelessWidget {
   }
 
   Widget _createCommentForm() {
-    return Text("Form goes here!");
+    return const Text("Form goes here!");
     // return BlocListener<CommentBloc, CommentState>(
     //   listenWhen: (previous, current) {
     //     if (current.formStatus == previous.formStatus) {
