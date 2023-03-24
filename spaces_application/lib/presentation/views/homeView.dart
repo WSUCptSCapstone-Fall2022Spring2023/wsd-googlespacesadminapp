@@ -4,9 +4,12 @@ import 'package:spaces_application/presentation/views/settingsView.dart';
 import 'package:spaces_application/presentation/views/loginView.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:spaces_application/presentation/widgets/navigation_drawer.dart';
+import 'package:spaces_application/presentation/widgets/settingsDrawer.dart';
 
 import '../../data/models/userData.dart';
 import '../../data/repositories/userData_repository.dart';
+
+import 'package:path/path.dart';
 
 class HomeView extends StatelessWidget {
   HomeView({required this.currentUserData});
@@ -25,22 +28,13 @@ class HomeView extends StatelessWidget {
         drawer: NavigationDrawer(
           currentUserData: currentUserData,
         ),
+        endDrawer: SettingsDrawer(currentUserData: currentUserData),
         appBar: AppBar(
           elevation: 15,
           // title: Text(currentSpace.spaceName,
           title: Text("Home Page", style: const TextStyle(color: Colors.white)),
           iconTheme: const IconThemeData(color: Colors.white, size: 30),
           backgroundColor: bgColor,
-          actions: <Widget>[
-            IconButton(
-                icon: const Icon(Icons.settings_outlined),
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => SettingsView(
-                            currentUserData: currentUserData,
-                          )));
-                })
-          ],
         ),
         body: Center(child: WebView(initialUrl: 'https://wahksd.k12.wa.us/')));
   }
