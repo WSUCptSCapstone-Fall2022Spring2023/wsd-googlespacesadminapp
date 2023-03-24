@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttermoji/fluttermoji.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
+import 'package:spaces_application/business_logic/data_retrieval_status.dart';
 import 'package:spaces_application/data/models/userData.dart';
 import 'package:spaces_application/presentation/widgets/createSpacePopUpDialog.dart';
 import 'package:spaces_application/presentation/views/loginView.dart';
@@ -44,13 +45,10 @@ class SettingsDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<SpaceBloc>().add(GetUsers());
-
-    List<UserData> userList = state.users;
-
     final List spacesJoined = currentUserData.spacesJoined;
     var ScreenHeight = MediaQuery.of(context).size.height;
     var ScreenWidth = MediaQuery.of(context).size.width;
+    List<UserData> userList = List<UserData>.empty(growable: true);
 
     return Drawer(
       // width: ScreenWidth / 4,
@@ -115,48 +113,69 @@ class SettingsDrawer extends StatelessWidget {
                       fontWeight: FontWeight.normal,
                       fontSize: 20)),
               children: [
-                ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: userList.length,
-                    itemBuilder: ((context, index) {
-                      return ListTile(
-                        leading: CircleAvatar(
-                          radius: 15,
-                          backgroundColor: Colors.grey[200],
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(
-                                150,
+                BlocBuilder<SpaceBloc, SpaceState>(
+                  builder: (context, state) {
+                    if (state.getUsersStatus is InitialRetrievalStatus) {
+                      context.read<SpaceBloc>().add(GetUsers());
+                      return const SizedBox.shrink();
+                    } else if (state.getUsersStatus is DataRetrieving) {
+                      return const SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: Center(child: CircularProgressIndicator()));
+                    } else if (state.getUsersStatus is RetrievalSuccess) {
+                      userList = state.users;
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: userList.length,
+                          itemBuilder: ((context, index) {
+                            return ListTile(
+                              leading: CircleAvatar(
+                                radius: 15,
+                                backgroundColor: Colors.grey[200],
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(
+                                      150,
+                                    ),
+                                  ),
+                                  child: SvgPicture.string(
+                                    FluttermojiFunctions()
+                                        .decodeFluttermojifromString(
+                                            userList[index].profilePicString),
+                                    height: 150,
+                                    width: 150,
+                                  ),
+                                ),
                               ),
-                            ),
-                            child: SvgPicture.string(
-                              FluttermojiFunctions()
-                                  .decodeFluttermojifromString(
-                                      userList[index].profilePicString),
-                              height: 150,
-                              width: 150,
-                            ),
-                          ),
-                        ),
-                        title: Text(userList[index].displayName,
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 10)),
-                        onTap: () {
-                          showDialog(
-                              barrierDismissible: true,
-                              context: context,
-                              builder: ((context) {
-                                return CreateUserProfileViewDialog(
-                                    currentSpace: currentSpace,
-                                    currentUserData: currentUserData,
-                                    // selectedUser: currentSpace?.membersPermissions[index],
-                                    selectedUserData: userList[index]);
-                              }));
-                        },
-                      );
-                    }))
+                              title: Text(userList[index].displayName,
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 10)),
+                              onTap: () {
+                                showDialog(
+                                    barrierDismissible: true,
+                                    context: context,
+                                    builder: ((context) {
+                                      return CreateUserProfileViewDialog(
+                                          currentSpace: currentSpace,
+                                          currentUserData: currentUserData,
+                                          // selectedUser: currentSpace?.membersPermissions[index],
+                                          selectedUserData: userList[index]);
+                                    }));
+                              },
+                            );
+                          }));
+                    } else if (state.getUsersStatus is RetrievalFailed) {
+                      return const Center(
+                          child: Text(
+                              "Error with Data Retrieval. Please Refresh."));
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                )
               ],
             ),
             const SizedBox(height: 10),

@@ -132,7 +132,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     emit(state.copyWith(getUsersStatus: DataRetrieving()));
     try {
       final List<UserData> users =
-          await spaceRepo.getUsersInSpace(state.currentSpace);
+          await spaceRepo.getUsersInSpace(state.currentSpace.sid);
       emit(state.copyWith(getUsersStatus: RetrievalSuccess(), users: users));
     } catch (e) {
       emit(state.copyWith(getUsersStatus: RetrievalFailed(Exception(e))));

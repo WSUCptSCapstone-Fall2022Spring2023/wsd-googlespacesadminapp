@@ -86,7 +86,13 @@ class SpaceRepository {
     return spacePosts;
   }
 
-  Future<List<UserData>> getUsersInSpace(spaceID) async {
+  Future<UserData> getUserFromID(String userID) async {
+    final snapshot = await ref.child("UserData/").child(userID).get();
+    UserData user = UserData.fromFirebase(snapshot);
+    return user;
+  }
+
+  Future<List<UserData>> getUsersInSpace(String spaceID) async {
     final snapshot = await ref
         .child("Spaces/")
         .child(spaceID)
@@ -94,7 +100,8 @@ class SpaceRepository {
         .get();
     final List<UserData> users = List<UserData>.empty(growable: true);
     for (final child in snapshot.children) {
-      users.add(UserData.fromFirebase(child));
+      UserData user = await getUserFromID(child.key as String);
+      users.add(user);
     }
     return users;
   }
