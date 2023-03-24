@@ -296,7 +296,7 @@ class SpaceView extends StatelessWidget {
                                                                           height: double
                                                                               .infinity,
                                                                           child:
-                                                                              const Text("This is where replies and the ability to reply will be stored.")),
+                                                                              const Text("Ths is where replies and the ability to reply will be stored.")),
                                                                     ),
                                                                     // const SizedBox(
                                                                     //     height:
