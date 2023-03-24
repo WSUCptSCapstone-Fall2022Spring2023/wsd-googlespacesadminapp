@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:spaces_application/data/models/userData.dart';
 import 'package:spaces_application/data/repositories/userData_repository.dart';
 
+import '../models/commentData.dart';
 import '../models/postData.dart';
 
 class SpaceRepository {
@@ -67,13 +68,19 @@ class SpaceRepository {
     String uid = snapshot.child("userID/").value as String;
     DataSnapshot userSnapshot = await ref.child("UserData/").child(uid).get();
     post.postUser = UserData.fromFirebase(userSnapshot);
+    final commentSnapshot = await ref
+        .child('Comments/')
+        .child(post.postUser.uid)
+        .child(post.postedTime.toString().replaceAll('.', ':'))
+        .get();
+    post.commentCount = commentSnapshot.children.length;
     return post;
   }
 
   Future<List<PostData>> getSpacePosts(String spaceID) async {
-    final snapshot = await ref.child("Posts/").child(spaceID).get();
+    final postSnapshot = await ref.child("Posts/").child(spaceID).get();
     List<PostData> spacePosts = List<PostData>.empty(growable: true);
-    for (final post in snapshot.children) {
+    for (final post in postSnapshot.children) {
       spacePosts.add(await getPost(post));
     }
     return spacePosts;
@@ -193,7 +200,35 @@ class SpaceRepository {
         .remove();
   }
 
-  //Future<List<PostData>> getUserPostHistory(String spaceID, String userID) async {
-  //}
+  Future<void> createComment(
+      String message, String userID, String spaceID, DateTime postDate) async {
+    final currentTime = DateTime.now().toString().replaceAll('.', ':');
+    final postDateStr = postDate.toString().replaceAll('.', ':');
+    await ref
+        .child("Comments/")
+        .child(userID)
+        .child(postDateStr)
+        .child(currentTime)
+        .set({"spaceID": spaceID, "contents": message});
+  }
 
+  Future<CommentData> getComment(DataSnapshot snapshot) async {
+    CommentData comment = CommentData.fromFirebase(snapshot);
+    String uid = snapshot.child("userID/").value as String;
+    DataSnapshot userSnapshot = await ref.child("UserData/").child(uid).get();
+    comment.commentUser = UserData.fromFirebase(userSnapshot);
+    return comment;
+  }
+
+  Future<List<CommentData>> getPostComments(
+      String userID, DateTime postDate) async {
+    final postDateStr = postDate.toString().replaceAll('.', ':');
+    final commentSnapshot =
+        await ref.child("Comments/").child(userID).child(postDateStr).get();
+    List<CommentData> postComments = List<CommentData>.empty(growable: true);
+    for (final comment in commentSnapshot.children) {
+      postComments.add(await getComment(comment));
+    }
+    return postComments;
+  }
 }
