@@ -193,10 +193,13 @@ class SettingsDrawer extends StatelessWidget {
                       barrierDismissible: false,
                       barrierColor: Colors.red,
                       context: context,
-                      builder: ((context) {
-                        return DeleteSpacePopupDialog(
-                            currentSpace: currentSpace,
-                            currentUserData: currentUserData);
+                      builder: ((_) {
+                        return BlocProvider.value(
+                          value: BlocProvider.of<SpaceBloc>(context),
+                          child: DeleteSpacePopupDialog(
+                              currentSpace: currentSpace,
+                              currentUserData: currentUserData),
+                        );
                       }));
                 },
               ),
