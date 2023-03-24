@@ -47,231 +47,256 @@ class SpaceView extends StatelessWidget {
     var ScreenWidth = MediaQuery.of(context).size.width;
 
     return BlocProvider(
-      create: (context) => SpaceBloc(
-        spaceRepo: context.read<SpaceRepository>(),
-        userRepo: context.read<UserDataRepository>(),
-        currentUserData: currentUserData,
-        currentSpaceData: currentSpace,
-      )..add(LoadSpacePosts()),
-      child: Scaffold(
-          backgroundColor: Colors.white,
-          drawer: NavigationDrawer(
-            currentUserData: currentUserData,
-          ),
-          endDrawer: SettingsDrawer(
-            currentUserData: currentUserData,
-            currentSpace: currentSpace,
-          ),
-          appBar: AppBar(
-            elevation: 15,
-            // title: Text(currentSpace.spaceName,
-            title: Text(currentSpace.spaceName,
-                style: const TextStyle(color: Colors.white)),
-            iconTheme: const IconThemeData(color: Colors.white, size: 30),
-            backgroundColor: bgColor,
-            actions: [
-              Builder(
-                  builder: (context) => IconButton(
-                      onPressed: () => Scaffold.of(context).openEndDrawer(),
-                      icon: const Icon(Icons.menu)))
-            ],
-          ),
-          body: Container(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(children: [
-              Flexible(
-                child: Container(
-                    color: Colors.white,
-                    width: double.infinity,
-                    height: double.infinity,
-                    child: BlocBuilder<SpaceBloc, SpaceState>(
-                      builder: ((context, state) {
-                        // build Progress indicator when posts are being retrieved
-                        if (state.getPostsStatus is DataRetrieving) {
-                          return const SizedBox(
-                              width: 100,
-                              height: 100,
-                              child:
-                                  Center(child: CircularProgressIndicator()));
-                        }
-                        // build empty space pic/text when there are no posts
-                        else if (state.getPostsStatus is RetrievalSuccess &&
-                            state.currentSpace.spacePosts.isEmpty) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/images/SchoolLearning.jpg',
-                                width: 400,
-                                height: 400,
-                              ),
-                              const Text(
-                                  "This space has no Posts. Be the First!"),
-                            ],
-                          );
-                        }
-                        // build posts when there are posts
-                        else if (state.getPostsStatus is RetrievalSuccess &&
-                            state.currentSpace.spacePosts.isNotEmpty) {
-                          return ListView.builder(
-                              shrinkWrap: false,
-                              itemCount: state.currentSpace.spacePosts.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: ListTile(
-                                      dense: true,
-                                      leading: ConstrainedBox(
-                                        constraints: const BoxConstraints(
-                                            maxHeight: 50,
-                                            maxWidth: 50,
-                                            minWidth: 50,
-                                            minHeight: 50),
-                                        child: SvgPicture.string(
-                                            FluttermojiFunctions()
-                                                .decodeFluttermojifromString(
-                                                    state
-                                                        .currentSpace
-                                                        .spacePosts[index]
-                                                        .postUser
-                                                        .profilePicString)),
-                                      ),
-                                      shape: const Border(
-                                          top: BorderSide(width: 5)),
-                                      selectedTileColor: Colors.grey,
-                                      title: RichText(
-                                          text: TextSpan(
-                                              style: const TextStyle(),
-                                              children: [
-                                            TextSpan(
-                                                text: state
-                                                    .currentSpace
-                                                    .spacePosts[index]
-                                                    .postUser
-                                                    .displayName
-                                                    .toString(),
+        create: (context) => SpaceBloc(
+              spaceRepo: context.read<SpaceRepository>(),
+              userRepo: context.read<UserDataRepository>(),
+              currentUserData: currentUserData,
+              currentSpaceData: currentSpace,
+            )..add(LoadSpacePosts()),
+        child: BlocBuilder<SpaceBloc, SpaceState>(
+          builder: (context, state) {
+            return Scaffold(
+                backgroundColor: Colors.white,
+                drawer: NavigationDrawer(
+                  currentUserData: currentUserData,
+                ),
+                endDrawer: SettingsDrawer(
+                  currentUserData: currentUserData,
+                  currentSpace: currentSpace,
+                ),
+                appBar: AppBar(
+                  elevation: 15,
+                  // title: Text(currentSpace.spaceName,
+                  title: Text(currentSpace.spaceName,
+                      style: const TextStyle(color: Colors.white)),
+                  iconTheme: const IconThemeData(color: Colors.white, size: 30),
+                  backgroundColor: bgColor,
+                  actions: [
+                    Builder(
+                        builder: (context) => IconButton(
+                            onPressed: () =>
+                                Scaffold.of(context).openEndDrawer(),
+                            icon: const Icon(Icons.menu)))
+                  ],
+                ),
+                body: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(children: [
+                    Flexible(
+                      child: Container(
+                          color: Colors.white,
+                          width: double.infinity,
+                          height: double.infinity,
+                          child: BlocBuilder<SpaceBloc, SpaceState>(
+                            builder: ((context, state) {
+                              // build Progress indicator when posts are being retrieved
+                              if (state.getPostsStatus is DataRetrieving) {
+                                return const SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: Center(
+                                        child: CircularProgressIndicator()));
+                              }
+                              // build empty space pic/text when there are no posts
+                              else if (state.getPostsStatus
+                                      is RetrievalSuccess &&
+                                  state.currentSpace.spacePosts.isEmpty) {
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/SchoolLearning.jpg',
+                                      width: 400,
+                                      height: 400,
+                                    ),
+                                    const Text(
+                                        "This space has no Posts. Be the First!"),
+                                  ],
+                                );
+                              }
+                              // build posts when there are posts
+                              else if (state.getPostsStatus
+                                      is RetrievalSuccess &&
+                                  state.currentSpace.spacePosts.isNotEmpty) {
+                                return ListView.builder(
+                                    shrinkWrap: false,
+                                    itemCount:
+                                        state.currentSpace.spacePosts.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: ListTile(
+                                            dense: true,
+                                            leading: ConstrainedBox(
+                                              constraints: const BoxConstraints(
+                                                  maxHeight: 50,
+                                                  maxWidth: 50,
+                                                  minWidth: 50,
+                                                  minHeight: 50),
+                                              child: SvgPicture.string(
+                                                  FluttermojiFunctions()
+                                                      .decodeFluttermojifromString(
+                                                          state
+                                                              .currentSpace
+                                                              .spacePosts[index]
+                                                              .postUser
+                                                              .profilePicString)),
+                                            ),
+                                            shape: const Border(
+                                                top: BorderSide(width: 5)),
+                                            selectedTileColor: Colors.grey,
+                                            title: RichText(
+                                                text: TextSpan(
+                                                    style: const TextStyle(),
+                                                    children: [
+                                                  TextSpan(
+                                                      text: state
+                                                          .currentSpace
+                                                          .spacePosts[index]
+                                                          .postUser
+                                                          .displayName
+                                                          .toString(),
+                                                      style: const TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          fontSize: 25)),
+                                                  TextSpan(
+                                                      text:
+                                                          "  ${state.currentSpace.spacePosts[index].postedTime.month.toString()}/${state.currentSpace.spacePosts[index].postedTime.day.toString()}/${state.currentSpace.spacePosts[index].postedTime.year.toString()} ${state.currentSpace.spacePosts[index].postedTime.hour.toString()}:${state.currentSpace.spacePosts[index].postedTime.minute.toString()}",
+                                                      style: const TextStyle(
+                                                          color: Colors.grey))
+                                                ])),
+                                            subtitle: Text(
+                                                state.currentSpace
+                                                    .spacePosts[index].contents,
                                                 style: const TextStyle(
                                                     color: Colors.black,
+                                                    fontSize: 25,
                                                     fontWeight:
-                                                        FontWeight.normal,
-                                                    fontSize: 25)),
-                                            TextSpan(
-                                                text:
-                                                    "  ${state.currentSpace.spacePosts[index].postedTime.month.toString()}/${state.currentSpace.spacePosts[index].postedTime.day.toString()}/${state.currentSpace.spacePosts[index].postedTime.year.toString()} ${state.currentSpace.spacePosts[index].postedTime.hour.toString()}:${state.currentSpace.spacePosts[index].postedTime.minute.toString()}",
-                                                style: const TextStyle(
-                                                    color: Colors.grey))
-                                          ])),
-                                      subtitle: Text(
-                                          state.currentSpace.spacePosts[index]
-                                              .contents,
-                                          style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.normal)),
-                                      isThreeLine: true,
-                                      trailing: PopupMenuButton(
-                                        onSelected: ((value) {
-                                          if (value == '/reply') {
-                                            MiscWidgets.showException(
-                                                (context), "reply");
-                                          } else if (value == '/edit') {
-                                            MiscWidgets.showException(
-                                                context, "Edit Message");
-                                          } else if (value == '/delete') {
-                                            MiscWidgets.showException(
-                                                context, "Delete Message");
-                                          }
-                                        }),
-                                        itemBuilder: (context) {
-                                          return const [
-                                            PopupMenuItem(
-                                                value: '/edit',
-                                                child: Text("Edit")),
-                                            PopupMenuItem(
-                                                value: '/delete',
-                                                child: Text("Delete"))
-                                          ];
-                                        },
-                                      ),
-                                      onTap: () {
-                                        showDialog(
-                                            barrierDismissible: true,
-                                            context: context,
-                                            builder: ((context) {
-                                              return Dialog(
-                                                  insetPadding:
-                                                      const EdgeInsets.all(200),
-                                                  child: Stack(
-                                                    alignment: Alignment.center,
-                                                    children: <Widget>[
-                                                      Container(
-                                                          width:
-                                                              double.infinity,
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(20),
-                                                          child: Column(
-                                                            children: [
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Row(
-                                                                    children: [
-                                                                      ConstrainedBox(
-                                                                        constraints: const BoxConstraints(
-                                                                            maxHeight:
-                                                                                50,
-                                                                            maxWidth:
-                                                                                50,
-                                                                            minWidth:
-                                                                                50,
-                                                                            minHeight:
-                                                                                50),
-                                                                        child: SvgPicture.string(FluttermojiFunctions().decodeFluttermojifromString(state
-                                                                            .currentSpace
-                                                                            .spacePosts[index]
-                                                                            .postUser
-                                                                            .profilePicString)),
-                                                                      ),
-                                                                      Column(
-                                                                        children: [
-                                                                          Text(
-                                                                              state.currentSpace.spacePosts[index].postUser.displayName.toString(),
-                                                                              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 25)),
-                                                                          Text(
-                                                                            "${state.currentSpace.spacePosts[index].postedTime.month.toString()}/${state.currentSpace.spacePosts[index].postedTime.day.toString()}/${state.currentSpace.spacePosts[index].postedTime.year.toString()} ${state.currentSpace.spacePosts[index].postedTime.hour.toString()}:${state.currentSpace.spacePosts[index].postedTime.minute.toString()}",
-                                                                            style:
-                                                                                const TextStyle(
-                                                                              color: Colors.grey,
-                                                                              fontWeight: FontWeight.normal,
+                                                        FontWeight.normal)),
+                                            isThreeLine: true,
+                                            trailing: PopupMenuButton(
+                                              onSelected: ((value) {
+                                                if (value == '/reply') {
+                                                  MiscWidgets.showException(
+                                                      (context), "reply");
+                                                } else if (value == '/edit') {
+                                                  MiscWidgets.showException(
+                                                      context, "Edit Message");
+                                                } else if (value == '/delete') {
+                                                  MiscWidgets.showException(
+                                                      context,
+                                                      "Delete Message");
+                                                }
+                                              }),
+                                              itemBuilder: (context) {
+                                                return const [
+                                                  PopupMenuItem(
+                                                      value: '/edit',
+                                                      child: Text("Edit")),
+                                                  PopupMenuItem(
+                                                      value: '/delete',
+                                                      child: Text("Delete"))
+                                                ];
+                                              },
+                                            ),
+                                            onTap: () {
+                                              showDialog(
+                                                  barrierDismissible: true,
+                                                  context: context,
+                                                  builder: ((context) {
+                                                    return Dialog(
+                                                        insetPadding:
+                                                            const EdgeInsets
+                                                                .all(200),
+                                                        child: Stack(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          children: <Widget>[
+                                                            Container(
+                                                                width: double
+                                                                    .infinity,
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(20),
+                                                                child: Column(
+                                                                  children: [
+                                                                    Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      children: [
+                                                                        Row(
+                                                                          children: [
+                                                                            ConstrainedBox(
+                                                                              constraints: const BoxConstraints(maxHeight: 50, maxWidth: 50, minWidth: 50, minHeight: 50),
+                                                                              child: SvgPicture.string(FluttermojiFunctions().decodeFluttermojifromString(state.currentSpace.spacePosts[index].postUser.profilePicString)),
                                                                             ),
-                                                                            textAlign:
-                                                                                TextAlign.left,
-                                                                          )
-                                                                        ],
+                                                                            Column(
+                                                                              children: [
+                                                                                Text(state.currentSpace.spacePosts[index].postUser.displayName.toString(), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 25)),
+                                                                                Text(
+                                                                                  "${state.currentSpace.spacePosts[index].postedTime.month.toString()}/${state.currentSpace.spacePosts[index].postedTime.day.toString()}/${state.currentSpace.spacePosts[index].postedTime.year.toString()} ${state.currentSpace.spacePosts[index].postedTime.hour.toString()}:${state.currentSpace.spacePosts[index].postedTime.minute.toString()}",
+                                                                                  style: const TextStyle(
+                                                                                    color: Colors.grey,
+                                                                                    fontWeight: FontWeight.normal,
+                                                                                  ),
+                                                                                  textAlign: TextAlign.left,
+                                                                                )
+                                                                              ],
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                        Align(
+                                                                          alignment:
+                                                                              Alignment.topRight,
+                                                                          child:
+                                                                              IconButton(
+                                                                            icon: const Icon(Icons.close,
+                                                                                color: Colors.black,
+                                                                                size: 25),
+                                                                            onPressed:
+                                                                                (() {
+                                                                              Navigator.pop(context);
+                                                                            }),
+                                                                          ),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                    Container(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .centerLeft,
+                                                                      child:
+                                                                          Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.symmetric(vertical: 8.0),
+                                                                        child:
+                                                                            Text(
+                                                                          state
+                                                                              .currentSpace
+                                                                              .spacePosts[index]
+                                                                              .contents,
+                                                                          style: const TextStyle(
+                                                                              color: Colors.black,
+                                                                              fontSize: 25,
+                                                                              fontWeight: FontWeight.normal),
+                                                                        ),
                                                                       ),
-                                                                    ],
-                                                                  ),
-                                                                  Align(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .topRight,
-                                                                    child:
-                                                                        IconButton(
-                                                                      icon: const Icon(
-                                                                          Icons
-                                                                              .close,
+                                                                    ),
+                                                                    // Column(
+                                                                    //   children: [
+                                                                    Flexible(
+                                                                      child: Container(
                                                                           color: Colors
-                                                                              .black,
-                                                                          size:
-                                                                              25),
-                                                                      onPressed:
-                                                                          (() {
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      }),
+                                                                              .orangeAccent,
+                                                                          width: double
+                                                                              .infinity,
+                                                                          height: double
+                                                                              .infinity,
+                                                                          child:
+                                                                              const Text("This is where replies and the ability to reply will be stored.")),
                                                                     ),
                                                                   )
                                                                 ],
@@ -365,26 +390,27 @@ class SpaceView extends StatelessWidget {
                                       }),
                                 );
                               });
-
-                          // Show error message when Retrieval fails
-                        } else if (state.getPostsStatus is RetrievalFailed) {
-                          return const Center(
-                              child: Text(
-                                  "Error with Data Retrieval. Please Refresh."));
-                          // Initial Data Retrieval Status
-                        } else {
-                          return const SizedBox.shrink();
-                        }
-                      }),
-                    )),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: _createPostForm())
-            ]),
-          )),
-    );
+                                // Show error message when Retrieval fails
+                              } else if (state.getPostsStatus
+                                  is RetrievalFailed) {
+                                return const Center(
+                                    child: Text(
+                                        "Error with Data Retrieval. Please Refresh."));
+                                // Initial Data Retrieval Status
+                              } else {
+                                return const SizedBox.shrink();
+                              }
+                            }),
+                          )),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: _createPostForm())
+                  ]),
+                ));
+          },
+        ));
   }
 
   Widget _createPostForm() {
