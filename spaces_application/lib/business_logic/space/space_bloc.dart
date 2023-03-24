@@ -122,7 +122,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     emit(state.copyWith(deleteSpaceStatus: DataRetrieving()));
     try {
       await spaceRepo.deleteSpace(state.currentSpace.sid);
-      emit(state.copyWith(deleteSpaceStatus: RetrievalSuccess()));
+      UserData currentUser = await userRepo.getCurrentUserData();
+      emit(state.copyWith(
+          deleteSpaceStatus: RetrievalSuccess(), currentUser: currentUser));
     } catch (e) {
       emit(state.copyWith(deleteSpaceStatus: RetrievalFailed(Exception(e))));
     }

@@ -116,14 +116,14 @@ class SpaceRepository {
         .get();
     final List<String> userIDs = List<String>.empty(growable: true);
     for (final child in snapshot.children) {
-      userIDs.add(child.value as String);
+      userIDs.add(child.key as String);
     }
     // iterates through users list and deletes the space info from within them
     for (final userID in userIDs) {
       await ref
           .child("UserData/")
           .child(userID)
-          .child("spacePermissions/")
+          .child("spacesPermissions/")
           .child(spaceID)
           .remove();
     }
