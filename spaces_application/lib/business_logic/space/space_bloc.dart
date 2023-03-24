@@ -110,8 +110,12 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   Future<void> _submitComment(Emitter<SpaceState> emit) async {
     emit(state.copyWith(commentFormStatus: FormSubmitting()));
     try {
-      await spaceRepo.createComment(state.newComment, currentUserData.uid,
-          state.currentSpace.sid, state.selectedPost!.postedTime);
+      await spaceRepo.createComment(
+          state.newComment,
+          state.selectedPost!.postUser.uid,
+          currentUserData.uid,
+          state.currentSpace.sid,
+          state.selectedPost!.postedTime);
       emit(state.copyWith(commentFormStatus: SubmissionSuccess()));
     } catch (e) {
       emit(state.copyWith(commentFormStatus: SubmissionFailed(Exception(e))));
