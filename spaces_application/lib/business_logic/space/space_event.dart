@@ -38,3 +38,9 @@ class GetUsers extends SpaceEvent {}
 class PostSubmitted extends SpaceEvent {}
 
 class CommentSubmitted extends SpaceEvent {}
+
+class RemovePost extends SpaceEvent {
+  PostData selectedPost;
+
+  RemovePost({required this.selectedPost});
+}

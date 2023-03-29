@@ -18,6 +18,7 @@ class SpaceState {
   final DataRetrievalStatus deleteSpaceStatus;
   final DataRetrievalStatus getUsersStatus;
   final DataRetrievalStatus getCommentsStatus;
+  final DataRetrievalStatus deletePostStatus;
   final SpaceData currentSpace;
   final UserData currentUser;
   final PostData? selectedPost;
@@ -34,6 +35,7 @@ class SpaceState {
     this.deleteSpaceStatus = const InitialRetrievalStatus(),
     this.getUsersStatus = const InitialRetrievalStatus(),
     this.getCommentsStatus = const InitialRetrievalStatus(),
+    this.deletePostStatus = const InitialRetrievalStatus(),
     required this.currentSpace,
     required this.currentUser,
   }) : users = users ?? List<UserData>.empty();
@@ -50,6 +52,7 @@ class SpaceState {
     DataRetrievalStatus? getUsersStatus,
     DataRetrievalStatus? getPostsStatus,
     DataRetrievalStatus? getCommentsStatus,
+    DataRetrievalStatus? deletePostStatus,
     UserData? currentUser,
     SpaceData? currentSpace,
   }) {
@@ -61,6 +64,7 @@ class SpaceState {
       postFormStatus: postFormStatus ?? this.postFormStatus,
       inviteUserStatus: inviteUserStatus ?? this.inviteUserStatus,
       commentFormStatus: commentFormStatus ?? this.commentFormStatus,
+      deletePostStatus: deletePostStatus ?? this.deletePostStatus,
       getPostsStatus: getPostsStatus ?? this.getPostsStatus,
       deleteSpaceStatus: deleteSpaceStatus ?? this.deleteSpaceStatus,
       getUsersStatus: getUsersStatus ?? this.getUsersStatus,
