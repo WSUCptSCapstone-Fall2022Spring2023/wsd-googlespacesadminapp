@@ -115,6 +115,7 @@ class SpaceView extends StatelessWidget {
                             else if (state.getPostsStatus is RetrievalSuccess &&
                                 state.currentSpace.spacePosts.isNotEmpty) {
                               return ListView.builder(
+                                  physics: ClampingScrollPhysics(),
                                   shrinkWrap: false,
                                   itemCount:
                                       state.currentSpace.spacePosts.length,
@@ -281,22 +282,29 @@ class SpaceView extends StatelessWidget {
                                                                         ),
                                                                         Flexible(
                                                                             child: Container(
-                                                                                color: Colors.orangeAccent,
+                                                                                decoration: const BoxDecoration(
+                                                                                  // border: Border(top: BorderSide(width: 0.2, color: Colors.black)),
+                                                                                  color: Colors.white,
+                                                                                ),
                                                                                 width: double.infinity,
                                                                                 height: double.infinity,
                                                                                 // child: BlocBuilder<CommentBloc, CommentState>(
                                                                                 child: BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
                                                                                   if (state.getCommentsStatus is RetrievalSuccess) {
-                                                                                    return Column(
+                                                                                    return ListView(
                                                                                       children: [
                                                                                         if (state.getCommentsStatus is DataRetrieving) ...[
                                                                                           const SizedBox(width: 100, height: 100, child: Center(child: CircularProgressIndicator()))
                                                                                         ] else if (state.getCommentsStatus is RetrievalSuccess && state.selectedPost!.comments.isEmpty) ...[
                                                                                           Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: const [
-                                                                                            Text("No replies")
+                                                                                            Padding(
+                                                                                              padding: EdgeInsets.symmetric(vertical: 8.0),
+                                                                                              child: Text("No replies"),
+                                                                                            )
                                                                                           ])
                                                                                         ] else if (state.getCommentsStatus is RetrievalSuccess && state.selectedPost!.comments.isNotEmpty) ...[
                                                                                           ListView.builder(
+                                                                                              physics: ClampingScrollPhysics(),
                                                                                               shrinkWrap: true,
                                                                                               itemCount: state.selectedPost!.comments.length,
                                                                                               itemBuilder: (context, index2) {
@@ -315,7 +323,7 @@ class SpaceView extends StatelessWidget {
                                                                                                         TextSpan(text: state.selectedPost!.comments[index2].commentUser.displayName.toString(), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 25)),
                                                                                                         TextSpan(text: "  ${state.selectedPost!.comments[index2].postedTime.month.toString()}/${state.selectedPost!.comments[index2].postedTime.day.toString()}/${state.selectedPost!.comments[index2].postedTime.year.toString()} ${state.selectedPost!.comments[index2].postedTime.hour.toString()}:${state.selectedPost!.comments[index2].postedTime.minute.toString()}", style: const TextStyle(color: Colors.grey))
                                                                                                       ])),
-                                                                                                      subtitle: Text(state.selectedPost!.comments[index2].contents),
+                                                                                                      subtitle: Text(state.selectedPost!.comments[index2].contents, style: const TextStyle(fontSize: 20)),
                                                                                                     ));
                                                                                               })
                                                                                         ] else if (state.getCommentsStatus is RetrievalFailed) ...[
@@ -332,7 +340,7 @@ class SpaceView extends StatelessWidget {
                                                                                       ],
                                                                                     );
                                                                                   } else {
-                                                                                    return CircularProgressIndicator();
+                                                                                    return const Center(child: SizedBox(width: 100, height: 100, child: CircularProgressIndicator()));
                                                                                   }
                                                                                 }
                                                                                     // ]
