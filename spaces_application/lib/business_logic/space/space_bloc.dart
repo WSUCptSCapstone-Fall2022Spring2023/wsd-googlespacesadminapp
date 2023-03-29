@@ -117,8 +117,10 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
           state.currentSpace.sid,
           state.selectedPost!.postedTime);
       emit(state.copyWith(commentFormStatus: SubmissionSuccess()));
+      emit(state.copyWith(commentFormStatus: const InitialFormStatus()));
     } catch (e) {
       emit(state.copyWith(commentFormStatus: SubmissionFailed(Exception(e))));
+      emit(state.copyWith(commentFormStatus: const InitialFormStatus()));
     }
   }
 

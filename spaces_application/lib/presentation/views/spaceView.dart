@@ -26,10 +26,9 @@ import '../widgets/miscWidgets.dart';
 
 class SpaceView extends StatelessWidget {
   SpaceView({required this.currentSpace, required this.currentUserData});
+  final _formKey = GlobalKey<FormState>();
   SpaceData currentSpace;
   final UserData currentUserData;
-  static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  static GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
   final Color bgColor = const Color.fromARGB(255, 49, 49, 49);
   final Color textColor = const Color.fromARGB(255, 246, 246, 176);
   final Color boxColor = const Color.fromARGB(255, 60, 60, 60);
@@ -371,6 +370,13 @@ class SpaceView extends StatelessWidget {
 
   Widget _createPostForm() {
     return BlocListener<SpaceBloc, SpaceState>(
+        listenWhen: (previous, current) {
+          if (current.postFormStatus == previous.postFormStatus) {
+            return false;
+          } else {
+            return true;
+          }
+        },
         listener: (context, state) {
           final formStatus = state.postFormStatus;
           if (formStatus is SubmissionFailed) {
@@ -381,12 +387,12 @@ class SpaceView extends StatelessWidget {
           }
         },
         child: Form(
-            key: _formKey2,
+            key: _formKey,
             child: Row(
               children: [
                 _messageField(),
                 const SizedBox(width: 10),
-                _createPostButton(),
+                _createPostButton(_formKey),
               ],
             )));
   }
@@ -418,13 +424,13 @@ class SpaceView extends StatelessWidget {
     });
   }
 
-  Widget _createPostButton() {
+  Widget _createPostButton(GlobalKey<FormState> key) {
     return BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
       return state.postFormStatus is FormSubmitting
           ? const CircularProgressIndicator()
           : ElevatedButton(
               onPressed: () {
-                if (_formKey.currentState!.validate()) {
+                if (key.currentState!.validate()) {
                   context.read<SpaceBloc>().add(PostSubmitted());
                 }
               },
@@ -439,7 +445,15 @@ class SpaceView extends StatelessWidget {
   }
 
   Widget _createCommentForm() {
+    final _formKey = GlobalKey<FormState>();
     return BlocListener<SpaceBloc, SpaceState>(
+      listenWhen: (previous, current) {
+        if (current.commentFormStatus == previous.commentFormStatus) {
+          return false;
+        } else {
+          return true;
+        }
+      },
       listener: (context, state) {
         final formStatus = state.commentFormStatus;
         if (formStatus is SubmissionFailed) {
@@ -454,7 +468,7 @@ class SpaceView extends StatelessWidget {
             children: [
               _commentField(),
               const SizedBox(width: 10),
-              _createCommentButton()
+              _createCommentButton(_formKey)
             ],
           )),
     );
@@ -487,13 +501,13 @@ class SpaceView extends StatelessWidget {
     });
   }
 
-  Widget _createCommentButton() {
+  Widget _createCommentButton(GlobalKey<FormState> key) {
     return BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
       return state.commentFormStatus is FormSubmitting
           ? const CircularProgressIndicator()
           : ElevatedButton(
               onPressed: () {
-                if (_formKey.currentState!.validate()) {
+                if (key.currentState!.validate()) {
                   context.read<SpaceBloc>().add(CommentSubmitted());
                 }
               },
