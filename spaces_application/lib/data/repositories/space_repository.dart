@@ -52,13 +52,21 @@ class SpaceRepository {
     });
   }
 
-  Future<void> createPost(String message, String userID, String spaceID) async {
-    final currentTime = DateTime.now().toString().replaceAll('.', ':');
+  Future<void> createPost(String message, String userID, String spaceID,
+      DateTime currentTime) async {
+    final timeStr = currentTime.toString().replaceAll('.', ':');
     await ref
         .child("Posts/")
         .child(spaceID)
-        .child(currentTime)
+        .child(timeStr)
         .set({"userID": userID, "contents": message});
+  }
+
+  Future<void> deletePost(
+      DateTime postTime, String spaceID, String postAuthorID) async {
+    final timeStr = postTime.toString().replaceAll('.', ':');
+    await ref.child("Posts/").child(spaceID).child(timeStr).remove();
+    await ref.child("Comments/").child(postAuthorID).child(timeStr).remove();
   }
 
   // returns a list of spaces searched for by spacesJoined field in UserData
@@ -207,15 +215,20 @@ class SpaceRepository {
         .remove();
   }
 
-  Future<void> createComment(String message, String postAuthorID,
-      String commenterID, String spaceID, DateTime postDate) async {
-    final currentTime = DateTime.now().toString().replaceAll('.', ':');
+  Future<void> createComment(
+      String message,
+      String postAuthorID,
+      String commenterID,
+      String spaceID,
+      DateTime postDate,
+      DateTime currentTime) async {
+    final timeStr = currentTime.toString().replaceAll('.', ':');
     final postDateStr = postDate.toString().replaceAll('.', ':');
     await ref
         .child("Comments/")
         .child(postAuthorID)
         .child(postDateStr)
-        .child(currentTime)
+        .child(timeStr)
         .set({
       "spaceID": spaceID,
       "contents": message,

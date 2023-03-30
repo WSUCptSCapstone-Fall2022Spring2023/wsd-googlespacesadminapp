@@ -29,6 +29,7 @@ class SpaceView extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   SpaceData currentSpace;
   final UserData currentUserData;
+  final TextEditingController _controller = TextEditingController();
   final Color bgColor = const Color.fromARGB(255, 49, 49, 49);
   final Color textColor = const Color.fromARGB(255, 246, 246, 176);
   final Color boxColor = const Color.fromARGB(255, 60, 60, 60);
@@ -182,20 +183,32 @@ class SpaceView extends StatelessWidget {
                                                   MiscWidgets.showException(
                                                       context, "Edit Message");
                                                 } else if (value == '/delete') {
-                                                  MiscWidgets.showException(
-                                                      context,
-                                                      "Delete Message");
+                                                  context.read<SpaceBloc>().add(
+                                                      RemovePost(
+                                                          selectedPost: state
+                                                                  .currentSpace
+                                                                  .spacePosts[
+                                                              index]));
                                                 }
                                               }),
                                               itemBuilder: (context) {
-                                                return const [
-                                                  PopupMenuItem(
-                                                      value: '/edit',
-                                                      child: Text("Edit")),
-                                                  PopupMenuItem(
-                                                      value: '/delete',
-                                                      child: Text("Delete"))
-                                                ];
+                                                if (state.deletePostStatus
+                                                    is DataRetrieving) {
+                                                  return const [
+                                                    PopupMenuItem(
+                                                        child:
+                                                            CircularProgressIndicator())
+                                                  ];
+                                                } else {
+                                                  return const [
+                                                    PopupMenuItem(
+                                                        value: '/edit',
+                                                        child: Text("Edit")),
+                                                    PopupMenuItem(
+                                                        value: '/delete',
+                                                        child: Text("Delete"))
+                                                  ];
+                                                }
                                               },
                                             ),
                                             onTap: () {
@@ -415,6 +428,7 @@ class SpaceView extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(5)),
             ),
             child: TextFormField(
+              controller: _controller,
               style: const TextStyle(color: Colors.black, fontSize: 18),
               decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -440,6 +454,7 @@ class SpaceView extends StatelessWidget {
               onPressed: () {
                 if (key.currentState!.validate()) {
                   context.read<SpaceBloc>().add(PostSubmitted());
+                  _controller.clear();
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -492,6 +507,7 @@ class SpaceView extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(5)),
               ),
               child: TextFormField(
+                controller: _controller,
                 style: const TextStyle(color: Colors.black, fontSize: 18),
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -517,6 +533,7 @@ class SpaceView extends StatelessWidget {
               onPressed: () {
                 if (key.currentState!.validate()) {
                   context.read<SpaceBloc>().add(CommentSubmitted());
+                  _controller.clear();
                 }
               },
               style: ElevatedButton.styleFrom(
