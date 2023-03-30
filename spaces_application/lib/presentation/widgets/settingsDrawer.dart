@@ -6,6 +6,7 @@ import 'package:fluttermoji/fluttermoji.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:spaces_application/business_logic/data_retrieval_status.dart';
 import 'package:spaces_application/data/models/userData.dart';
+import 'package:spaces_application/presentation/widgets/createInviteUserPopupDialog.dart';
 import 'package:spaces_application/presentation/widgets/createSpacePopUpDialog.dart';
 import 'package:spaces_application/presentation/views/loginView.dart';
 import 'package:spaces_application/presentation/views/homeView.dart';
@@ -102,7 +103,18 @@ class SettingsDrawer extends StatelessWidget {
                       color: Colors.black,
                       fontWeight: FontWeight.normal,
                       fontSize: 20)),
-              onTap: () {},
+              onTap: () {
+                showDialog(
+                  barrierDismissible: true,
+                  context: context,
+                  builder: (context) {
+                    return CreateInviteUserPopUpDialog(
+                      currentSpace: currentSpace,
+                      currentUserData: currentUserData,
+                    );
+                  },
+                );
+              },
             ),
             ExpansionTile(
               leading: const Icon(Icons.person_search,
