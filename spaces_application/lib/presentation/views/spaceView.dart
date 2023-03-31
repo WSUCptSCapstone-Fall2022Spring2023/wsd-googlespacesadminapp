@@ -22,6 +22,7 @@ import '../../business_logic/auth/login/login_bloc.dart';
 import '../../data/models/spaceData.dart';
 import '../../data/models/userData.dart';
 import '../../data/repositories/userData_repository.dart';
+import '../widgets/editMessagePopUp.dart';
 import '../widgets/miscWidgets.dart';
 
 class SpaceView extends StatelessWidget {
@@ -180,8 +181,17 @@ class SpaceView extends StatelessWidget {
                                                   MiscWidgets.showException(
                                                       (context), "reply");
                                                 } else if (value == '/edit') {
-                                                  MiscWidgets.showException(
-                                                      context, "Edit Message");
+                                                  showDialog(
+                                                    barrierDismissible: true,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return EditMessagePopUp(
+                                                          previousMessage: state
+                                                              .currentSpace
+                                                              .spacePosts[index]
+                                                              .contents);
+                                                    },
+                                                  );
                                                 } else if (value == '/delete') {
                                                   context.read<SpaceBloc>().add(
                                                       RemovePost(
@@ -337,6 +347,34 @@ class SpaceView extends StatelessWidget {
                                                                                                         TextSpan(text: "  ${state.selectedPost!.comments[index2].postedTime.month.toString()}/${state.selectedPost!.comments[index2].postedTime.day.toString()}/${state.selectedPost!.comments[index2].postedTime.year.toString()} ${state.selectedPost!.comments[index2].postedTime.hour.toString()}:${state.selectedPost!.comments[index2].postedTime.minute.toString()}", style: const TextStyle(color: Colors.grey))
                                                                                                       ])),
                                                                                                       subtitle: Text(state.selectedPost!.comments[index2].contents, style: const TextStyle(fontSize: 20)),
+                                                                                                      trailing: PopupMenuButton(
+                                                                                                        onSelected: ((value) {
+                                                                                                          if (value == '/edit') {
+                                                                                                            showDialog(
+                                                                                                              barrierDismissible: true,
+                                                                                                              context: context,
+                                                                                                              builder: (context) {
+                                                                                                                return EditMessagePopUp(previousMessage: state.currentSpace.spacePosts[index].comments[index2].contents);
+                                                                                                              },
+                                                                                                            );
+                                                                                                          } else if (value == '/delete') {
+                                                                                                            // context.read<SpaceBloc>().add(RemoveComment(selectedPost: state.currentSpace.spacePosts[index].comments[index2]));
+                                                                                                            // TODO: Add a RemoveComment action here ^ again, not sure if you need a new bloc type for comments
+                                                                                                          }
+                                                                                                        }),
+                                                                                                        itemBuilder: (context) {
+                                                                                                          if (state.deletePostStatus is DataRetrieving) {
+                                                                                                            return const [
+                                                                                                              PopupMenuItem(child: CircularProgressIndicator())
+                                                                                                            ];
+                                                                                                          } else {
+                                                                                                            return const [
+                                                                                                              PopupMenuItem(value: '/edit', child: Text("Edit")),
+                                                                                                              PopupMenuItem(value: '/delete', child: Text("Delete"))
+                                                                                                            ];
+                                                                                                          }
+                                                                                                        },
+                                                                                                      ),
                                                                                                     ));
                                                                                               })
                                                                                         ] else if (state.getCommentsStatus is RetrievalFailed) ...[
