@@ -39,11 +39,11 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     on<DeleteSpace>((event, emit) async {
       await _onDeleteSpace(emit);
     });
-    on<GetUsers>((event, emit) async {
-      await _onGetUsers(emit);
+    on<GetSpaceUsers>((event, emit) async {
+      await _onGetSpaceUsers(emit);
     });
-    on<InviteUser>((event, emit) async {
-      await _inviteUser(event.invitedUser, emit);
+    on<InviteUsers>((event, emit) async {
+      await _inviteUsers(event.invitedUsers, emit);
     });
     on<LoadPostComments>((event, emit) async {
       await _onLoadPostComments(event.selectedPost, emit);
@@ -56,6 +56,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     });
     on<RemovePost>((event, emit) async {
       await _onRemovePost(emit, event.selectedPost);
+    });
+    on<GetAllUsers>((event, emit) async {
+      await _onGetAllUsers(emit);
     });
   }
 
@@ -180,24 +183,37 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     }
   }
 
-  Future<void> _onGetUsers(Emitter<SpaceState> emit) async {
+  Future<void> _onGetSpaceUsers(Emitter<SpaceState> emit) async {
     emit(state.copyWith(getUsersStatus: DataRetrieving()));
     try {
       final List<UserData> users =
           await spaceRepo.getUsersInSpace(state.currentSpace.sid);
-      emit(state.copyWith(getUsersStatus: RetrievalSuccess(), users: users));
+      emit(state.copyWith(
+          getUsersStatus: RetrievalSuccess(), spaceUsers: users));
     } catch (e) {
       emit(state.copyWith(getUsersStatus: RetrievalFailed(Exception(e))));
     }
   }
 
-  Future<void> _inviteUser(
-      UserData invitedUser, Emitter<SpaceState> emit) async {
+  Future<void> _onGetAllUsers(Emitter<SpaceState> emit) async {
+    emit(state.copyWith(getAllUsersStatus: DataRetrieving()));
+    try {
+      final List<UserData> users = await userRepo.getAllUsers();
+      emit(state.copyWith(
+          getAllUsersStatus: RetrievalSuccess(), allUsers: users));
+    } catch (e) {
+      emit(state.copyWith(getAllUsersStatus: RetrievalFailed(Exception(e))));
+    }
+  }
+
+  Future<void> _inviteUsers(
+      List<UserData> invitedUsers, Emitter<SpaceState> emit) async {
     emit(state.copyWith(inviteUserStatus: FormSubmitting()));
     try {
-      await spaceRepo.joinSpace(
-          state.currentSpace.sid, invitedUser.uid, invitedUser.isFaculty);
-      emit(state.copyWith(inviteUserStatus: SubmissionSuccess()));
+      await spaceRepo.joinSpace(state.currentSpace.sid, invitedUsers);
+      emit(state.copyWith(
+          inviteUserStatus: SubmissionSuccess(),
+          getUsersStatus: const InitialRetrievalStatus()));
     } catch (e) {
       emit(state.copyWith(inviteUserStatus: SubmissionFailed(Exception(e))));
     }

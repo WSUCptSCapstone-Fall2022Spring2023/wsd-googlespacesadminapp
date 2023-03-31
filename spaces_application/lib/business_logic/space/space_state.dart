@@ -10,7 +10,8 @@ import '../../data/models/userData.dart';
 class SpaceState {
   final String newPost;
   final String newComment;
-  final List<UserData> users;
+  final List<UserData> spaceUsers;
+  final List<UserData> allUsers;
   final FormSubmissionStatus postFormStatus;
   final FormSubmissionStatus inviteUserStatus;
   final FormSubmissionStatus commentFormStatus;
@@ -19,6 +20,7 @@ class SpaceState {
   final DataRetrievalStatus getUsersStatus;
   final DataRetrievalStatus getCommentsStatus;
   final DataRetrievalStatus deletePostStatus;
+  final DataRetrievalStatus getAllUsersStatus;
   final SpaceData currentSpace;
   final UserData currentUser;
   final PostData? selectedPost;
@@ -27,7 +29,8 @@ class SpaceState {
     this.newPost = '',
     this.newComment = '',
     this.selectedPost,
-    List<UserData>? users,
+    List<UserData>? spaceUsers,
+    List<UserData>? allUsers,
     this.postFormStatus = const InitialFormStatus(),
     this.inviteUserStatus = const InitialFormStatus(),
     this.commentFormStatus = const InitialFormStatus(),
@@ -36,14 +39,17 @@ class SpaceState {
     this.getUsersStatus = const InitialRetrievalStatus(),
     this.getCommentsStatus = const InitialRetrievalStatus(),
     this.deletePostStatus = const InitialRetrievalStatus(),
+    this.getAllUsersStatus = const InitialRetrievalStatus(),
     required this.currentSpace,
     required this.currentUser,
-  }) : users = users ?? List<UserData>.empty();
+  })  : spaceUsers = spaceUsers ?? List<UserData>.empty(),
+        allUsers = allUsers ?? List<UserData>.empty();
 
   SpaceState copyWith({
     String? newPost,
     String? newComment,
-    List<UserData>? users,
+    List<UserData>? spaceUsers,
+    List<UserData>? allUsers,
     PostData? selectedPost,
     FormSubmissionStatus? postFormStatus,
     FormSubmissionStatus? inviteUserStatus,
@@ -53,13 +59,15 @@ class SpaceState {
     DataRetrievalStatus? getPostsStatus,
     DataRetrievalStatus? getCommentsStatus,
     DataRetrievalStatus? deletePostStatus,
+    DataRetrievalStatus? getAllUsersStatus,
     UserData? currentUser,
     SpaceData? currentSpace,
   }) {
     return SpaceState(
       newPost: newPost ?? this.newPost,
       newComment: newComment ?? this.newComment,
-      users: users ?? this.users,
+      spaceUsers: spaceUsers ?? this.spaceUsers,
+      allUsers: allUsers ?? this.allUsers,
       selectedPost: selectedPost ?? this.selectedPost,
       postFormStatus: postFormStatus ?? this.postFormStatus,
       inviteUserStatus: inviteUserStatus ?? this.inviteUserStatus,
@@ -68,6 +76,7 @@ class SpaceState {
       getPostsStatus: getPostsStatus ?? this.getPostsStatus,
       deleteSpaceStatus: deleteSpaceStatus ?? this.deleteSpaceStatus,
       getUsersStatus: getUsersStatus ?? this.getUsersStatus,
+      getAllUsersStatus: getAllUsersStatus ?? this.getAllUsersStatus,
       getCommentsStatus: getCommentsStatus ?? this.getCommentsStatus,
       currentSpace: currentSpace ?? this.currentSpace,
       currentUser: currentUser ?? this.currentUser,

@@ -1,21 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttermoji/fluttermoji.dart';
-import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:spaces_application/business_logic/data_retrieval_status.dart';
 import 'package:spaces_application/data/models/userData.dart';
 import 'package:spaces_application/presentation/widgets/createInviteUserPopupDialog.dart';
-import 'package:spaces_application/presentation/widgets/createSpacePopUpDialog.dart';
-import 'package:spaces_application/presentation/views/loginView.dart';
-import 'package:spaces_application/presentation/views/homeView.dart';
 import 'package:spaces_application/presentation/widgets/createUserProfileViewDialog.dart';
 import 'package:spaces_application/presentation/widgets/deleteSpacePopupDialog.dart';
-import 'package:spaces_application/presentation/widgets/helpPopUpDialog.dart';
-import 'package:spaces_application/presentation/widgets/createStudentPopUpDialog.dart';
-import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../business_logic/space/space_bloc.dart';
@@ -107,10 +97,10 @@ class SettingsDrawer extends StatelessWidget {
                 showDialog(
                   barrierDismissible: true,
                   context: context,
-                  builder: (context) {
-                    return CreateInviteUserPopUpDialog(
-                      currentSpace: currentSpace,
-                      currentUserData: currentUserData,
+                  builder: (_) {
+                    return BlocProvider.value(
+                      value: BlocProvider.of<SpaceBloc>(context),
+                      child: CreateInviteUserPopUpDialog(),
                     );
                   },
                 );
@@ -128,7 +118,7 @@ class SettingsDrawer extends StatelessWidget {
                 BlocBuilder<SpaceBloc, SpaceState>(
                   builder: (context, state) {
                     if (state.getUsersStatus is InitialRetrievalStatus) {
-                      context.read<SpaceBloc>().add(GetUsers());
+                      context.read<SpaceBloc>().add(GetSpaceUsers());
                       return const SizedBox.shrink();
                     } else if (state.getUsersStatus is DataRetrieving) {
                       return const SizedBox(
@@ -136,7 +126,7 @@ class SettingsDrawer extends StatelessWidget {
                           height: 100,
                           child: Center(child: CircularProgressIndicator()));
                     } else if (state.getUsersStatus is RetrievalSuccess) {
-                      userList = state.users;
+                      userList = state.spaceUsers;
                       return ListView.builder(
                           shrinkWrap: true,
                           itemCount: userList.length,

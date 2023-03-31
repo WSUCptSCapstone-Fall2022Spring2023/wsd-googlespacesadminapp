@@ -55,7 +55,14 @@ class SpaceView extends StatelessWidget {
               currentUserData: currentUserData,
               currentSpaceData: currentSpace,
             )..add(LoadSpacePosts()),
-        child: BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
+        child:
+            BlocBuilder<SpaceBloc, SpaceState>(buildWhen: (previous, current) {
+          if (ModalRoute.of(context)?.isCurrent == true) {
+            return true;
+          } else {
+            return false;
+          }
+        }, builder: (context, state) {
           return Scaffold(
               backgroundColor: Colors.white,
               drawer: NavigationDrawer(

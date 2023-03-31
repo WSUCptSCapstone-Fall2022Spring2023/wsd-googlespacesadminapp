@@ -141,59 +141,61 @@ class SpaceRepository {
     await ref.child("Posts/").child(spaceID).remove();
   }
 
-  Future<void> joinSpace(String spaceID, String userID, bool isFaculty) async {
-    if (isFaculty) {
-      await ref
-          .child("Spaces/")
-          .child(spaceID)
-          .child("membersPermissions/")
-          .child(userID)
-          .set({
-        "canComment": true,
-        "canEdit": true,
-        "canInvite": true,
-        "canRemove": true,
-        "canPost": true,
-      });
+  Future<void> joinSpace(String spaceID, List<UserData> users) async {
+    for (final user in users) {
+      if (user.isFaculty) {
+        await ref
+            .child("Spaces/")
+            .child(spaceID)
+            .child("membersPermissions/")
+            .child(user.uid)
+            .set({
+          "canComment": true,
+          "canEdit": true,
+          "canInvite": true,
+          "canRemove": true,
+          "canPost": true,
+        });
 
-      await ref
-          .child("UserData/")
-          .child(userID)
-          .child("spacesPermissions/")
-          .child(spaceID)
-          .set({
-        "canComment": true,
-        "canEdit": true,
-        "canInvite": true,
-        "canRemove": true,
-        "canPost": true,
-      });
-    } else {
-      await ref
-          .child("Spaces/")
-          .child(spaceID)
-          .child("membersPermissions/")
-          .child(userID)
-          .set({
-        "canComment": true,
-        "canEdit": false,
-        "canInvite": false,
-        "canRemove": false,
-        "canPost": true,
-      });
+        await ref
+            .child("UserData/")
+            .child(user.uid)
+            .child("spacesPermissions/")
+            .child(spaceID)
+            .set({
+          "canComment": true,
+          "canEdit": true,
+          "canInvite": true,
+          "canRemove": true,
+          "canPost": true,
+        });
+      } else {
+        await ref
+            .child("Spaces/")
+            .child(spaceID)
+            .child("membersPermissions/")
+            .child(user.uid)
+            .set({
+          "canComment": true,
+          "canEdit": false,
+          "canInvite": false,
+          "canRemove": false,
+          "canPost": true,
+        });
 
-      await ref
-          .child("UserData/")
-          .child(userID)
-          .child("spacesPermissions/")
-          .child(spaceID)
-          .set({
-        "canComment": true,
-        "canEdit": false,
-        "canInvite": false,
-        "canRemove": false,
-        "canPost": true,
-      });
+        await ref
+            .child("UserData/")
+            .child(user.uid)
+            .child("spacesPermissions/")
+            .child(spaceID)
+            .set({
+          "canComment": true,
+          "canEdit": false,
+          "canInvite": false,
+          "canRemove": false,
+          "canPost": true,
+        });
+      }
     }
   }
 

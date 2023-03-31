@@ -38,4 +38,14 @@ class UserDataRepository {
     final space = SpaceData.fromFirebase(snapshot);
     return space;
   }
+
+  Future<List<UserData>> getAllUsers() async {
+    final snapshot = await ref.child("UserData/").get();
+    final List<UserData> users = List<UserData>.empty(growable: true);
+    for (final child in snapshot.children) {
+      UserData user = await UserData.fromFirebase(child);
+      users.add(user);
+    }
+    return users;
+  }
 }

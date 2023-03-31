@@ -17,10 +17,10 @@ class CommentMessageChanged extends SpaceEvent {
   CommentMessageChanged({required this.message});
 }
 
-class InviteUser extends SpaceEvent {
-  UserData invitedUser;
+class InviteUsers extends SpaceEvent {
+  List<UserData> invitedUsers;
 
-  InviteUser({required this.invitedUser});
+  InviteUsers({required this.invitedUsers});
 }
 
 class LoadSpacePosts extends SpaceEvent {}
@@ -33,7 +33,9 @@ class LoadPostComments extends SpaceEvent {
 
 class DeleteSpace extends SpaceEvent {}
 
-class GetUsers extends SpaceEvent {}
+class GetSpaceUsers extends SpaceEvent {}
+
+class GetAllUsers extends SpaceEvent {}
 
 class PostSubmitted extends SpaceEvent {}
 
