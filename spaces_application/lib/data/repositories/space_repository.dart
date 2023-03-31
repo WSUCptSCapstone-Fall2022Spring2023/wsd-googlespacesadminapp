@@ -259,4 +259,10 @@ class SpaceRepository {
     }
     return postComments;
   }
+
+  Future<DatabaseReference> getSpaceReference(String spaceID) async {
+    DatabaseReference spaceRef =
+        FirebaseDatabase.instance.ref("Posts/$spaceID");
+    return spaceRef;
+  }
 }
