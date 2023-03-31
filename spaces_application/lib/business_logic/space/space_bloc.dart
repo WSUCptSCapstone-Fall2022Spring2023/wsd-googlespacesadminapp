@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spaces_application/business_logic/auth/form_submission_status.dart';
 import 'package:spaces_application/business_logic/data_retrieval_status.dart';
@@ -72,6 +73,16 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     emit(state.copyWith(getPostsStatus: DataRetrieving()));
     try {
       final posts = await spaceRepo.getSpacePosts(state.currentSpace.sid);
+
+      // final DatabaseReference spaceRef =
+      //     await spaceRepo.getSpaceReference(state.currentSpace.sid);
+      // spaceRef.onChildAdded.listen((event) {
+      //   final post = event.snapshot.value;
+      //   final replaceSpace = state.currentSpace;
+      //   replaceSpace.spacePosts.add(post);
+      //   emit(state.copyWith(
+      //       currentSpace: replaceSpace, getPostsStatus: RetrievalSuccess()));
+      // });
       final replaceSpace = state.currentSpace;
       replaceSpace.spacePosts = posts;
       emit(state.copyWith(
