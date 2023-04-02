@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttermoji/fluttermoji.dart';
+import 'package:profanity_filter/profanity_filter.dart';
 import 'package:spaces_application/business_logic/data_retrieval_status.dart';
 import 'package:spaces_application/presentation/views/settingsView.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
@@ -30,7 +31,8 @@ class SpaceView extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   SpaceData currentSpace;
   final UserData currentUserData;
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _postController = TextEditingController();
+  final TextEditingController _commentController = TextEditingController();
   final Color bgColor = const Color.fromARGB(255, 49, 49, 49);
   final Color textColor = const Color.fromARGB(255, 246, 246, 176);
   final Color boxColor = const Color.fromARGB(255, 60, 60, 60);
@@ -196,12 +198,10 @@ class SpaceView extends StatelessWidget {
                                                         value: BlocProvider.of<
                                                             SpaceBloc>(context),
                                                         child: EditMessagePopUp(
-                                                            previousMessage:
-                                                                state
+                                                            post: state
                                                                     .currentSpace
                                                                     .spacePosts[
-                                                                        index]
-                                                                    .contents),
+                                                                index]),
                                                       );
                                                     },
                                                   );
@@ -366,8 +366,13 @@ class SpaceView extends StatelessWidget {
                                                                                                             showDialog(
                                                                                                               barrierDismissible: true,
                                                                                                               context: context,
-                                                                                                              builder: (context) {
-                                                                                                                return EditMessagePopUp(previousMessage: state.currentSpace.spacePosts[index].comments[index2].contents);
+                                                                                                              builder: (_) {
+                                                                                                                return BlocProvider.value(
+                                                                                                                  value: BlocProvider.of<SpaceBloc>(context),
+                                                                                                                  child: EditMessagePopUp(
+                                                                                                                    post: state.selectedPost!.comments[index2],
+                                                                                                                  ),
+                                                                                                                );
                                                                                                               },
                                                                                                             );
                                                                                                           } else if (value == '/delete') {
@@ -478,7 +483,7 @@ class SpaceView extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(5)),
             ),
             child: TextFormField(
-              controller: _controller,
+              controller: _postController,
               style: const TextStyle(color: Colors.black, fontSize: 18),
               decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -491,6 +496,19 @@ class SpaceView extends StatelessWidget {
               onFieldSubmitted: (value) => context
                   .read<SpaceBloc>()
                   .add(PostMessageChanged(message: value)),
+              validator: (value) {
+                bool isValid = true;
+                final filter = ProfanityFilter();
+                if (value!.isEmpty) {
+                  return "Please enter text.";
+                }
+                if (filter.hasProfanity(value)) {
+                  return "Post must not contain profanity!";
+                } else {
+                  return null;
+                }
+              },
+              maxLength: 300,
             )),
       );
     });
@@ -504,7 +522,7 @@ class SpaceView extends StatelessWidget {
               onPressed: () {
                 if (key.currentState!.validate()) {
                   context.read<SpaceBloc>().add(PostSubmitted());
-                  _controller.clear();
+                  _postController.clear();
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -557,7 +575,7 @@ class SpaceView extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(5)),
               ),
               child: TextFormField(
-                controller: _controller,
+                controller: _commentController,
                 style: const TextStyle(color: Colors.black, fontSize: 18),
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -571,6 +589,18 @@ class SpaceView extends StatelessWidget {
                 onFieldSubmitted: (value) => context
                     .read<SpaceBloc>()
                     .add(CommentMessageChanged(message: value)),
+                validator: (value) {
+                  final filter = ProfanityFilter();
+                  if (value!.isEmpty) {
+                    return "Please enter text.";
+                  }
+                  if (filter.hasProfanity(value)) {
+                    return "Post must not contain profanity!";
+                  } else {
+                    return null;
+                  }
+                },
+                maxLength: 300,
               )));
     });
   }
@@ -583,7 +613,7 @@ class SpaceView extends StatelessWidget {
               onPressed: () {
                 if (key.currentState!.validate()) {
                   context.read<SpaceBloc>().add(CommentSubmitted());
-                  _controller.clear();
+                  _commentController.clear();
                 }
               },
               style: ElevatedButton.styleFrom(

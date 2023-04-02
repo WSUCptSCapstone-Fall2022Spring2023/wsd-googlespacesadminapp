@@ -28,6 +28,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     on<PostMessageChanged>((event, emit) async {
       await _onMessageChanged(event.message, emit);
     });
+    on<EditFieldChanged>((event, emit) async {
+      await _onEditFieldChanged(event.message, emit);
+    });
     on<LoadSpacePosts>((event, emit) async {
       await _onLoadSpacePosts(emit);
     });
@@ -71,12 +74,17 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
 
   Future<void> _onMessageChanged(
       String newPost, Emitter<SpaceState> emit) async {
-    emit(state.copyWith(newPost: newPost));
+    emit(state.copyWith(newPostContents: newPost));
   }
 
   Future<void> _onCommentChanged(
       String newComment, Emitter<SpaceState> emit) async {
     emit(state.copyWith(newComment: newComment));
+  }
+
+  Future<void> _onEditFieldChanged(
+      String newEditContents, Emitter<SpaceState> emit) async {
+    emit(state.copyWith(newEditContents: newEditContents));
   }
 
   Future<void> _onLoadSpacePosts(Emitter<SpaceState> emit) async {
@@ -125,13 +133,16 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     emit(state.copyWith(postFormStatus: FormSubmitting()));
     try {
       final currentTime = DateTime.now();
-      await spaceRepo.createPost(state.newPost, currentUserData.uid,
+      await spaceRepo.createPost(state.newPostContents, currentUserData.uid,
           state.currentSpace.sid, currentTime);
       final replaceSpace = state.currentSpace;
-      final newPost = PostData(state.newPost, currentUserData, currentTime, 0);
+      final newPost =
+          PostData(state.newPostContents, currentUserData, currentTime, 0);
       replaceSpace.spacePosts.add(newPost);
       emit(state.copyWith(
-          currentSpace: replaceSpace, postFormStatus: SubmissionSuccess()));
+          currentSpace: replaceSpace,
+          postFormStatus: SubmissionSuccess(),
+          newPostContents: ""));
     } catch (e) {
       emit(state.copyWith(postFormStatus: SubmissionFailed(Exception(e))));
     }
@@ -156,7 +167,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
           selectedPost: replacePost, commentFormStatus: SubmissionSuccess()));
       emit(state.copyWith(commentFormStatus: const InitialFormStatus()));
     } catch (e) {
-      emit(state.copyWith(commentFormStatus: SubmissionFailed(Exception(e))));
+      emit(state.copyWith(
+          commentFormStatus: SubmissionFailed(Exception(e)), newComment: ""));
       emit(state.copyWith(commentFormStatus: const InitialFormStatus()));
     }
   }

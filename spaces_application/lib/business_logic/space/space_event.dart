@@ -18,6 +18,12 @@ class CommentMessageChanged extends SpaceEvent {
   CommentMessageChanged({required this.message});
 }
 
+class EditFieldChanged extends SpaceEvent {
+  final String message;
+
+  EditFieldChanged({required this.message});
+}
+
 class InviteUsers extends SpaceEvent {
   List<UserData> invitedUsers;
 

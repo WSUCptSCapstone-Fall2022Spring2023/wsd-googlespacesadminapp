@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:profanity_filter/profanity_filter.dart';
+import 'package:spaces_application/data/models/commentData.dart';
+import 'package:spaces_application/data/models/postData.dart';
 import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
 
 import '../../business_logic/auth/form_submission_status.dart';
@@ -11,21 +14,23 @@ import '../../business_logic/space/space_state.dart';
 import '../../data/models/spaceData.dart';
 
 class EditMessagePopUp extends StatefulWidget {
-  EditMessagePopUp({required this.previousMessage});
-  final String previousMessage;
+  EditMessagePopUp({required this.post});
+  final post;
 
   @override
-  _EditMessagePopUpState createState() => _EditMessagePopUpState();
+  _EditMessagePopUpState createState() => _EditMessagePopUpState(post);
 }
 
 class _EditMessagePopUpState extends State<EditMessagePopUp> {
+  _EditMessagePopUpState(this.post);
+  final post;
   TextEditingController _controller = TextEditingController();
   static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.previousMessage);
+    _controller = TextEditingController(text: widget.post.contents);
   }
 
   @override
@@ -40,58 +45,62 @@ class _EditMessagePopUpState extends State<EditMessagePopUp> {
         insetPadding:
             const EdgeInsets.symmetric(horizontal: 250, vertical: 350),
         backgroundColor: Colors.white,
-        child: Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Align(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.black, size: 25),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                )),
-            const Align(
-                alignment: Alignment.centerLeft,
-                child: Text("Edit Message",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 35))),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: Divider(height: 0),
-            ),
-            // TODO: Add BlocProvider here, which will hold the message form
+        child: Stack(alignment: Alignment.center, children: <Widget>[
+          Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                icon: const Icon(Icons.close, color: Colors.black, size: 25),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )),
+          const Align(
+              alignment: Alignment.centerLeft,
+              child: Text("Edit Message",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 35))),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 20),
+            child: Divider(height: 0),
+          ),
+          // TODO: Add BlocProvider here, which will hold the message form
 
-            _editCommentForm(context, widget.previousMessage),
-          ],
-        ));
+          _editCommentForm(context, widget.post.contents),
+        ]));
   }
 
   Widget _editCommentForm(BuildContext context, String previousMessage) {
     final _formKey = GlobalKey<FormState>();
     return BlocListener<SpaceBloc, SpaceState>(
       listenWhen: (previous, current) {
-        if (current.commentFormStatus == previous.commentFormStatus) {
+        if (current.editPostFormStatus == previous.editPostFormStatus &&
+            current.editCommentFormStatus == previous.editCommentFormStatus) {
           return false;
         } else {
           return true;
         }
       },
       listener: (context, state) {
-        final formStatus = state.commentFormStatus;
+        final formStatus;
+        if (post is PostData) {
+          formStatus = state.editPostFormStatus;
+        } else {
+          formStatus = state.editCommentFormStatus;
+        }
         if (formStatus is SubmissionFailed) {
           MiscWidgets.showException((context), formStatus.exception.toString());
         } else if (formStatus is SubmissionSuccess) {
-          MiscWidgets.showException(context, "Edit Message SUCCESS(?)");
+          Navigator.pop(context);
         }
       },
       child: Form(
           key: _formKey,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              _messageField(),
+              SizedBox(width: 700, child: _messageField()),
               const SizedBox(height: 10),
               Row(
                 children: [
@@ -116,25 +125,31 @@ class _EditMessagePopUpState extends State<EditMessagePopUp> {
               ),
               child: TextFormField(
                 controller: _controller,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter text, or press cancel to cancle edit.';
-                  }
-                  return null;
-                },
                 style: const TextStyle(color: Colors.black, fontSize: 18),
                 decoration: InputDecoration(
-                    hintText: widget.previousMessage,
+                    hintText: widget.post.contents,
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5)),
                     hintStyle:
                         const TextStyle(color: Colors.grey, fontSize: 18)),
                 onChanged: (value) => context
                     .read<SpaceBloc>()
-                    .add(CommentMessageChanged(message: value)),
+                    .add(EditFieldChanged(message: value)),
                 onFieldSubmitted: (value) => context
                     .read<SpaceBloc>()
-                    .add(CommentMessageChanged(message: value)),
+                    .add(EditFieldChanged(message: value)),
+                validator: (value) {
+                  final filter = ProfanityFilter();
+                  if (value!.isEmpty) {
+                    return "Please enter text.";
+                  }
+                  if (filter.hasProfanity(value)) {
+                    return "Post must not contain profanity!";
+                  } else {
+                    return null;
+                  }
+                },
+                maxLength: 300,
               )));
     });
   }
@@ -155,19 +170,30 @@ class _EditMessagePopUpState extends State<EditMessagePopUp> {
   }
 
   Widget _editCommentButton(GlobalKey<FormState> key) {
-    return ElevatedButton(
-      onPressed: () {
-        if (key.currentState!.validate()) {
-          // TODO: Finish implementation of editing a comment.
-        }
+    return BlocBuilder<SpaceBloc, SpaceState>(
+      builder: (context, state) {
+        return ElevatedButton(
+          onPressed: () {
+            if (key.currentState!.validate()) {
+              if (post is PostData) {
+                context.read<SpaceBloc>().add(EditPost(
+                    newContents: state.newEditContents, selectedPost: post));
+              } else if (post is CommentData) {
+                context.read<SpaceBloc>().add(EditComment(
+                    newContents: state.newEditContents, selectedComment: post));
+              }
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red,
+            side: const BorderSide(color: Colors.black, width: 0.5),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          ),
+          child: const Text('Edit',
+              style: TextStyle(color: Colors.black, fontSize: 13)),
+        );
       },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.red,
-        side: const BorderSide(color: Colors.black, width: 0.5),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-      ),
-      child: const Text('Edit',
-          style: TextStyle(color: Colors.black, fontSize: 13)),
     );
   }
 }

@@ -8,8 +8,9 @@ import '../../data/models/spaceData.dart';
 import '../../data/models/userData.dart';
 
 class SpaceState {
-  final String newPost;
+  final String newPostContents;
   final String newComment;
+  final String newEditContents;
   final List<UserData> spaceUsers;
   final List<UserData> allUsers;
   final FormSubmissionStatus postFormStatus;
@@ -29,8 +30,9 @@ class SpaceState {
   final PostData? selectedPost;
 
   SpaceState({
-    this.newPost = '',
+    this.newPostContents = '',
     this.newComment = '',
+    this.newEditContents = '',
     this.selectedPost,
     List<UserData>? spaceUsers,
     List<UserData>? allUsers,
@@ -52,8 +54,9 @@ class SpaceState {
         allUsers = allUsers ?? List<UserData>.empty();
 
   SpaceState copyWith({
-    String? newPost,
+    String? newPostContents,
     String? newComment,
+    String? newEditContents,
     List<UserData>? spaceUsers,
     List<UserData>? allUsers,
     PostData? selectedPost,
@@ -73,8 +76,9 @@ class SpaceState {
     SpaceData? currentSpace,
   }) {
     return SpaceState(
-      newPost: newPost ?? this.newPost,
+      newPostContents: newPostContents ?? this.newPostContents,
       newComment: newComment ?? this.newComment,
+      newEditContents: newEditContents ?? this.newEditContents,
       spaceUsers: spaceUsers ?? this.spaceUsers,
       allUsers: allUsers ?? this.allUsers,
       selectedPost: selectedPost ?? this.selectedPost,
