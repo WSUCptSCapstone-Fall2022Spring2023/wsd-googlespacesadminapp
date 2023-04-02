@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spaces_application/business_logic/auth/form_submission_status.dart';
@@ -59,6 +57,15 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     });
     on<GetAllUsers>((event, emit) async {
       await _onGetAllUsers(emit);
+    });
+    on<RemoveComment>((event, emit) async {
+      await _onRemoveComment(emit, event.selectedComment);
+    });
+    on<EditComment>((event, emit) async {
+      await _onEditComment(emit, event.newContents, event.selectedComment);
+    });
+    on<EditPost>((event, emit) async {
+      await _onEditPost(emit, event.newContents, event.selectedPost);
     });
   }
 
@@ -216,6 +223,78 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
           getUsersStatus: const InitialRetrievalStatus()));
     } catch (e) {
       emit(state.copyWith(inviteUserStatus: SubmissionFailed(Exception(e))));
+    }
+  }
+
+  Future<void> _onRemoveComment(
+      Emitter<SpaceState> emit, CommentData selectedComment) async {
+    emit(state.copyWith(deleteCommentFormStatus: FormSubmitting()));
+    try {
+      await spaceRepo.deleteComment(selectedComment.commentedTime,
+          state.selectedPost!.postedTime, state.selectedPost!.postUser.uid);
+      final replaceSpace = state.currentSpace;
+      final replacePost = state.selectedPost;
+      replacePost!.comments.removeWhere(
+        (element) => element.commentedTime == selectedComment.commentedTime,
+      );
+      final index = replaceSpace.spacePosts.indexWhere(
+        (element) => element.postedTime == replacePost.postedTime,
+      );
+      replaceSpace.spacePosts[index] = replacePost;
+      emit(state.copyWith(
+          deleteCommentFormStatus: SubmissionSuccess(),
+          currentSpace: replaceSpace,
+          selectedPost: replacePost));
+    } catch (e) {
+      emit(state.copyWith(
+          deleteCommentFormStatus: SubmissionFailed(Exception(e))));
+    }
+  }
+
+  Future<void> _onEditPost(Emitter<SpaceState> emit, String newContents,
+      PostData selectedPost) async {
+    emit(state.copyWith(editPostFormStatus: FormSubmitting()));
+    try {
+      await spaceRepo.editPost(
+          selectedPost.postedTime, newContents, currentSpaceData.sid);
+      final replaceSpace = state.currentSpace;
+      final index = replaceSpace.spacePosts.indexWhere(
+        (element) => element.postedTime == selectedPost.postedTime,
+      );
+      replaceSpace.spacePosts[index].contents = newContents;
+      emit(state.copyWith(
+          editPostFormStatus: SubmissionSuccess(), currentSpace: replaceSpace));
+    } catch (e) {
+      emit(state.copyWith(editPostFormStatus: SubmissionFailed(Exception(e))));
+    }
+  }
+
+  Future<void> _onEditComment(Emitter<SpaceState> emit, String newContents,
+      CommentData selectedComment) async {
+    emit(state.copyWith(editCommentFormStatus: FormSubmitting()));
+    try {
+      await spaceRepo.editComment(
+          selectedComment.commentedTime,
+          state.selectedPost!.postedTime,
+          newContents,
+          state.selectedPost!.postUser.uid);
+      final replaceSpace = state.currentSpace;
+      final replacePost = state.selectedPost;
+      final commentIndex = replacePost!.comments.indexWhere(
+        (element) => element.commentedTime == selectedComment.commentedTime,
+      );
+      replacePost.comments[commentIndex].contents = newContents;
+      final postIndex = replaceSpace.spacePosts.indexWhere(
+        (element) => element.postedTime == replacePost.postedTime,
+      );
+      replaceSpace.spacePosts[postIndex] = replacePost;
+      emit(state.copyWith(
+          editCommentFormStatus: SubmissionSuccess(),
+          currentSpace: replaceSpace,
+          selectedPost: replacePost));
+    } catch (e) {
+      emit(state.copyWith(
+          editCommentFormStatus: SubmissionFailed(Exception(e))));
     }
   }
 }

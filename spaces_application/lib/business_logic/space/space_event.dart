@@ -1,5 +1,6 @@
 import 'package:spaces_application/data/models/spaceData.dart';
 
+import '../../data/models/commentData.dart';
 import '../../data/models/postData.dart';
 import '../../data/models/userData.dart';
 
@@ -40,6 +41,26 @@ class GetAllUsers extends SpaceEvent {}
 class PostSubmitted extends SpaceEvent {}
 
 class CommentSubmitted extends SpaceEvent {}
+
+class EditComment extends SpaceEvent {
+  String newContents;
+  CommentData selectedComment;
+
+  EditComment({required this.newContents, required this.selectedComment});
+}
+
+class RemoveComment extends SpaceEvent {
+  CommentData selectedComment;
+
+  RemoveComment({required this.selectedComment});
+}
+
+class EditPost extends SpaceEvent {
+  String newContents;
+  PostData selectedPost;
+
+  EditPost({required this.newContents, required this.selectedPost});
+}
 
 class RemovePost extends SpaceEvent {
   PostData selectedPost;

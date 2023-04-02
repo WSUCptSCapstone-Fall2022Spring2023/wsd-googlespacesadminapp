@@ -213,7 +213,7 @@ class CreateCommentPopUpDialog extends StatelessWidget {
                                                                         25)),
                                                             TextSpan(
                                                                 text:
-                                                                    "  ${state.currentSpace.spacePosts[index].comments[index2].postedTime.month.toString()}/${state.currentSpace.spacePosts[index].comments[index2].postedTime.day.toString()}/${state.currentSpace.spacePosts[index].comments[index2].postedTime.year.toString()} ${state.currentSpace.spacePosts[index].comments[index2].postedTime.hour.toString()}:${state.currentSpace.spacePosts[index].comments[index2].postedTime.minute.toString()}",
+                                                                    "  ${state.currentSpace.spacePosts[index].comments[index2].commentedTime.month.toString()}/${state.currentSpace.spacePosts[index].comments[index2].commentedTime.day.toString()}/${state.currentSpace.spacePosts[index].comments[index2].commentedTime.year.toString()} ${state.currentSpace.spacePosts[index].comments[index2].commentedTime.hour.toString()}:${state.currentSpace.spacePosts[index].comments[index2].commentedTime.minute.toString()}",
                                                                 style: const TextStyle(
                                                                     color: Colors
                                                                         .grey))

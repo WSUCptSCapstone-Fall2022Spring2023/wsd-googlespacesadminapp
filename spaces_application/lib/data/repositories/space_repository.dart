@@ -267,4 +267,32 @@ class SpaceRepository {
         FirebaseDatabase.instance.ref("Posts/$spaceID");
     return spaceRef;
   }
+
+  Future<void> editPost(
+      DateTime postedDate, String newContents, String spaceID) async {
+    final postTimeStr = postedDate.toString().replaceAll('.', ':');
+    await ref
+        .child("Posts/")
+        .child(spaceID)
+        .child(postTimeStr)
+        .update({'contents': newContents});
+  }
+
+  Future<void> editComment(DateTime commentDate, DateTime postDate,
+      String newContents, String posterID) async {
+    final postTimeStr = postDate.toString().replaceAll('.', ':');
+    final commentTimeStr = commentDate.toString().replaceAll('.', ':');
+    await ref
+        .child("Comments/")
+        .child(posterID)
+        .child(postTimeStr)
+        .child(commentTimeStr)
+        .update({"contents": newContents});
+  }
+
+  Future<void> deleteComment(
+      DateTime commentDate, DateTime postDate, String posterID) async {
+    final postTimeStr = postDate.toString().replaceAll('.', ':');
+    await ref.child("Comments/").child(posterID).child(postTimeStr).remove();
+  }
 }

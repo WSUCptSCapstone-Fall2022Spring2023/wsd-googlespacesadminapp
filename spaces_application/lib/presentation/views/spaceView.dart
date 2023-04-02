@@ -357,7 +357,7 @@ class SpaceView extends StatelessWidget {
                                                                                                       title: RichText(
                                                                                                           text: TextSpan(children: [
                                                                                                         TextSpan(text: state.selectedPost!.comments[index2].commentUser.displayName.toString(), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 25)),
-                                                                                                        TextSpan(text: "  ${state.selectedPost!.comments[index2].postedTime.month.toString()}/${state.selectedPost!.comments[index2].postedTime.day.toString()}/${state.selectedPost!.comments[index2].postedTime.year.toString()} ${state.selectedPost!.comments[index2].postedTime.hour.toString()}:${state.selectedPost!.comments[index2].postedTime.minute.toString()}", style: const TextStyle(color: Colors.grey))
+                                                                                                        TextSpan(text: "  ${state.selectedPost!.comments[index2].commentedTime.month.toString()}/${state.selectedPost!.comments[index2].commentedTime.day.toString()}/${state.selectedPost!.comments[index2].commentedTime.year.toString()} ${state.selectedPost!.comments[index2].commentedTime.hour.toString()}:${state.selectedPost!.comments[index2].commentedTime.minute.toString()}", style: const TextStyle(color: Colors.grey))
                                                                                                       ])),
                                                                                                       subtitle: Text(state.selectedPost!.comments[index2].contents, style: const TextStyle(fontSize: 20)),
                                                                                                       trailing: PopupMenuButton(
@@ -371,8 +371,7 @@ class SpaceView extends StatelessWidget {
                                                                                                               },
                                                                                                             );
                                                                                                           } else if (value == '/delete') {
-                                                                                                            // context.read<SpaceBloc>().add(RemoveComment(selectedPost: state.currentSpace.spacePosts[index].comments[index2]));
-                                                                                                            // TODO: Add a RemoveComment action here ^ again, not sure if you need a new bloc type for comments
+                                                                                                            context.read<SpaceBloc>().add(RemoveComment(selectedComment: state.selectedPost!.comments[index2]));
                                                                                                           }
                                                                                                         }),
                                                                                                         itemBuilder: (context) {

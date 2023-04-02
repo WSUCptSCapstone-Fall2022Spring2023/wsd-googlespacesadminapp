@@ -6,15 +6,15 @@ import 'package:spaces_application/data/models/userData.dart';
 class CommentData {
   String contents = "";
   UserData commentUser = UserData.empty();
-  DateTime postedTime = DateTime.now();
+  DateTime commentedTime = DateTime.now();
 
-  CommentData(this.contents, this.commentUser, this.postedTime);
+  CommentData(this.contents, this.commentUser, this.commentedTime);
 
   CommentData.empty();
 
   CommentData.fromFirebase(DataSnapshot snapshot) {
     String timeString = snapshot.key as String;
-    postedTime = DateTime.parse(
+    commentedTime = DateTime.parse(
         timeString.replaceFirst(':', '.', timeString.lastIndexOf(':')));
     contents = snapshot.child('contents/').value as String;
   }

@@ -15,6 +15,9 @@ class SpaceState {
   final FormSubmissionStatus postFormStatus;
   final FormSubmissionStatus inviteUserStatus;
   final FormSubmissionStatus commentFormStatus;
+  final FormSubmissionStatus editPostFormStatus;
+  final FormSubmissionStatus editCommentFormStatus;
+  final FormSubmissionStatus deleteCommentFormStatus;
   final DataRetrievalStatus getPostsStatus;
   final DataRetrievalStatus deleteSpaceStatus;
   final DataRetrievalStatus getUsersStatus;
@@ -34,6 +37,9 @@ class SpaceState {
     this.postFormStatus = const InitialFormStatus(),
     this.inviteUserStatus = const InitialFormStatus(),
     this.commentFormStatus = const InitialFormStatus(),
+    this.deleteCommentFormStatus = const InitialFormStatus(),
+    this.editCommentFormStatus = const InitialFormStatus(),
+    this.editPostFormStatus = const InitialFormStatus(),
     this.getPostsStatus = const InitialRetrievalStatus(),
     this.deleteSpaceStatus = const InitialRetrievalStatus(),
     this.getUsersStatus = const InitialRetrievalStatus(),
@@ -54,6 +60,9 @@ class SpaceState {
     FormSubmissionStatus? postFormStatus,
     FormSubmissionStatus? inviteUserStatus,
     FormSubmissionStatus? commentFormStatus,
+    FormSubmissionStatus? editCommentFormStatus,
+    FormSubmissionStatus? editPostFormStatus,
+    FormSubmissionStatus? deleteCommentFormStatus,
     DataRetrievalStatus? deleteSpaceStatus,
     DataRetrievalStatus? getUsersStatus,
     DataRetrievalStatus? getPostsStatus,
@@ -72,6 +81,11 @@ class SpaceState {
       postFormStatus: postFormStatus ?? this.postFormStatus,
       inviteUserStatus: inviteUserStatus ?? this.inviteUserStatus,
       commentFormStatus: commentFormStatus ?? this.commentFormStatus,
+      editCommentFormStatus:
+          editCommentFormStatus ?? this.editCommentFormStatus,
+      editPostFormStatus: editPostFormStatus ?? this.editPostFormStatus,
+      deleteCommentFormStatus:
+          deleteCommentFormStatus ?? this.deleteCommentFormStatus,
       deletePostStatus: deletePostStatus ?? this.deletePostStatus,
       getPostsStatus: getPostsStatus ?? this.getPostsStatus,
       deleteSpaceStatus: deleteSpaceStatus ?? this.deleteSpaceStatus,
