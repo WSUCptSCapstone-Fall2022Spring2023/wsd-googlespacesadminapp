@@ -191,12 +191,18 @@ class SpaceView extends StatelessWidget {
                                                   showDialog(
                                                     barrierDismissible: true,
                                                     context: context,
-                                                    builder: (context) {
-                                                      return EditMessagePopUp(
-                                                          previousMessage: state
-                                                              .currentSpace
-                                                              .spacePosts[index]
-                                                              .contents);
+                                                    builder: (_) {
+                                                      return BlocProvider.value(
+                                                        value: BlocProvider.of<
+                                                            SpaceBloc>(context),
+                                                        child: EditMessagePopUp(
+                                                            previousMessage:
+                                                                state
+                                                                    .currentSpace
+                                                                    .spacePosts[
+                                                                        index]
+                                                                    .contents),
+                                                      );
                                                     },
                                                   );
                                                 } else if (value == '/delete') {
