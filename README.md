@@ -33,7 +33,7 @@ None
 
 ## Known Problems
 
-Currently no known problems
+Comments UI needs polishing.
 
 
 ## Contributing
