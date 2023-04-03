@@ -2,13 +2,13 @@
 
 ## Project summary
 
-The Google Workspaces Alternative Application is a communicative platform designed for Wahkiakum School district, Naselle School district, and Wahkiakum 4-H. The purpose of this application is to help faculty and students in classrooms, clubs and groups communicate with each other in a forum-like structure. It will be designed to have a coordinated User Interface to allow for fluid student collaboration while letting faculty monitor their student's behavior. 
+The Google Workspace Alternative Application is a communication platform designed for Wahkiakum School District, Naselle School District, and Wahkiakum 4-H. The purpose of this application is to help faculty and students in classrooms, clubs, and groups communicate with each other in a forum-like structure. It will be designed to have a coordinated user interface to allow for fluid student collaboration while letting faculty monitor their students' behavior. 
 
 ### Additional information about the project
 
-In today's information age, our communication is dominated by digital computer applications such as Discord, Zoom and much more. Wahkiakum School district and Naselle School district also used these applications for streamlined collaboration with instant messaging, VoIP, and file transfers. However, these applications are not supervisable and CIPA compliant which is in violation with the district's regulations. It is Team Toto's mission to design this application in the interests of Wahkiakum School district and Naselle School district. It is within our hope that this application fulfills the district's needs and that application can be used and further developed for other school districts as well. 
+In today's information age, our communication is dominated by digital computer applications such as Discord, Zoom, and many more. Wahkiakum School District and Naselle School District also use these applications for streamlined collaboration with instant messaging, VoIP, and file transfers. However, these applications are not supervisable and CIPA compliant, which is in violation of the districts' regulations. It is Team Toto's mission to design this application in the interests of Wahkiakum School District and Naselle School District. It is within our hope that this application fulfills the districts' needs and that the application can be used and further developed for other school districts as well.
 
-It also worthy to note that half of the student's own smartphone, but they all have their own Chromebooks supplied to them by the school. 
+It is also worth noting that half of the students own smartphones, but they all have their own Chromebooks supplied to them by the school.
 
 ## Installation
 N/A 
@@ -50,6 +50,15 @@ TODO: Leave the steps below if you want others to contribute to your project.
 
 TODO: Provide links to additional documentation that may exist in the repo, e.g.,
   * [Sprint Report 1](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint1report.md)
+  * [Sprint Report 2](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint2report.md)
+  * [Sprint 2 Demo](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint2demo.mkv)
+  * [Sprint Report 3](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint3report.md)
+  * [Sprint Report 4](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint4report.md)
+  * [Sprint 4 Demo](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/Sprint4demo.mp4)
+  * [Sprint Report 5](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint5report.md)
+  * [Sprint 5 Demo](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint5demovideo.mp4)
+  * [Sprint Report 6](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint6report.md)
+
   * User links
 
 ## License
