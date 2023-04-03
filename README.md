@@ -50,6 +50,15 @@ TODO: Leave the steps below if you want others to contribute to your project.
 
 TODO: Provide links to additional documentation that may exist in the repo, e.g.,
   * [Sprint Report 1](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint1report.md)
+  * [Sprint Report 2](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint2report.md)
+  * [Sprint 2 Demo](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint2demo.mkv)
+  * [Sprint Report 3](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint3report.md)
+  * [Sprint Report 4](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint4report.md)
+  * [Sprint 4 Demo](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/Sprint4demo.mp4)
+  * [Sprint Report 5](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint5report.md)
+  * [Sprint 5 Demo](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint5demovideo.mp4)
+  * [Sprint Report 6](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint6report.md)
+
   * User links
 
 ## License
