@@ -49,6 +49,11 @@ TODO: Leave the steps below if you want others to contribute to your project.
 ## Additional Documentation
 
 TODO: Provide links to additional documentation that may exist in the repo, e.g.,
+  * [Project Description](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/Project_Description.docx.pdf)
+  * [Prototype Project Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/Prototype_Project_Report.pdf)
+  * [Requirements and Specifications](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/Requirements_and_Specifications.docx.pdf)
+  * [Solution Approach](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/Solution_Approach.docx.pdf)
+  * [Testing and Acceptance](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/Testing_and_Acceptance_plans.docx.pdf)
   * [Sprint Report 1](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint1report.md)
   * [Sprint Report 2](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint2report.md)
   * [Sprint 2 Demo](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint2demo.mkv)
