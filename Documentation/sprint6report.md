@@ -23,7 +23,7 @@ Here are links to the issues that we completed in this sprint:
 ## Incomplete Issues/ User Stories
 * MVP document work
 * Comments UI
-* Team Poster
+* Poster work
 
 ## Code Files for Review
 Please review the following important code files, which were actively developed/created during this sprint, for quality:
