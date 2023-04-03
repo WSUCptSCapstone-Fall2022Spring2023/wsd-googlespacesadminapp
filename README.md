@@ -55,15 +55,15 @@ TODO: Provide links to additional documentation that may exist in the repo, e.g.
   * [Requirements and Specifications](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/Requirements_and_Specifications.docx.pdf)
   * [Solution Approach](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/Solution_Approach.docx.pdf)
   * [Testing and Acceptance](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/Testing_and_Acceptance_plans.docx.pdf)
-  * [Sprint Report 1](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint1report.md)
-  * [Sprint Report 2](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint2report.md)
-  * [Sprint 2 Demo](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint2demo.mkv)
-  * [Sprint Report 3](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint3report.md)
-  * [Sprint Report 4](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint4report.md)
-  * [Sprint 4 Demo](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/Sprint4demo.mp4)
-  * [Sprint Report 5](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint5report.md)
+  * [Sprint 6 Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint6report.md)
   * [Sprint 5 Demo](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint5demovideo.mp4)
-  * [Sprint Report 6](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint6report.md)
+  * [Sprint 5 Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint5report.md)
+  * [Sprint 4 Demo](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/Sprint4demo.mp4)
+  * [Sprint 4 Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint4report.md)
+  * [Sprint 3 Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint3report.md)
+  * [Sprint 2 Demo](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint2demo.mkv)
+  * [Sprint 2 Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint2report.md)
+  * [Sprint 1 Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint1report.md)
 
   * User links
 
