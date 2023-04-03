@@ -1,18 +1,29 @@
 # Sprint 6 Report (3/2/2023 - 4/2/2023)
 
 ## What's New (User Facing)
-
+* MVP Project Report Updates
+* Front-end improvement
+* Editing and deleting comments in Spaces
+* Comments views
+* Admin control settings
+* Space settings
+* User settings
+* IOS/MACOS Configuration
 
 ## Work Summary (Developer Facing)
-In this sprint, the team has made signifcant progress towards UI updates, profiles picture configurations, and Chromebook configurations for testing. Since the last sprint, we have been in consistent contact with our mentor Ron and Paul the school's IT director to gain access to the school's Chromebook. We have also changed the application name to "Mules" and changed the color scheme to red & black/white. Posting to Spaces has now been implemented, as well as adding descriptions. In addtion, we have added a profile picture feature and customization using the "Fluttermoji" package. We have also completed implementing the chat feature allowing users inthe same Space to message each other.
+In this sprint, the team has made significant progress UI improvements, Spaces settings, comments functionality, Admin control settings and IOS/MACOS Configurations. In Spaces, we implemented a Space menu so if you click on a user, you can see their profile information. In this view, this is also where permissions can be modified. Admin and Faculty users are now able to delete Spaces, and they are the only ones allowed to do so. The application has been configured to work on IOS and MacOS devices, but will still need some work if we continue to develop for multiple platforms. So far we have opted to developing the application to be a web app for easier access across all devices. Also, comments can now be edited and deleted in a Space. The team has implemented a search function for other users to be invited to a Space.
 
 ## Unfinished Work
+Next, we will be focusing on optimizing the comments UI, deployment and completing the team Poster and Abstract.
 
 
 ## Completed Issue/User Stories
 Here are links to the issues that we completed in this sprint:
 
 ## Incomplete Issues/ User Stories
+* MVP document work
+* Comments UI
+* Team Poster
 
 ## Code Files for Review
 Please review the following important code files, which were actively developed/created during this sprint, for quality:
@@ -56,14 +67,11 @@ Here's what went well:
 
 Here's what we'd like to improve:
  * Team-Client meetings
- * Communicating with Client
  * The splitting of the workload
  * Using time effectively and spreading worktimes apart throughout the Sprint instead of cramming
 
 Here are changes we plan to implement in the next sprint:
- * Creating, Opening, Editing, Commenting on, and Deleting Post Spaces
- * Creating, Opening, Editing, Commenting on, and Deleting Posts
- * Creating, Opening, Editing, Commenting to, and Deleting Comments
  * UI Changes
  * Admin User Controls
- * User Text Chat
+ * Poster 
+ * Deployment
