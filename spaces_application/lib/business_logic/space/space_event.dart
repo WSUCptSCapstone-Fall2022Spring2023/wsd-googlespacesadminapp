@@ -32,6 +32,8 @@ class InviteUsers extends SpaceEvent {
 
 class LoadSpacePosts extends SpaceEvent {}
 
+class LoadMoreSpacePosts extends SpaceEvent {}
+
 class LoadPostComments extends SpaceEvent {
   PostData selectedPost;
 
@@ -42,7 +44,7 @@ class DeleteSpace extends SpaceEvent {}
 
 class GetSpaceUsers extends SpaceEvent {}
 
-class GetAllUsers extends SpaceEvent {}
+class GetNonSpaceUsers extends SpaceEvent {}
 
 class PostSubmitted extends SpaceEvent {}
 

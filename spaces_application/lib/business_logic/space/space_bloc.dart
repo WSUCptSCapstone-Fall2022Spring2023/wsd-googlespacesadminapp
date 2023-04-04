@@ -49,6 +49,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     on<LoadPostComments>((event, emit) async {
       await _onLoadPostComments(event.selectedPost, emit);
     });
+    on<LoadMoreSpacePosts>((event, emit) async {
+      await _onLoadMoreSpacePosts(emit);
+    });
     on<CommentMessageChanged>((event, emit) async {
       await _onCommentChanged(event.message, emit);
     });
@@ -58,8 +61,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     on<RemovePost>((event, emit) async {
       await _onRemovePost(emit, event.selectedPost);
     });
-    on<GetAllUsers>((event, emit) async {
-      await _onGetAllUsers(emit);
+    on<GetNonSpaceUsers>((event, emit) async {
+      await _onGetNonSpaceUsers(emit);
     });
     on<RemoveComment>((event, emit) async {
       await _onRemoveComment(emit, event.selectedComment);
@@ -91,7 +94,6 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     emit(state.copyWith(getPostsStatus: DataRetrieving()));
     try {
       final posts = await spaceRepo.getSpacePosts(state.currentSpace.sid);
-
       // final DatabaseReference spaceRef =
       //     await spaceRepo.getSpaceReference(state.currentSpace.sid);
       // spaceRef.onChildAdded.listen((event) {
@@ -107,6 +109,20 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
           currentSpace: replaceSpace, getPostsStatus: RetrievalSuccess()));
     } catch (e) {
       emit(state.copyWith(getPostsStatus: RetrievalFailed(Exception(e))));
+    }
+  }
+
+  Future<void> _onLoadMoreSpacePosts(Emitter<SpaceState> emit) async {
+    emit(state.copyWith(getMorePostsStatus: DataRetrieving()));
+    try {
+      final posts = await spaceRepo.getMoreSpacePosts(state.currentSpace.sid,
+          state.currentSpace.spacePosts.first.postedTime);
+      final replaceSpace = state.currentSpace;
+      replaceSpace.spacePosts.insertAll(0, posts);
+      emit(state.copyWith(
+          currentSpace: replaceSpace, getMorePostsStatus: RetrievalSuccess()));
+    } catch (e) {
+      emit(state.copyWith(getMorePostsStatus: RetrievalFailed(Exception(e))));
     }
   }
 
@@ -214,14 +230,23 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     }
   }
 
-  Future<void> _onGetAllUsers(Emitter<SpaceState> emit) async {
-    emit(state.copyWith(getAllUsersStatus: DataRetrieving()));
+  Future<void> _onGetNonSpaceUsers(Emitter<SpaceState> emit) async {
+    emit(state.copyWith(getNonSpaceUsersStatus: DataRetrieving()));
     try {
       final List<UserData> users = await userRepo.getAllUsers();
+      if (state.spaceUsers.isEmpty) {
+        await _onGetSpaceUsers(emit);
+      }
+      for (final index in state.spaceUsers) {
+        users.removeWhere(
+          (element) => index.uid == element.uid,
+        );
+      }
       emit(state.copyWith(
-          getAllUsersStatus: RetrievalSuccess(), allUsers: users));
+          getNonSpaceUsersStatus: RetrievalSuccess(), nonspaceUsers: users));
     } catch (e) {
-      emit(state.copyWith(getAllUsersStatus: RetrievalFailed(Exception(e))));
+      emit(state.copyWith(
+          getNonSpaceUsersStatus: RetrievalFailed(Exception(e))));
     }
   }
 
@@ -232,7 +257,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       await spaceRepo.joinSpace(state.currentSpace.sid, invitedUsers);
       emit(state.copyWith(
           inviteUserStatus: SubmissionSuccess(),
-          getUsersStatus: const InitialRetrievalStatus()));
+          getUsersStatus: const InitialRetrievalStatus(),
+          getNonSpaceUsersStatus: const InitialRetrievalStatus()));
     } catch (e) {
       emit(state.copyWith(inviteUserStatus: SubmissionFailed(Exception(e))));
     }

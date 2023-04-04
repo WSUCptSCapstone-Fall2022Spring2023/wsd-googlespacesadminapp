@@ -20,11 +20,12 @@ class SpaceState {
   final FormSubmissionStatus editCommentFormStatus;
   final FormSubmissionStatus deleteCommentFormStatus;
   final DataRetrievalStatus getPostsStatus;
+  final DataRetrievalStatus getMorePostsStatus;
   final DataRetrievalStatus deleteSpaceStatus;
   final DataRetrievalStatus getUsersStatus;
   final DataRetrievalStatus getCommentsStatus;
   final DataRetrievalStatus deletePostStatus;
-  final DataRetrievalStatus getAllUsersStatus;
+  final DataRetrievalStatus getNonSpaceUsers;
   final SpaceData currentSpace;
   final UserData currentUser;
   final PostData? selectedPost;
@@ -43,11 +44,12 @@ class SpaceState {
     this.editCommentFormStatus = const InitialFormStatus(),
     this.editPostFormStatus = const InitialFormStatus(),
     this.getPostsStatus = const InitialRetrievalStatus(),
+    this.getMorePostsStatus = const InitialRetrievalStatus(),
     this.deleteSpaceStatus = const InitialRetrievalStatus(),
     this.getUsersStatus = const InitialRetrievalStatus(),
     this.getCommentsStatus = const InitialRetrievalStatus(),
     this.deletePostStatus = const InitialRetrievalStatus(),
-    this.getAllUsersStatus = const InitialRetrievalStatus(),
+    this.getNonSpaceUsers = const InitialRetrievalStatus(),
     required this.currentSpace,
     required this.currentUser,
   })  : spaceUsers = spaceUsers ?? List<UserData>.empty(),
@@ -58,7 +60,7 @@ class SpaceState {
     String? newComment,
     String? newEditContents,
     List<UserData>? spaceUsers,
-    List<UserData>? allUsers,
+    List<UserData>? nonspaceUsers,
     PostData? selectedPost,
     FormSubmissionStatus? postFormStatus,
     FormSubmissionStatus? inviteUserStatus,
@@ -69,9 +71,10 @@ class SpaceState {
     DataRetrievalStatus? deleteSpaceStatus,
     DataRetrievalStatus? getUsersStatus,
     DataRetrievalStatus? getPostsStatus,
+    DataRetrievalStatus? getMorePostsStatus,
     DataRetrievalStatus? getCommentsStatus,
     DataRetrievalStatus? deletePostStatus,
-    DataRetrievalStatus? getAllUsersStatus,
+    DataRetrievalStatus? getNonSpaceUsersStatus,
     UserData? currentUser,
     SpaceData? currentSpace,
   }) {
@@ -80,7 +83,7 @@ class SpaceState {
       newComment: newComment ?? this.newComment,
       newEditContents: newEditContents ?? this.newEditContents,
       spaceUsers: spaceUsers ?? this.spaceUsers,
-      allUsers: allUsers ?? this.allUsers,
+      allUsers: nonspaceUsers ?? this.allUsers,
       selectedPost: selectedPost ?? this.selectedPost,
       postFormStatus: postFormStatus ?? this.postFormStatus,
       inviteUserStatus: inviteUserStatus ?? this.inviteUserStatus,
@@ -92,9 +95,10 @@ class SpaceState {
           deleteCommentFormStatus ?? this.deleteCommentFormStatus,
       deletePostStatus: deletePostStatus ?? this.deletePostStatus,
       getPostsStatus: getPostsStatus ?? this.getPostsStatus,
+      getMorePostsStatus: getMorePostsStatus ?? this.getMorePostsStatus,
       deleteSpaceStatus: deleteSpaceStatus ?? this.deleteSpaceStatus,
       getUsersStatus: getUsersStatus ?? this.getUsersStatus,
-      getAllUsersStatus: getAllUsersStatus ?? this.getAllUsersStatus,
+      getNonSpaceUsers: getNonSpaceUsersStatus ?? this.getNonSpaceUsers,
       getCommentsStatus: getCommentsStatus ?? this.getCommentsStatus,
       currentSpace: currentSpace ?? this.currentSpace,
       currentUser: currentUser ?? this.currentUser,

@@ -8,10 +8,11 @@ class SpaceData {
   String spaceName = "";
   List<PermissionData> membersPermissions =
       List<PermissionData>.empty(growable: true);
+  bool isPrivate = true;
 
   List<PostData> spacePosts = List<PostData>.empty(growable: true);
 
-  SpaceData(this.sid, this.spaceDescription, this.spaceName);
+  SpaceData(this.sid, this.spaceDescription, this.spaceName, this.isPrivate);
 
   SpaceData.empty();
 
@@ -22,6 +23,8 @@ class SpaceData {
         spaceName = child.value as String;
       } else if (child.key == "spaceDescription") {
         spaceDescription = child.value as String;
+      } else if (child.key == "isPrivate") {
+        isPrivate = child.value as bool;
       } else if (child.key == "membersPermissions") {
         for (final permission in child.children) {
           membersPermissions.add(PermissionData.fromSpace(permission));

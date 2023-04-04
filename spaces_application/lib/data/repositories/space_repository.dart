@@ -59,7 +59,7 @@ class SpaceRepository {
         .child("Posts/")
         .child(spaceID)
         .child(timeStr)
-        .set({"userID": userID, "contents": message});
+        .set({"userID": userID, "contents": message, "isEdited": false});
   }
 
   Future<void> deletePost(
@@ -86,7 +86,25 @@ class SpaceRepository {
   }
 
   Future<List<PostData>> getSpacePosts(String spaceID) async {
-    final postSnapshot = await ref.child("Posts/").child(spaceID).get();
+    final postRef =
+        FirebaseDatabase.instance.ref("Posts/").child(spaceID).limitToLast(15);
+    final postSnapshot = await postRef.get();
+    List<PostData> spacePosts = List<PostData>.empty(growable: true);
+    for (final post in postSnapshot.children) {
+      spacePosts.add(await getPost(post));
+    }
+    return spacePosts;
+  }
+
+  Future<List<PostData>> getMoreSpacePosts(
+      String spaceID, DateTime lastPost) async {
+    final postRef = FirebaseDatabase.instance
+        .ref("Posts/")
+        .child(spaceID)
+        .orderByKey()
+        .endBefore(lastPost.toString().replaceAll('.', ':'))
+        .limitToLast(15);
+    final postSnapshot = await postRef.get();
     List<PostData> spacePosts = List<PostData>.empty(growable: true);
     for (final post in postSnapshot.children) {
       spacePosts.add(await getPost(post));
@@ -199,7 +217,34 @@ class SpaceRepository {
     }
   }
 
-  Future<void> changePermissions(String spaceID, String userID) async {}
+  Future<void> changePermissions(String spaceID, String userID, bool canComment,
+      bool canEdit, bool canInvite, bool canRemove, bool canPost) async {
+    await ref
+        .child("UserData/")
+        .child(userID)
+        .child("spacesPermissions/")
+        .child(spaceID)
+        .update({
+      "canComment": canComment,
+      "canEdit": canEdit,
+      "canInvite": canInvite,
+      "canRemove": canRemove,
+      "canPost": canPost,
+    });
+
+    await ref
+        .child("Spaces/")
+        .child(spaceID)
+        .child("membersPermissions/")
+        .child(userID)
+        .update({
+      "canComment": canComment,
+      "canEdit": canEdit,
+      "canInvite": canInvite,
+      "canRemove": canRemove,
+      "canPost": canPost,
+    });
+  }
 
   Future<void> removeUserFromSpace(String spaceID, String userID) async {
     await ref
@@ -234,7 +279,8 @@ class SpaceRepository {
         .set({
       "spaceID": spaceID,
       "contents": message,
-      "commenter": commenterID
+      "commenter": commenterID,
+      "isEdited": false
     });
   }
 
@@ -275,7 +321,7 @@ class SpaceRepository {
         .child("Posts/")
         .child(spaceID)
         .child(postTimeStr)
-        .update({'contents': newContents});
+        .update({'contents': newContents, 'isEdited': true});
   }
 
   Future<void> editComment(DateTime commentDate, DateTime postDate,
