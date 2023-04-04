@@ -11,6 +11,7 @@ class PostData {
   DateTime postedTime = DateTime.now();
   List<CommentData> comments = List<CommentData>.empty(growable: true);
   int commentCount = 0;
+  bool isEdited = false;
 
   PostData(this.contents, this.postUser, this.postedTime, this.commentCount);
 
@@ -21,5 +22,6 @@ class PostData {
     postedTime = DateTime.parse(
         timeString.replaceFirst(':', '.', timeString.lastIndexOf(':')));
     contents = postSnapshot.child('contents/').value as String;
+    isEdited = postSnapshot.child('isEdited/').value as bool;
   }
 }

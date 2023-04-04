@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spaces_application/business_logic/auth/form_submission_status.dart';
@@ -30,6 +28,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     on<PostMessageChanged>((event, emit) async {
       await _onMessageChanged(event.message, emit);
     });
+    on<EditFieldChanged>((event, emit) async {
+      await _onEditFieldChanged(event.message, emit);
+    });
     on<LoadSpacePosts>((event, emit) async {
       await _onLoadSpacePosts(emit);
     });
@@ -48,6 +49,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     on<LoadPostComments>((event, emit) async {
       await _onLoadPostComments(event.selectedPost, emit);
     });
+    on<LoadMoreSpacePosts>((event, emit) async {
+      await _onLoadMoreSpacePosts(emit);
+    });
     on<CommentMessageChanged>((event, emit) async {
       await _onCommentChanged(event.message, emit);
     });
@@ -57,14 +61,23 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     on<RemovePost>((event, emit) async {
       await _onRemovePost(emit, event.selectedPost);
     });
-    on<GetAllUsers>((event, emit) async {
-      await _onGetAllUsers(emit);
+    on<GetNonSpaceUsers>((event, emit) async {
+      await _onGetNonSpaceUsers(emit);
+    });
+    on<RemoveComment>((event, emit) async {
+      await _onRemoveComment(emit, event.selectedComment);
+    });
+    on<EditComment>((event, emit) async {
+      await _onEditComment(emit, event.newContents, event.selectedComment);
+    });
+    on<EditPost>((event, emit) async {
+      await _onEditPost(emit, event.newContents, event.selectedPost);
     });
   }
 
   Future<void> _onMessageChanged(
       String newPost, Emitter<SpaceState> emit) async {
-    emit(state.copyWith(newPost: newPost));
+    emit(state.copyWith(newPostContents: newPost));
   }
 
   Future<void> _onCommentChanged(
@@ -72,11 +85,15 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     emit(state.copyWith(newComment: newComment));
   }
 
+  Future<void> _onEditFieldChanged(
+      String newEditContents, Emitter<SpaceState> emit) async {
+    emit(state.copyWith(newEditContents: newEditContents));
+  }
+
   Future<void> _onLoadSpacePosts(Emitter<SpaceState> emit) async {
     emit(state.copyWith(getPostsStatus: DataRetrieving()));
     try {
       final posts = await spaceRepo.getSpacePosts(state.currentSpace.sid);
-
       // final DatabaseReference spaceRef =
       //     await spaceRepo.getSpaceReference(state.currentSpace.sid);
       // spaceRef.onChildAdded.listen((event) {
@@ -92,6 +109,20 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
           currentSpace: replaceSpace, getPostsStatus: RetrievalSuccess()));
     } catch (e) {
       emit(state.copyWith(getPostsStatus: RetrievalFailed(Exception(e))));
+    }
+  }
+
+  Future<void> _onLoadMoreSpacePosts(Emitter<SpaceState> emit) async {
+    emit(state.copyWith(getMorePostsStatus: DataRetrieving()));
+    try {
+      final posts = await spaceRepo.getMoreSpacePosts(state.currentSpace.sid,
+          state.currentSpace.spacePosts.first.postedTime);
+      final replaceSpace = state.currentSpace;
+      replaceSpace.spacePosts.insertAll(0, posts);
+      emit(state.copyWith(
+          currentSpace: replaceSpace, getMorePostsStatus: RetrievalSuccess()));
+    } catch (e) {
+      emit(state.copyWith(getMorePostsStatus: RetrievalFailed(Exception(e))));
     }
   }
 
@@ -118,13 +149,16 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     emit(state.copyWith(postFormStatus: FormSubmitting()));
     try {
       final currentTime = DateTime.now();
-      await spaceRepo.createPost(state.newPost, currentUserData.uid,
+      await spaceRepo.createPost(state.newPostContents, currentUserData.uid,
           state.currentSpace.sid, currentTime);
       final replaceSpace = state.currentSpace;
-      final newPost = PostData(state.newPost, currentUserData, currentTime, 0);
+      final newPost =
+          PostData(state.newPostContents, currentUserData, currentTime, 0);
       replaceSpace.spacePosts.add(newPost);
       emit(state.copyWith(
-          currentSpace: replaceSpace, postFormStatus: SubmissionSuccess()));
+          currentSpace: replaceSpace,
+          postFormStatus: SubmissionSuccess(),
+          newPostContents: ""));
     } catch (e) {
       emit(state.copyWith(postFormStatus: SubmissionFailed(Exception(e))));
     }
@@ -149,7 +183,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
           selectedPost: replacePost, commentFormStatus: SubmissionSuccess()));
       emit(state.copyWith(commentFormStatus: const InitialFormStatus()));
     } catch (e) {
-      emit(state.copyWith(commentFormStatus: SubmissionFailed(Exception(e))));
+      emit(state.copyWith(
+          commentFormStatus: SubmissionFailed(Exception(e)), newComment: ""));
       emit(state.copyWith(commentFormStatus: const InitialFormStatus()));
     }
   }
@@ -195,14 +230,23 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     }
   }
 
-  Future<void> _onGetAllUsers(Emitter<SpaceState> emit) async {
-    emit(state.copyWith(getAllUsersStatus: DataRetrieving()));
+  Future<void> _onGetNonSpaceUsers(Emitter<SpaceState> emit) async {
+    emit(state.copyWith(getNonSpaceUsersStatus: DataRetrieving()));
     try {
       final List<UserData> users = await userRepo.getAllUsers();
+      if (state.spaceUsers.isEmpty) {
+        await _onGetSpaceUsers(emit);
+      }
+      for (final index in state.spaceUsers) {
+        users.removeWhere(
+          (element) => index.uid == element.uid,
+        );
+      }
       emit(state.copyWith(
-          getAllUsersStatus: RetrievalSuccess(), allUsers: users));
+          getNonSpaceUsersStatus: RetrievalSuccess(), nonspaceUsers: users));
     } catch (e) {
-      emit(state.copyWith(getAllUsersStatus: RetrievalFailed(Exception(e))));
+      emit(state.copyWith(
+          getNonSpaceUsersStatus: RetrievalFailed(Exception(e))));
     }
   }
 
@@ -213,9 +257,82 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       await spaceRepo.joinSpace(state.currentSpace.sid, invitedUsers);
       emit(state.copyWith(
           inviteUserStatus: SubmissionSuccess(),
-          getUsersStatus: const InitialRetrievalStatus()));
+          getUsersStatus: const InitialRetrievalStatus(),
+          getNonSpaceUsersStatus: const InitialRetrievalStatus()));
     } catch (e) {
       emit(state.copyWith(inviteUserStatus: SubmissionFailed(Exception(e))));
+    }
+  }
+
+  Future<void> _onRemoveComment(
+      Emitter<SpaceState> emit, CommentData selectedComment) async {
+    emit(state.copyWith(deleteCommentFormStatus: FormSubmitting()));
+    try {
+      await spaceRepo.deleteComment(selectedComment.commentedTime,
+          state.selectedPost!.postedTime, state.selectedPost!.postUser.uid);
+      final replaceSpace = state.currentSpace;
+      final replacePost = state.selectedPost;
+      replacePost!.comments.removeWhere(
+        (element) => element.commentedTime == selectedComment.commentedTime,
+      );
+      final index = replaceSpace.spacePosts.indexWhere(
+        (element) => element.postedTime == replacePost.postedTime,
+      );
+      replaceSpace.spacePosts[index] = replacePost;
+      emit(state.copyWith(
+          deleteCommentFormStatus: SubmissionSuccess(),
+          currentSpace: replaceSpace,
+          selectedPost: replacePost));
+    } catch (e) {
+      emit(state.copyWith(
+          deleteCommentFormStatus: SubmissionFailed(Exception(e))));
+    }
+  }
+
+  Future<void> _onEditPost(Emitter<SpaceState> emit, String newContents,
+      PostData selectedPost) async {
+    emit(state.copyWith(editPostFormStatus: FormSubmitting()));
+    try {
+      await spaceRepo.editPost(
+          selectedPost.postedTime, newContents, currentSpaceData.sid);
+      final replaceSpace = state.currentSpace;
+      final index = replaceSpace.spacePosts.indexWhere(
+        (element) => element.postedTime == selectedPost.postedTime,
+      );
+      replaceSpace.spacePosts[index].contents = newContents;
+      emit(state.copyWith(
+          editPostFormStatus: SubmissionSuccess(), currentSpace: replaceSpace));
+    } catch (e) {
+      emit(state.copyWith(editPostFormStatus: SubmissionFailed(Exception(e))));
+    }
+  }
+
+  Future<void> _onEditComment(Emitter<SpaceState> emit, String newContents,
+      CommentData selectedComment) async {
+    emit(state.copyWith(editCommentFormStatus: FormSubmitting()));
+    try {
+      await spaceRepo.editComment(
+          selectedComment.commentedTime,
+          state.selectedPost!.postedTime,
+          newContents,
+          state.selectedPost!.postUser.uid);
+      final replaceSpace = state.currentSpace;
+      final replacePost = state.selectedPost;
+      final commentIndex = replacePost!.comments.indexWhere(
+        (element) => element.commentedTime == selectedComment.commentedTime,
+      );
+      replacePost.comments[commentIndex].contents = newContents;
+      final postIndex = replaceSpace.spacePosts.indexWhere(
+        (element) => element.postedTime == replacePost.postedTime,
+      );
+      replaceSpace.spacePosts[postIndex] = replacePost;
+      emit(state.copyWith(
+          editCommentFormStatus: SubmissionSuccess(),
+          currentSpace: replaceSpace,
+          selectedPost: replacePost));
+    } catch (e) {
+      emit(state.copyWith(
+          editCommentFormStatus: SubmissionFailed(Exception(e))));
     }
   }
 }

@@ -52,15 +52,18 @@ class _CreateInviteUserPopUpDialogState
   Widget build(BuildContext context) {
     var ScreenHeight = MediaQuery.of(context).size.height;
     return BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
-      if (state.getAllUsersStatus is InitialRetrievalStatus) {
-        context.read<SpaceBloc>().add(GetAllUsers());
+      if (state.getNonSpaceUsers is InitialRetrievalStatus) {
+        context.read<SpaceBloc>().add(GetNonSpaceUsers());
         return const SizedBox.shrink();
-      } else if (state.getAllUsersStatus is DataRetrieving) {
-        return CircularProgressIndicator();
-      } else if (state.getAllUsersStatus is RetrievalFailed) {
+      } else if (state.getNonSpaceUsers is DataRetrieving) {
+        return const SizedBox(
+            width: 100,
+            height: 100,
+            child: Center(child: CircularProgressIndicator()));
+      } else if (state.getNonSpaceUsers is RetrievalFailed) {
         return const Center(
             child: Text("Error with Data Retrieval. Please Refresh."));
-      } else if (state.getAllUsersStatus is RetrievalSuccess) {
+      } else if (state.getNonSpaceUsers is RetrievalSuccess) {
         return Dialog(
             // insetPadding: const EdgeInsets.symmetric(horizontal: 50, vertical: 100),
             backgroundColor: Colors.white,
@@ -95,108 +98,114 @@ class _CreateInviteUserPopUpDialogState
                         padding: EdgeInsets.symmetric(vertical: 20),
                         child: Divider(height: 0),
                       ),
-                      Flexible(
-                        child: Container(
-                          clipBehavior: Clip.hardEdge,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Card(
-                            child: ListView.builder(
-                              physics: ClampingScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: state.allUsers.length,
-                              itemBuilder: ((context, index) {
-                                // final selectedUser = UserData(
-                                //     "",
-                                //     false,
-                                //     "",
-                                //     "",
-                                //     "",
-                                //     "",
-                                //     "",
-                                //     List<PermissionData>.empty(growable: true));
-                                bool isSelected =
-                                    _selectedUsersIndices.contains(index);
-                                return Material(
-                                  color:
-                                      isSelected ? Colors.grey : Colors.white,
-                                  child: ListTile(
-                                    key: ValueKey(index),
-                                    selected:
-                                        _selectedUsersIndices.contains(index),
-                                    dense: true,
-                                    onTap: () {
-                                      setState(() {
-                                        if (isSelected) {
-                                          _selectedUsersIndices.remove(index);
-                                        } else {
-                                          _selectedUsersIndices.add(index);
-                                        }
-                                      });
-                                    },
-                                    leading: ConstrainedBox(
-                                      constraints: const BoxConstraints(
-                                          maxHeight: 30,
-                                          maxWidth: 30,
-                                          minWidth: 30,
-                                          minHeight: 30),
-                                      child: SvgPicture.string(
-                                          FluttermojiFunctions()
-                                              .decodeFluttermojifromString(state
-                                                  .allUsers[index]
-                                                  .profilePicString)),
+                      if (state.allUsers.isEmpty)
+                        Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              "No users left to invite.",
+                              style:
+                                  TextStyle(fontSize: 60, color: Colors.black),
+                            ))
+                      else
+                        Flexible(
+                          child: Container(
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Card(
+                              child: ListView.builder(
+                                physics: ClampingScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: state.allUsers.length,
+                                itemBuilder: ((context, index) {
+                                  bool isSelected =
+                                      _selectedUsersIndices.contains(index);
+                                  return Material(
+                                    color:
+                                        isSelected ? Colors.grey : Colors.white,
+                                    child: ListTile(
+                                      key: ValueKey(index),
+                                      selected: _selectedUsersIndices
+                                              .contains(index) ||
+                                          state.spaceUsers.any((element) =>
+                                              element.uid ==
+                                              state.allUsers[index].uid),
+                                      dense: true,
+                                      onTap: () {
+                                        setState(() {
+                                          if (isSelected) {
+                                            _selectedUsersIndices.remove(index);
+                                          } else {
+                                            _selectedUsersIndices.add(index);
+                                          }
+                                        });
+                                      },
+                                      leading: ConstrainedBox(
+                                        constraints: const BoxConstraints(
+                                            maxHeight: 30,
+                                            maxWidth: 30,
+                                            minWidth: 30,
+                                            minHeight: 30),
+                                        child: SvgPicture.string(
+                                            FluttermojiFunctions()
+                                                .decodeFluttermojifromString(
+                                                    state.allUsers[index]
+                                                        .profilePicString)),
+                                      ),
+                                      shape: const Border(
+                                          top: BorderSide(width: 5)),
+                                      title: RichText(
+                                          text: TextSpan(children: [
+                                        TextSpan(
+                                            // "  ${state.user.firstName} ${state.user.lastName}",
+                                            text: state
+                                                .allUsers[index].displayName
+                                                .toString(),
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 25)),
+                                        TextSpan(
+                                            text:
+                                                "  ${state.allUsers[index].firstName} ${state.allUsers[index].lastName}",
+                                            style: const TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 20))
+                                        // if (state.allUsers[index] is in state.spaceUsers) { Text("Invited"); }
+                                      ])),
                                     ),
-                                    shape:
-                                        const Border(top: BorderSide(width: 5)),
-                                    title: RichText(
-                                        text: TextSpan(children: [
-                                      TextSpan(
-                                          // "  ${state.user.firstName} ${state.user.lastName}",
-                                          text: state
-                                              .allUsers[index].displayName
-                                              .toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 25)),
-                                      TextSpan(
-                                          text:
-                                              "  ${state.allUsers[index].firstName} ${state.allUsers[index].lastName}",
-                                          style: const TextStyle(
-                                              color: Colors.grey, fontSize: 20))
-                                      // if (state.allUsers[index] is in state.spaceUsers) { Text("Invited"); }
-                                    ])),
-                                  ),
-                                );
-                              }),
+                                  );
+                                }),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_selectedUsersIndices.isNotEmpty) {
-                            List<UserData> selectedUsers =
-                                List<UserData>.empty(growable: true);
-                            for (final i in _selectedUsersIndices) {
-                              selectedUsers.add(state.allUsers[i]);
+                      if (state.allUsers.isNotEmpty)
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_selectedUsersIndices.isNotEmpty) {
+                              List<UserData> selectedUsers =
+                                  List<UserData>.empty(growable: true);
+                              for (final i in _selectedUsersIndices) {
+                                selectedUsers.add(state.allUsers[i]);
+                              }
+                              showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (_) {
+                                  return BlocProvider.value(
+                                    value: BlocProvider.of<SpaceBloc>(context),
+                                    child: ConfirmInviteUsersPopUp(
+                                        numInvites:
+                                            _selectedUsersIndices.length,
+                                        selectedUsers: selectedUsers),
+                                  );
+                                },
+                              );
                             }
-                            showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (_) {
-                                return BlocProvider.value(
-                                  value: BlocProvider.of<SpaceBloc>(context),
-                                  child: ConfirmInviteUsersPopUp(
-                                      numInvites: _selectedUsersIndices.length,
-                                      selectedUsers: selectedUsers),
-                                );
-                              },
-                            );
-                          }
-                        },
-                        child: Text("Invite Users"),
-                      ),
+                          },
+                          child: Text("Invite Users"),
+                        ),
                     ],
                   ),
                 )
