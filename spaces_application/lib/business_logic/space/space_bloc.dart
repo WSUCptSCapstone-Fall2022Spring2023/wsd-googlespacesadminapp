@@ -24,7 +24,10 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       required this.currentUserData,
       required this.currentSpaceData})
       : super(SpaceState(
-            currentSpace: currentSpaceData, currentUser: currentUserData)) {
+            currentSpace: currentSpaceData,
+            currentUser: currentUserData,
+            permissions: currentUserData.spacesPermissions.singleWhere(
+                (element) => element.spaceID == currentSpaceData.sid))) {
     on<PostMessageChanged>((event, emit) async {
       await _onMessageChanged(event.message, emit);
     });
@@ -105,6 +108,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       // });
       final replaceSpace = state.currentSpace;
       replaceSpace.spacePosts = posts;
+
       emit(state.copyWith(
           currentSpace: replaceSpace, getPostsStatus: RetrievalSuccess()));
     } catch (e) {

@@ -17,6 +17,8 @@ class ConfirmInviteUsersPopUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var ScreenHeight = MediaQuery.of(context).size.height;
+    var ScreenWidth = MediaQuery.of(context).size.width;
     return BlocBuilder<SpaceBloc, SpaceState>(
       builder: (context, state) {
         return SingleChildScrollView(
@@ -27,7 +29,7 @@ class ConfirmInviteUsersPopUp extends StatelessWidget {
                 backgroundColor: Colors.white,
                 child: Stack(alignment: Alignment.center, children: <Widget>[
                   Container(
-                      width: double.infinity,
+                      width: ScreenWidth * 0.3,
                       padding: const EdgeInsets.all(20),
                       child: Column(children: [
                         Align(
@@ -40,7 +42,7 @@ class ConfirmInviteUsersPopUp extends StatelessWidget {
                               })),
                         ),
                         const Align(
-                          alignment: Alignment.centerLeft,
+                          alignment: Alignment.center,
                           child: Text("Confirm invite Users",
                               style: TextStyle(
                                   color: Colors.black,
@@ -50,8 +52,12 @@ class ConfirmInviteUsersPopUp extends StatelessWidget {
                         Align(
                           alignment: Alignment.center,
                           child: Text(
-                              "Are you sure you wish to invite ${numInvites.toString()} users to ${state.currentSpace.spaceName}?"),
+                            "Are you sure you wish to invite ${numInvites.toString()} users to ${state.currentSpace.spaceName}?",
+                            style: TextStyle(fontSize: 20),
+                          ),
                         ),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10)),
                         ElevatedButton(
                           onPressed: () {
                             context

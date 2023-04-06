@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:spaces_application/business_logic/auth/form_submission_status.dart';
 import 'package:spaces_application/business_logic/data_retrieval_status.dart';
 import 'package:spaces_application/data/models/commentData.dart';
+import 'package:spaces_application/data/models/permissionData.dart';
 
 import '../../data/models/postData.dart';
 import '../../data/models/spaceData.dart';
@@ -29,6 +30,7 @@ class SpaceState {
   final SpaceData currentSpace;
   final UserData currentUser;
   final PostData? selectedPost;
+  final PermissionData? permissions;
 
   SpaceState({
     this.newPostContents = '',
@@ -37,6 +39,7 @@ class SpaceState {
     this.selectedPost,
     List<UserData>? spaceUsers,
     List<UserData>? allUsers,
+    this.permissions,
     this.postFormStatus = const InitialFormStatus(),
     this.inviteUserStatus = const InitialFormStatus(),
     this.commentFormStatus = const InitialFormStatus(),
@@ -77,8 +80,10 @@ class SpaceState {
     DataRetrievalStatus? getNonSpaceUsersStatus,
     UserData? currentUser,
     SpaceData? currentSpace,
+    PermissionData? permissions,
   }) {
     return SpaceState(
+      permissions: permissions ?? this.permissions,
       newPostContents: newPostContents ?? this.newPostContents,
       newComment: newComment ?? this.newComment,
       newEditContents: newEditContents ?? this.newEditContents,
