@@ -278,14 +278,47 @@ class _SpaceViewState extends State<SpaceView> {
                                                             CircularProgressIndicator())
                                                   ];
                                                 } else {
-                                                  return const [
-                                                    PopupMenuItem(
-                                                        value: '/edit',
-                                                        child: Text("Edit")),
-                                                    PopupMenuItem(
-                                                        value: '/delete',
-                                                        child: Text("Delete"))
-                                                  ];
+                                                  if (state.currentUser.uid ==
+                                                          state
+                                                              .currentSpace
+                                                              .spacePosts[
+                                                                  reversedIndex]
+                                                              .postUser
+                                                              .uid ||
+                                                      (state.permissions!
+                                                              .canRemove &&
+                                                          state.permissions!
+                                                              .canEdit)) {
+                                                    return const [
+                                                      PopupMenuItem(
+                                                          value: '/edit',
+                                                          child: Text("Edit")),
+                                                      PopupMenuItem(
+                                                          value: '/delete',
+                                                          child: Text("Delete"))
+                                                    ];
+                                                  } else if (state
+                                                      .permissions!.canRemove) {
+                                                    return const [
+                                                      PopupMenuItem(
+                                                          value: '/delete',
+                                                          child:
+                                                              Text("Delete")),
+                                                    ];
+                                                  } else if (state
+                                                      .permissions!.canEdit) {
+                                                    return const [
+                                                      PopupMenuItem(
+                                                          value: '/edit',
+                                                          child: Text("Edit")),
+                                                    ];
+                                                  } else {
+                                                    return const [
+                                                      PopupMenuItem(
+                                                          child: const SizedBox
+                                                              .shrink())
+                                                    ];
+                                                  }
                                                 }
                                               },
                                             ),
@@ -443,10 +476,24 @@ class _SpaceViewState extends State<SpaceView> {
                                                                                                               PopupMenuItem(child: CircularProgressIndicator())
                                                                                                             ];
                                                                                                           } else {
-                                                                                                            return const [
-                                                                                                              PopupMenuItem(value: '/edit', child: Text("Edit")),
-                                                                                                              PopupMenuItem(value: '/delete', child: Text("Delete"))
-                                                                                                            ];
+                                                                                                            if (state.currentUser.uid == state.selectedPost!.comments[reversedIndex2].commentUser.uid || (state.permissions!.canRemove && state.permissions!.canEdit)) {
+                                                                                                              return const [
+                                                                                                                PopupMenuItem(value: '/edit', child: Text("Edit")),
+                                                                                                                PopupMenuItem(value: '/delete', child: Text("Delete"))
+                                                                                                              ];
+                                                                                                            } else if (state.permissions!.canRemove) {
+                                                                                                              return const [
+                                                                                                                PopupMenuItem(value: '/delete', child: Text("Delete")),
+                                                                                                              ];
+                                                                                                            } else if (state.permissions!.canEdit) {
+                                                                                                              return const [
+                                                                                                                PopupMenuItem(value: '/edit', child: Text("Edit")),
+                                                                                                              ];
+                                                                                                            } else {
+                                                                                                              return const [
+                                                                                                                PopupMenuItem(child: const SizedBox.shrink())
+                                                                                                              ];
+                                                                                                            }
                                                                                                           }
                                                                                                         },
                                                                                                       ),
@@ -602,9 +649,14 @@ class _SpaceViewState extends State<SpaceView> {
           : ElevatedButton(
               onPressed: () {
                 if (key.currentState!.validate()) {
-                  context.read<SpaceBloc>().add(PostSubmitted());
-                  _postController.clear();
-                  scrollAnimateToEnd(_postScrollController);
+                  if (state.permissions!.canPost) {
+                    context.read<SpaceBloc>().add(PostSubmitted());
+                    _postController.clear();
+                    scrollAnimateToEnd(_postScrollController);
+                  } else {
+                    MiscWidgets.showException(context,
+                        "You do not have permission to do that. Please contact a Space Administrator.");
+                  }
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -694,9 +746,14 @@ class _SpaceViewState extends State<SpaceView> {
           : ElevatedButton(
               onPressed: () {
                 if (key.currentState!.validate()) {
-                  context.read<SpaceBloc>().add(CommentSubmitted());
-                  _commentController.clear();
-                  scrollAnimateToEnd(_commentScrollController);
+                  if (state.permissions!.canComment) {
+                    context.read<SpaceBloc>().add(CommentSubmitted());
+                    _commentController.clear();
+                    scrollAnimateToEnd(_commentScrollController);
+                  } else {
+                    MiscWidgets.showException(context,
+                        "You do not have permission to do that. Please contact a Space Administrator.");
+                  }
                 }
               },
               style: ElevatedButton.styleFrom(

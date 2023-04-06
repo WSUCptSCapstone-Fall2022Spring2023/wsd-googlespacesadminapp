@@ -51,6 +51,7 @@ class _CreateInviteUserPopUpDialogState
   @override
   Widget build(BuildContext context) {
     var ScreenHeight = MediaQuery.of(context).size.height;
+    var ScreenWidth = MediaQuery.of(context).size.width;
     return BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
       if (state.getNonSpaceUsers is InitialRetrievalStatus) {
         context.read<SpaceBloc>().add(GetNonSpaceUsers());
@@ -71,7 +72,7 @@ class _CreateInviteUserPopUpDialogState
               alignment: Alignment.center,
               children: <Widget>[
                 Container(
-                  width: double.infinity,
+                  width: ScreenWidth * 0.5,
                   height: ScreenHeight * 0.8,
                   padding: const EdgeInsets.all(20),
                   color: Colors.white,
