@@ -40,7 +40,7 @@ class ProfileView extends StatelessWidget {
     Get.put(FluttermojiController());
     return Scaffold(
       backgroundColor: offWhite,
-      drawer: NavigationDrawer(
+      drawer: MyNavigationDrawer(
         currentUserData: currentUserData,
       ),
       appBar: AppBar(
@@ -165,7 +165,7 @@ class ProfileView extends StatelessWidget {
 //   Widget build(BuildContext context) {
 //     return Scaffold(
 //       backgroundColor: Colors.white,
-//       drawer: NavigationDrawer(
+//       drawer: MyNavigationDrawer(
 //         currentUserData: currentUserData,
 //       ),
 //       appBar: AppBar(
