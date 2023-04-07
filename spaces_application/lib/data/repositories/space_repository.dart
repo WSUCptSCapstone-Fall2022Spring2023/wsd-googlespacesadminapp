@@ -106,7 +106,14 @@ class SpaceRepository {
         .limitToLast(15);
     final postSnapshot = await postRef.get();
     List<PostData> spacePosts = List<PostData>.empty(growable: true);
+    final numPosts = postSnapshot.children.length;
     for (final post in postSnapshot.children) {
+      if (numPosts == 1) {
+        final newPost = await getPost(post);
+        if (newPost.postedTime == lastPost) {
+          return spacePosts;
+        }
+      }
       spacePosts.add(await getPost(post));
     }
     return spacePosts;
