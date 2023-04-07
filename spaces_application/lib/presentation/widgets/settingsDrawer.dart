@@ -8,6 +8,7 @@ import 'package:spaces_application/presentation/widgets/createUserProfileViewDia
 import 'package:spaces_application/presentation/widgets/deleteSpacePopupDialog.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:spaces_application/presentation/widgets/viewProfileDialog.dart';
 import '../../business_logic/space/space_bloc.dart';
 import '../../business_logic/space/space_event.dart';
 import '../../data/models/spaceData.dart';
@@ -160,10 +161,9 @@ class SettingsDrawer extends StatelessWidget {
                                     barrierDismissible: true,
                                     context: context,
                                     builder: ((context) {
-                                      return CreateUserProfileViewDialog(
+                                      return ViewProfileDialog(
                                           currentSpace: currentSpace,
                                           currentUserData: currentUserData,
-                                          // selectedUser: currentSpace?.membersPermissions[index],
                                           selectedUserData: userList[index]);
                                     }));
                               },

@@ -29,14 +29,14 @@ class CreateCommentPopUpDialog extends StatelessWidget {
   final index = 0;
   static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final Color darkViolet = Color.fromARGB(255, 9, 5, 5);
-  final Color navyBlue = Color.fromARGB(255, 14, 4, 104);
-  final Color picoteeBlue = Color.fromARGB(255, 45, 40, 208);
-  final Color majorelleBlue = Color.fromARGB(255, 86, 85, 221);
-  final Color salmon = Color.fromARGB(255, 252, 117, 106);
-  final Color phthaloBlue = Color.fromARGB(255, 22, 12, 120);
-  final Color lightPink = Color.fromARGB(255, 243, 171, 174);
-  final Color offWhite = Color.fromARGB(255, 255, 255, 240);
+  final Color darkViolet = const Color.fromARGB(255, 9, 5, 5);
+  final Color navyBlue = const Color.fromARGB(255, 14, 4, 104);
+  final Color picoteeBlue = const Color.fromARGB(255, 45, 40, 208);
+  final Color majorelleBlue = const Color.fromARGB(255, 86, 85, 221);
+  final Color salmon = const Color.fromARGB(255, 252, 117, 106);
+  final Color phthaloBlue = const Color.fromARGB(255, 22, 12, 120);
+  final Color lightPink = const Color.fromARGB(255, 243, 171, 174);
+  final Color offWhite = const Color.fromARGB(255, 255, 255, 240);
 
   @override
   Widget build(BuildContext context) {
@@ -141,19 +141,22 @@ class CreateCommentPopUpDialog extends StatelessWidget {
                                                 is RetrievalSuccess &&
                                             state.currentSpace.spacePosts[index]
                                                 .comments.isEmpty) ...[
-                                          Column(
+                                          const Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
-                                              children: const [
-                                                Text("No replies")
-                                              ])
+                                              children: [Text("No replies")])
                                         ] else if (state.getCommentsStatus
                                                 is RetrievalSuccess &&
                                             state.currentSpace.spacePosts[index]
                                                 .comments.isNotEmpty) ...[
-                                          ListView.builder(
+                                          ListView.separated(
+                                              separatorBuilder:
+                                                  (context, index) {
+                                                return const Divider(
+                                                    height: 0.5);
+                                              },
                                               shrinkWrap: false,
                                               itemCount: state
                                                   .currentSpace
@@ -185,9 +188,6 @@ class CreateCommentPopUpDialog extends StatelessWidget {
                                                                     .commentUser
                                                                     .profilePicString)),
                                                       ),
-                                                      shape: const Border(
-                                                          top: BorderSide(
-                                                              width: 5)),
                                                       selectedTileColor:
                                                           Colors.grey,
                                                       title: RichText(

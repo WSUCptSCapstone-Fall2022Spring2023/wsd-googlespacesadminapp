@@ -36,7 +36,7 @@ class EditSettingsView extends StatelessWidget {
     var ScreenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: offWhite,
-        drawer: NavigationDrawer(
+        drawer: MyNavigationDrawer(
           currentUserData: currentUserData,
         ),
         appBar: AppBar(

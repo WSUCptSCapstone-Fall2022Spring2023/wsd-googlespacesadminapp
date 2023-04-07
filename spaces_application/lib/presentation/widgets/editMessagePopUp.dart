@@ -43,31 +43,38 @@ class _EditMessagePopUpState extends State<EditMessagePopUp> {
   Widget build(BuildContext context) {
     return Dialog(
         insetPadding:
-            const EdgeInsets.symmetric(horizontal: 250, vertical: 350),
+            const EdgeInsets.symmetric(horizontal: 200, vertical: 320),
         backgroundColor: Colors.white,
         child: Stack(alignment: Alignment.center, children: <Widget>[
-          Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                icon: const Icon(Icons.close, color: Colors.black, size: 25),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+          Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        icon: const Icon(Icons.close,
+                            color: Colors.black, size: 25),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      )),
+                  const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("Edit Message",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 35))),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Divider(height: 0),
+                  ),
+                  _editCommentForm(context, widget.post.contents),
+                ],
               )),
-          const Align(
-              alignment: Alignment.centerLeft,
-              child: Text("Edit Message",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 35))),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
-            child: Divider(height: 0),
-          ),
-          // TODO: Add BlocProvider here, which will hold the message form
-
-          _editCommentForm(context, widget.post.contents),
         ]));
   }
 
@@ -99,8 +106,9 @@ class _EditMessagePopUpState extends State<EditMessagePopUp> {
           key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(width: 700, child: _messageField()),
+              _messageField(),
               const SizedBox(height: 10),
               Row(
                 children: [
@@ -190,7 +198,7 @@ class _EditMessagePopUpState extends State<EditMessagePopUp> {
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
           ),
-          child: const Text('Edit',
+          child: const Text('Save Edit',
               style: TextStyle(color: Colors.black, fontSize: 13)),
         );
       },

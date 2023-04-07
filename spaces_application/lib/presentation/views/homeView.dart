@@ -26,7 +26,7 @@ class HomeView extends StatelessWidget {
     var ScreenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: Colors.white,
-        drawer: NavigationDrawer(
+        drawer: MyNavigationDrawer(
           currentUserData: currentUserData,
         ),
         //endDrawer: SettingsDrawer(currentUserData: currentUserData),

@@ -19,8 +19,8 @@ import '../views/edit_profileView.dart';
 import '../views/spaceView.dart';
 import 'dart:math';
 
-class NavigationDrawer extends StatelessWidget {
-  NavigationDrawer({required this.currentUserData});
+class MyNavigationDrawer extends StatelessWidget {
+  MyNavigationDrawer({required this.currentUserData});
   final UserData currentUserData;
   final Color navyBlue = const Color.fromARGB(255, 14, 4, 104);
   final Color picoteeBlue = const Color.fromARGB(255, 45, 40, 138);

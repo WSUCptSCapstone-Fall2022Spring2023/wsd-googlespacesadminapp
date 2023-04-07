@@ -100,7 +100,7 @@ class _CreateInviteUserPopUpDialogState
                         child: Divider(height: 0),
                       ),
                       if (state.allUsers.isEmpty)
-                        Align(
+                        const Align(
                             alignment: Alignment.center,
                             child: Text(
                               "No users left to invite.",
@@ -108,104 +108,129 @@ class _CreateInviteUserPopUpDialogState
                                   TextStyle(fontSize: 60, color: Colors.black),
                             ))
                       else
-                        Flexible(
-                          child: Container(
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Card(
-                              child: ListView.builder(
-                                physics: ClampingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: state.allUsers.length,
-                                itemBuilder: ((context, index) {
-                                  bool isSelected =
-                                      _selectedUsersIndices.contains(index);
-                                  return Material(
-                                    color:
-                                        isSelected ? Colors.grey : Colors.white,
-                                    child: ListTile(
-                                      key: ValueKey(index),
-                                      selected: _selectedUsersIndices
-                                              .contains(index) ||
-                                          state.spaceUsers.any((element) =>
-                                              element.uid ==
-                                              state.allUsers[index].uid),
-                                      dense: true,
-                                      onTap: () {
-                                        setState(() {
-                                          if (isSelected) {
-                                            _selectedUsersIndices.remove(index);
-                                          } else {
-                                            _selectedUsersIndices.add(index);
-                                          }
-                                        });
-                                      },
-                                      leading: ConstrainedBox(
-                                        constraints: const BoxConstraints(
-                                            maxHeight: 30,
-                                            maxWidth: 30,
-                                            minWidth: 30,
-                                            minHeight: 30),
-                                        child: SvgPicture.string(
-                                            FluttermojiFunctions()
-                                                .decodeFluttermojifromString(
-                                                    state.allUsers[index]
-                                                        .profilePicString)),
-                                      ),
-                                      shape: const Border(
-                                          top: BorderSide(width: 5)),
-                                      title: RichText(
-                                          text: TextSpan(children: [
-                                        TextSpan(
-                                            // "  ${state.user.firstName} ${state.user.lastName}",
-                                            text: state
-                                                .allUsers[index].displayName
-                                                .toString(),
-                                            style: const TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.normal,
-                                                fontSize: 25)),
-                                        TextSpan(
-                                            text:
-                                                "  ${state.allUsers[index].firstName} ${state.allUsers[index].lastName}",
-                                            style: const TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 20))
-                                        // if (state.allUsers[index] is in state.spaceUsers) { Text("Invited"); }
-                                      ])),
-                                    ),
-                                  );
-                                }),
+                        Material(
+                          child: Flexible(
+                            child: Container(
+                              clipBehavior: Clip.hardEdge,
+                              decoration: const BoxDecoration(
+                                  // borderRadius: BorderRadius.circular(20)
+                                  color: Colors.white),
+                              child: Expanded(
+                                // color: Colors.white,
+                                child: Column(children: [
+                                  ListView.builder(
+                                    physics: const ClampingScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: state.allUsers.length,
+                                    itemBuilder: ((context, index) {
+                                      bool isSelected =
+                                          _selectedUsersIndices.contains(index);
+                                      return Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: Material(
+                                          color: isSelected
+                                              ? Colors.grey
+                                              : Colors.white,
+                                          child: ListTile(
+                                            key: ValueKey(index),
+                                            selected: _selectedUsersIndices
+                                                    .contains(index) ||
+                                                state.spaceUsers.any(
+                                                    (element) =>
+                                                        element.uid ==
+                                                        state.allUsers[index]
+                                                            .uid),
+                                            dense: true,
+                                            onTap: () {
+                                              setState(() {
+                                                if (isSelected) {
+                                                  _selectedUsersIndices
+                                                      .remove(index);
+                                                } else {
+                                                  _selectedUsersIndices
+                                                      .add(index);
+                                                }
+                                              });
+                                            },
+                                            leading: ConstrainedBox(
+                                              constraints: const BoxConstraints(
+                                                  maxHeight: 30,
+                                                  maxWidth: 30,
+                                                  minWidth: 30,
+                                                  minHeight: 30),
+                                              child: SvgPicture.string(
+                                                  FluttermojiFunctions()
+                                                      .decodeFluttermojifromString(
+                                                          state.allUsers[index]
+                                                              .profilePicString)),
+                                            ),
+                                            title: RichText(
+                                                text: TextSpan(children: [
+                                              TextSpan(
+                                                  // "  ${state.user.firstName} ${state.user.lastName}",
+                                                  text: state.allUsers[index]
+                                                      .displayName
+                                                      .toString(),
+                                                  style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      fontSize: 25)),
+                                              TextSpan(
+                                                  text:
+                                                      "  ${state.allUsers[index].firstName} ${state.allUsers[index].lastName}",
+                                                  style: const TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 20))
+                                              // if (state.allUsers[index] is in state.spaceUsers) { Text("Invited"); }
+                                            ])),
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                ]),
                               ),
                             ),
                           ),
                         ),
+                      const SizedBox(height: 10),
                       if (state.allUsers.isNotEmpty)
-                        ElevatedButton(
-                          onPressed: () {
-                            if (_selectedUsersIndices.isNotEmpty) {
-                              List<UserData> selectedUsers =
-                                  List<UserData>.empty(growable: true);
-                              for (final i in _selectedUsersIndices) {
-                                selectedUsers.add(state.allUsers[i]);
-                              }
-                              showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (_) {
-                                  return BlocProvider.value(
-                                    value: BlocProvider.of<SpaceBloc>(context),
-                                    child: ConfirmInviteUsersPopUp(
-                                        numInvites:
-                                            _selectedUsersIndices.length,
-                                        selectedUsers: selectedUsers),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                if (_selectedUsersIndices.isNotEmpty) {
+                                  List<UserData> selectedUsers =
+                                      List<UserData>.empty(growable: true);
+                                  for (final i in _selectedUsersIndices) {
+                                    selectedUsers.add(state.allUsers[i]);
+                                  }
+                                  showDialog(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (_) {
+                                      return BlocProvider.value(
+                                        value:
+                                            BlocProvider.of<SpaceBloc>(context),
+                                        child: ConfirmInviteUsersPopUp(
+                                            numInvites:
+                                                _selectedUsersIndices.length,
+                                            selectedUsers: selectedUsers),
+                                      );
+                                    },
                                   );
-                                },
-                              );
-                            }
-                          },
-                          child: Text("Invite Users"),
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  side: const BorderSide(
+                                      color: Colors.black, width: 0.5),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5))),
+                              child: const Text('Invite Users',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 15))),
                         ),
                     ],
                   ),

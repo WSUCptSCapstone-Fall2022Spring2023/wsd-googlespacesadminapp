@@ -95,7 +95,7 @@ class _SpaceViewState extends State<SpaceView> {
         }, builder: (context, state) {
           return Scaffold(
               backgroundColor: Colors.white,
-              drawer: NavigationDrawer(
+              drawer: MyNavigationDrawer(
                 currentUserData: widget.currentUserData,
               ),
               endDrawer: SettingsDrawer(
@@ -356,8 +356,7 @@ class _SpaceViewState extends State<SpaceView> {
                                                               alignment:
                                                                   Alignment
                                                                       .center,
-                                                              children: <
-                                                                  Widget>[
+                                                              children: <Widget>[
                                                                 Container(
                                                                     width: double
                                                                         .infinity,
