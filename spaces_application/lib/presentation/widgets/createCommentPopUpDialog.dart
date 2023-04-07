@@ -141,7 +141,7 @@ class CreateCommentPopUpDialog extends StatelessWidget {
                                                 is RetrievalSuccess &&
                                             state.currentSpace.spacePosts[index]
                                                 .comments.isEmpty) ...[
-                                          const Column(
+                                          Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               crossAxisAlignment:

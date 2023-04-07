@@ -160,11 +160,13 @@ class SettingsDrawer extends StatelessWidget {
                                 showDialog(
                                     barrierDismissible: true,
                                     context: context,
-                                    builder: ((context) {
-                                      return ViewProfileDialog(
-                                          currentSpace: currentSpace,
-                                          currentUserData: currentUserData,
-                                          selectedUserData: userList[index]);
+                                    builder: ((_) {
+                                      return BlocProvider.value(
+                                        value:
+                                            BlocProvider.of<SpaceBloc>(context),
+                                        child: ViewProfileDialog(
+                                            selectedUserData: userList[index]),
+                                      );
                                     }));
                               },
                             );
