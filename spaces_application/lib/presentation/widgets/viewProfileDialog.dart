@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttermoji/fluttermoji.dart';
+import 'package:spaces_application/business_logic/space/space_event.dart';
 import 'package:spaces_application/data/repositories/space_repository.dart';
 import 'package:spaces_application/data/repositories/userData_repository.dart';
 import 'package:fluttermoji/fluttermoji.dart';
@@ -42,11 +43,11 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
       builder: (context, state) {
         final permission = widget.selectedUserData.spacesPermissions
             .firstWhere((element) => element.spaceID == state.currentSpace.sid);
-        this._canComment = permission.canComment;
-        this._canEdit = permission.canEdit;
-        this._canInvite = permission.canInvite;
-        this._canPost = permission.canPost;
-        this._canRemove = permission.canRemove;
+        _canComment = permission.canComment;
+        _canEdit = permission.canEdit;
+        _canInvite = permission.canInvite;
+        _canPost = permission.canPost;
+        _canRemove = permission.canRemove;
         return Dialog(
             insetPadding: const EdgeInsets.symmetric(horizontal: 250),
             backgroundColor: Colors.white,
@@ -163,7 +164,7 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                         SwitchListTile(
                           dense: true,
                           title: const Text('Can Comment'),
-                          value: state.permissions!.canComment,
+                          value: permission.canComment,
                           onChanged: (value) {
                             setState(() {
                               _canComment = value;
@@ -173,7 +174,7 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                         SwitchListTile(
                           dense: true,
                           title: const Text('Can Edit'),
-                          value: state.permissions!.canEdit,
+                          value: permission.canEdit,
                           onChanged: (value) {
                             setState(() {
                               _canEdit = value;
@@ -183,7 +184,7 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                         SwitchListTile(
                           dense: true,
                           title: const Text('Can Invite'),
-                          value: state.permissions!.canInvite,
+                          value: permission.canInvite,
                           onChanged: (value) {
                             setState(() {
                               _canInvite = value;
@@ -193,7 +194,7 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                         SwitchListTile(
                           dense: true,
                           title: const Text('Can Post'),
-                          value: state.permissions!.canPost,
+                          value: permission.canPost,
                           onChanged: (value) {
                             setState(() {
                               _canPost = value;
@@ -203,7 +204,7 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                         SwitchListTile(
                           dense: true,
                           title: const Text('Can Remove'),
-                          value: state.permissions!.canRemove,
+                          value: permission.canRemove,
                           onChanged: (value) {
                             setState(() {
                               _canRemove = value;
@@ -227,11 +228,13 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                           const SizedBox(width: 10),
                           ElevatedButton(
                               onPressed: () {
-                                state.permissions!.canComment = _canComment;
-                                state.permissions!.canEdit = _canEdit;
-                                state.permissions!.canInvite = _canInvite;
-                                state.permissions!.canPost = _canPost;
-                                state.permissions!.canRemove = _canRemove;
+                                context.read<SpaceBloc>().add(UpdatePermissions(
+                                    selectedUserID: widget.selectedUserData.uid,
+                                    canComment: _canComment,
+                                    canEdit: _canEdit,
+                                    canInvite: _canInvite,
+                                    canRemove: _canRemove,
+                                    canPost: _canPost));
                                 Navigator.pop(context);
                               },
                               style: ElevatedButton.styleFrom(
