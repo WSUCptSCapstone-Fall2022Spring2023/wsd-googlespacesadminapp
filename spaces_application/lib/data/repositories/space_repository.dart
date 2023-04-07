@@ -224,7 +224,7 @@ class SpaceRepository {
     }
   }
 
-  Future<void> changePermissions(String spaceID, String userID, bool canComment,
+  Future<void> updatePermissions(String spaceID, String userID, bool canComment,
       bool canEdit, bool canInvite, bool canRemove, bool canPost) async {
     await ref
         .child("UserData/")

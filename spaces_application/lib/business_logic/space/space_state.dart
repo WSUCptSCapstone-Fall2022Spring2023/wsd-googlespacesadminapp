@@ -20,6 +20,7 @@ class SpaceState {
   final FormSubmissionStatus editPostFormStatus;
   final FormSubmissionStatus editCommentFormStatus;
   final FormSubmissionStatus deleteCommentFormStatus;
+  final FormSubmissionStatus updatePermissionsStatus;
   final DataRetrievalStatus getPostsStatus;
   final DataRetrievalStatus getMorePostsStatus;
   final DataRetrievalStatus deleteSpaceStatus;
@@ -42,6 +43,7 @@ class SpaceState {
     this.permissions,
     this.postFormStatus = const InitialFormStatus(),
     this.inviteUserStatus = const InitialFormStatus(),
+    this.updatePermissionsStatus = const InitialFormStatus(),
     this.commentFormStatus = const InitialFormStatus(),
     this.deleteCommentFormStatus = const InitialFormStatus(),
     this.editCommentFormStatus = const InitialFormStatus(),
@@ -67,6 +69,7 @@ class SpaceState {
     PostData? selectedPost,
     FormSubmissionStatus? postFormStatus,
     FormSubmissionStatus? inviteUserStatus,
+    FormSubmissionStatus? updatePermissionsStatus,
     FormSubmissionStatus? commentFormStatus,
     FormSubmissionStatus? editCommentFormStatus,
     FormSubmissionStatus? editPostFormStatus,
@@ -93,6 +96,8 @@ class SpaceState {
       postFormStatus: postFormStatus ?? this.postFormStatus,
       inviteUserStatus: inviteUserStatus ?? this.inviteUserStatus,
       commentFormStatus: commentFormStatus ?? this.commentFormStatus,
+      updatePermissionsStatus:
+          updatePermissionsStatus ?? this.updatePermissionsStatus,
       editCommentFormStatus:
           editCommentFormStatus ?? this.editCommentFormStatus,
       editPostFormStatus: editPostFormStatus ?? this.editPostFormStatus,

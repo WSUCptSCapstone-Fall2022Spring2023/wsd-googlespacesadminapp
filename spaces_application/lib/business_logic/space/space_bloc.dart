@@ -76,6 +76,10 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     on<EditPost>((event, emit) async {
       await _onEditPost(emit, event.newContents, event.selectedPost);
     });
+    on<UpdatePermissions>((event, emit) async {
+      await _onUpdatePermissions(emit, event.selectedUserID, event.canComment,
+          event.canEdit, event.canInvite, event.canPost, event.canRemove);
+    });
   }
 
   Future<void> _onMessageChanged(
@@ -339,7 +343,29 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
           editCommentFormStatus: SubmissionFailed(Exception(e))));
     }
   }
+
+  Future<void> _onUpdatePermissions(
+      Emitter<SpaceState> emit,
+      String selectedUserID,
+      bool canComment,
+      bool canEdit,
+      bool canInvite,
+      bool canRemove,
+      bool canPost) async {
+    emit(state.copyWith(updatePermissionsStatus: FormSubmitting()));
+    try {
+      await spaceRepo.updatePermissions(state.currentSpace.sid, selectedUserID,
+          canComment, canEdit, canInvite, canRemove, canPost);
+      emit(state.copyWith(
+          getUsersStatus: InitialRetrievalStatus(),
+          updatePermissionsStatus: SubmissionSuccess()));
+    } catch (e) {
+      emit(state.copyWith(
+          updatePermissionsStatus: SubmissionFailed(Exception(e))));
+    }
+  }
 }
+
 
   // async* allows us to yield values out the Stream
 
