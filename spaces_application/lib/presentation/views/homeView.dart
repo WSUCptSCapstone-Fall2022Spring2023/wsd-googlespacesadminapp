@@ -1,3 +1,4 @@
+import 'package:easy_web_view/easy_web_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spaces_application/presentation/views/settingsView.dart';
@@ -36,7 +37,12 @@ class HomeView extends StatelessWidget {
           iconTheme: const IconThemeData(color: Colors.white, size: 30),
           backgroundColor: bgColor,
         ),
-        body: Center(child: WebView(initialUrl: 'https://wahksd.k12.wa.us/')));
+        body: Center(
+            child: EasyWebView(
+          src: 'https://flutter.dev',
+          isMarkdown: false,
+          convertToWidgets: false,
+        )));
   }
 
   // Future<UserData> g(context) async {

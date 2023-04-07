@@ -12,7 +12,16 @@ import 'data/repositories/space_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+      options: FirebaseOptions(
+          apiKey: "AIzaSyDQgEbgwqqXOqeXKudY211ESIOzK_Im934",
+          authDomain: "spaces-application.firebaseapp.com",
+          databaseURL: "https://spaces-application-default-rtdb.firebaseio.com",
+          projectId: "spaces-application",
+          storageBucket: "spaces-application.appspot.com",
+          messagingSenderId: "743951780713",
+          appId: "1:743951780713:web:a2b87f322356347591cbf8",
+          measurementId: "G-BPCJ3X2NZ0"));
   runApp(MyApp());
 }
 

@@ -17,6 +17,7 @@ import 'package:spaces_application/presentation/widgets/navigation_drawer.dart';
 import 'package:spaces_application/presentation/widgets/settingsDrawer.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:link_text/link_text.dart';
 
 import '../../business_logic/auth/form_submission_status.dart';
 import '../../business_logic/auth/login/login_bloc.dart';
@@ -228,16 +229,28 @@ class _SpaceViewState extends State<SpaceView> {
                                                         style: const TextStyle(
                                                             color: Colors.grey))
                                                 ])),
-                                            subtitle: Text(
+                                            subtitle: Container(
+                                              child: LinkText(
                                                 state
-                                                    .currentSpace
-                                                    .spacePosts[reversedIndex]
-                                                    .contents,
-                                                style: const TextStyle(
+                                                        .currentSpace
+                                                        .spacePosts[
+                                                            reversedIndex]
+                                                        .contents +
+                                                    " ",
+                                                textStyle: const TextStyle(
                                                     color: Colors.black,
                                                     fontSize: 25,
                                                     fontWeight:
-                                                        FontWeight.normal)),
+                                                        FontWeight.normal),
+                                                linkStyle: const TextStyle(
+                                                    color: Colors.red,
+                                                    fontSize: 25,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    decoration: TextDecoration
+                                                        .underline),
+                                              ),
+                                            ),
                                             isThreeLine: true,
                                             trailing: PopupMenuButton(
                                               onSelected: ((value) {
@@ -398,9 +411,10 @@ class _SpaceViewState extends State<SpaceView> {
                                                                             padding:
                                                                                 const EdgeInsets.symmetric(vertical: 8.0),
                                                                             child:
-                                                                                Text(
+                                                                                LinkText(
                                                                               state.currentSpace.spacePosts[reversedIndex].contents,
-                                                                              style: const TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.normal),
+                                                                              textStyle: const TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.normal),
+                                                                              linkStyle: const TextStyle(color: Colors.red, fontSize: 25, fontWeight: FontWeight.normal, decoration: TextDecoration.underline),
                                                                             ),
                                                                           ),
                                                                         ),
