@@ -20,6 +20,8 @@ class SpaceState {
   final FormSubmissionStatus editPostFormStatus;
   final FormSubmissionStatus editCommentFormStatus;
   final FormSubmissionStatus deleteCommentFormStatus;
+  final FormSubmissionStatus updatePermissionsStatus;
+  final FormSubmissionStatus kickUserStatus;
   final DataRetrievalStatus getPostsStatus;
   final DataRetrievalStatus getMorePostsStatus;
   final DataRetrievalStatus deleteSpaceStatus;
@@ -41,7 +43,9 @@ class SpaceState {
     List<UserData>? allUsers,
     this.permissions,
     this.postFormStatus = const InitialFormStatus(),
+    this.kickUserStatus = const InitialFormStatus(),
     this.inviteUserStatus = const InitialFormStatus(),
+    this.updatePermissionsStatus = const InitialFormStatus(),
     this.commentFormStatus = const InitialFormStatus(),
     this.deleteCommentFormStatus = const InitialFormStatus(),
     this.editCommentFormStatus = const InitialFormStatus(),
@@ -66,7 +70,9 @@ class SpaceState {
     List<UserData>? nonspaceUsers,
     PostData? selectedPost,
     FormSubmissionStatus? postFormStatus,
+    FormSubmissionStatus? kickUserStatus,
     FormSubmissionStatus? inviteUserStatus,
+    FormSubmissionStatus? updatePermissionsStatus,
     FormSubmissionStatus? commentFormStatus,
     FormSubmissionStatus? editCommentFormStatus,
     FormSubmissionStatus? editPostFormStatus,
@@ -85,6 +91,7 @@ class SpaceState {
     return SpaceState(
       permissions: permissions ?? this.permissions,
       newPostContents: newPostContents ?? this.newPostContents,
+      kickUserStatus: kickUserStatus ?? this.kickUserStatus,
       newComment: newComment ?? this.newComment,
       newEditContents: newEditContents ?? this.newEditContents,
       spaceUsers: spaceUsers ?? this.spaceUsers,
@@ -93,6 +100,8 @@ class SpaceState {
       postFormStatus: postFormStatus ?? this.postFormStatus,
       inviteUserStatus: inviteUserStatus ?? this.inviteUserStatus,
       commentFormStatus: commentFormStatus ?? this.commentFormStatus,
+      updatePermissionsStatus:
+          updatePermissionsStatus ?? this.updatePermissionsStatus,
       editCommentFormStatus:
           editCommentFormStatus ?? this.editCommentFormStatus,
       editPostFormStatus: editPostFormStatus ?? this.editPostFormStatus,

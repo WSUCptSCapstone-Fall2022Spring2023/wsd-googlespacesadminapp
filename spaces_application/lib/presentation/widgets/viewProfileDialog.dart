@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttermoji/fluttermoji.dart';
+import 'package:spaces_application/business_logic/auth/form_submission_status.dart';
+import 'package:spaces_application/business_logic/space/space_event.dart';
 import 'package:spaces_application/data/repositories/space_repository.dart';
 import 'package:spaces_application/data/repositories/userData_repository.dart';
 import 'package:fluttermoji/fluttermoji.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
 
 import '../../business_logic/space/space_bloc.dart';
 import '../../business_logic/space/space_state.dart';
@@ -21,11 +24,7 @@ class ViewProfileDialog extends StatefulWidget {
 
 class _ViewProfileDialogState extends State<ViewProfileDialog> {
   _ViewProfileDialogState();
-  bool _canComment = false;
-  bool _canEdit = false;
-  bool _canInvite = false;
-  bool _canPost = false;
-  bool _canRemove = false;
+  bool isEnable = true;
 
   late SpaceBloc _spaceBloc;
 
@@ -42,11 +41,8 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
       builder: (context, state) {
         final permission = widget.selectedUserData.spacesPermissions
             .firstWhere((element) => element.spaceID == state.currentSpace.sid);
-        this._canComment = permission.canComment;
-        this._canEdit = permission.canEdit;
-        this._canInvite = permission.canInvite;
-        this._canPost = permission.canPost;
-        this._canRemove = permission.canRemove;
+        isEnable =
+            !(widget.selectedUserData.isFaculty) && state.currentUser.isFaculty;
         return Dialog(
             insetPadding: const EdgeInsets.symmetric(horizontal: 250),
             backgroundColor: Colors.white,
@@ -55,7 +51,10 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
               children: <Widget>[
                 Container(
                     width: double.infinity,
-                    height: ScreenHeight * 0.8,
+                    height: state.currentUser.isFaculty ||
+                            state.currentUser.uid == widget.selectedUserData.uid
+                        ? ScreenHeight * 0.8
+                        : ScreenHeight * 0.6,
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
@@ -152,98 +151,229 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                           padding: EdgeInsets.symmetric(vertical: 20),
                           child: Divider(height: 0),
                         ),
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                                "${widget.selectedUserData.firstName} ${widget.selectedUserData.lastName}'s Permissions in ${state.currentSpace.spaceName}",
-                                style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 20))),
-                        SwitchListTile(
-                          dense: true,
-                          title: const Text('Can Comment'),
-                          value: state.permissions!.canComment,
-                          onChanged: (value) {
-                            setState(() {
-                              _canComment = value;
-                            });
-                          },
-                        ),
-                        SwitchListTile(
-                          dense: true,
-                          title: const Text('Can Edit'),
-                          value: state.permissions!.canEdit,
-                          onChanged: (value) {
-                            setState(() {
-                              _canEdit = value;
-                            });
-                          },
-                        ),
-                        SwitchListTile(
-                          dense: true,
-                          title: const Text('Can Invite'),
-                          value: state.permissions!.canInvite,
-                          onChanged: (value) {
-                            setState(() {
-                              _canInvite = value;
-                            });
-                          },
-                        ),
-                        SwitchListTile(
-                          dense: true,
-                          title: const Text('Can Post'),
-                          value: state.permissions!.canPost,
-                          onChanged: (value) {
-                            setState(() {
-                              _canPost = value;
-                            });
-                          },
-                        ),
-                        SwitchListTile(
-                          dense: true,
-                          title: const Text('Can Remove'),
-                          value: state.permissions!.canRemove,
-                          onChanged: (value) {
-                            setState(() {
-                              _canRemove = value;
-                            });
-                          },
-                        ),
-                        Row(children: [
-                          ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  side: const BorderSide(
-                                      color: Colors.black, width: 0.5),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5))),
-                              child: const Text('Cancel',
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 18))),
-                          const SizedBox(width: 10),
-                          ElevatedButton(
-                              onPressed: () {
-                                state.permissions!.canComment = _canComment;
-                                state.permissions!.canEdit = _canEdit;
-                                state.permissions!.canInvite = _canInvite;
-                                state.permissions!.canPost = _canPost;
-                                state.permissions!.canRemove = _canRemove;
-                                Navigator.pop(context);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green,
-                                  side: const BorderSide(
-                                      color: Colors.black, width: 0.5),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5))),
-                              child: const Text('Save',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18))),
-                        ])
+                        if (state.currentUser.isFaculty ||
+                            state.currentUser.uid ==
+                                widget.selectedUserData.uid)
+                          Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                  "${widget.selectedUserData.displayName}'s Permissions in ${state.currentSpace.spaceName}",
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 20))),
+                        if (state.currentUser.isFaculty ||
+                            state.currentUser.uid ==
+                                widget.selectedUserData.uid)
+                          SwitchListTile(
+                            dense: true,
+                            title: const Text('Can Comment'),
+                            value: permission.canComment,
+                            onChanged: (value) {
+                              setState(() {
+                                isEnable ? permission.canComment = value : null;
+                              });
+                            },
+                          ),
+                        if (state.currentUser.isFaculty ||
+                            state.currentUser.uid ==
+                                widget.selectedUserData.uid)
+                          SwitchListTile(
+                            dense: true,
+                            title: const Text('Can Edit'),
+                            value: permission.canEdit,
+                            onChanged: (value) {
+                              setState(() {
+                                isEnable ? permission.canEdit = value : null;
+                              });
+                            },
+                          ),
+                        if (state.currentUser.isFaculty ||
+                            state.currentUser.uid ==
+                                widget.selectedUserData.uid)
+                          SwitchListTile(
+                            dense: true,
+                            title: const Text('Can Invite'),
+                            value: permission.canInvite,
+                            onChanged: (value) {
+                              setState(() {
+                                isEnable ? permission.canInvite = value : null;
+                              });
+                            },
+                          ),
+                        if (state.currentUser.isFaculty ||
+                            state.currentUser.uid ==
+                                widget.selectedUserData.uid)
+                          SwitchListTile(
+                            dense: true,
+                            title: const Text('Can Post'),
+                            value: permission.canPost,
+                            onChanged: (value) {
+                              setState(() {
+                                isEnable ? permission.canPost = value : null;
+                              });
+                            },
+                          ),
+                        if (state.currentUser.isFaculty ||
+                            state.currentUser.uid ==
+                                widget.selectedUserData.uid)
+                          SwitchListTile(
+                            dense: true,
+                            title: const Text('Can Remove'),
+                            value: permission.canRemove,
+                            onChanged: (value) {
+                              setState(() {
+                                isEnable ? permission.canRemove = value : null;
+                              });
+                            },
+                          ),
+                        if (state.currentUser.isFaculty)
+                          Row(children: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    side: const BorderSide(
+                                        color: Colors.black, width: 0.5),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5))),
+                                child: const Text('Cancel',
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 18))),
+                            const SizedBox(width: 10),
+                            ElevatedButton(
+                                onPressed: () {
+                                  context.read<SpaceBloc>().add(
+                                      UpdatePermissions(
+                                          selectedUserID:
+                                              widget.selectedUserData.uid,
+                                          canComment: permission.canComment,
+                                          canEdit: permission.canEdit,
+                                          canInvite: permission.canInvite,
+                                          canRemove: permission.canRemove,
+                                          canPost: permission.canPost));
+                                  Navigator.pop(context);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green,
+                                    side: const BorderSide(
+                                        color: Colors.black, width: 0.5),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5))),
+                                child: const Text('Save',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18))),
+                            const SizedBox(width: 10),
+                            ElevatedButton(
+                                onPressed: () {
+                                  showDialog(
+                                      barrierDismissible: true,
+                                      context: context,
+                                      builder: ((_) {
+                                        return BlocProvider.value(
+                                            value: BlocProvider.of<SpaceBloc>(
+                                                context),
+                                            child: Dialog(
+                                                insetPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 250),
+                                                backgroundColor: Colors.white,
+                                                child: Stack(
+                                                    alignment: Alignment.center,
+                                                    children: <Widget>[
+                                                      Container(
+                                                          width:
+                                                              double.infinity,
+                                                          height: ScreenHeight *
+                                                              0.25,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(20),
+                                                          child: Column(
+                                                              children: [
+                                                                Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .topRight,
+                                                                    child:
+                                                                        IconButton(
+                                                                      icon: const Icon(
+                                                                          Icons
+                                                                              .close,
+                                                                          color: Colors
+                                                                              .black,
+                                                                          size:
+                                                                              25),
+                                                                      onPressed:
+                                                                          () {
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                      },
+                                                                    )),
+                                                                Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .bottomCenter,
+                                                                    child: Text(
+                                                                        "Are you sure you want to kick this user from the space?",
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            fontWeight: FontWeight.normal,
+                                                                            fontSize: 35))),
+                                                                Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      top: 20),
+                                                                  child: Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .topCenter,
+                                                                    child: BlocBuilder<
+                                                                        SpaceBloc,
+                                                                        SpaceState>(
+                                                                      builder:
+                                                                          (context,
+                                                                              state) {
+                                                                        if (state.kickUserStatus
+                                                                            is FormSubmitting) {
+                                                                          return CircularProgressIndicator();
+                                                                        } else if (state.kickUserStatus
+                                                                            is SubmissionFailed) {
+                                                                          return Text(
+                                                                              "User could not be kicked. Please try again.");
+                                                                        } else {
+                                                                          return ElevatedButton(
+                                                                              onPressed: () {
+                                                                                context.read<SpaceBloc>().add(KickUser(uid: widget.selectedUserData.uid));
+                                                                                Navigator.pop(context);
+                                                                              },
+                                                                              style: ElevatedButton.styleFrom(backgroundColor: Colors.red, side: const BorderSide(color: Colors.black, width: 0.5), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+                                                                              child: const Text('Kick', style: TextStyle(color: Colors.white, fontSize: 18)));
+                                                                        }
+                                                                      },
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ]))
+                                                    ])));
+                                      }));
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                    side: const BorderSide(
+                                        color: Colors.black, width: 0.5),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5))),
+                                child: const Text('Kick',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18))),
+                          ])
                       ],
                     )),
               ],

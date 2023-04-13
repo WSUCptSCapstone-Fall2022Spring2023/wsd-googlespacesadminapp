@@ -12,11 +12,11 @@ class CreateSpaceDescriptionChanged extends CreateSpaceEvent {
   CreateSpaceDescriptionChanged({required this.description});
 }
 
-// class CreateSpaceIsPrivateChanged extends CreateSpaceEvent {
-//   final bool isPrivate;
+class CreateSpaceIsPrivateChanged extends CreateSpaceEvent {
+  bool? isPrivate;
 
-//   CreateSpaceIsPrivateChanged({required this.isPrivate});
-// }
+  CreateSpaceIsPrivateChanged({required this.isPrivate});
+}
 
 // class CreateSpacePictureChanged extends CreateSpaceEvent {
 //   final File photo;

@@ -75,3 +75,26 @@ class RemovePost extends SpaceEvent {
 
   RemovePost({required this.selectedPost});
 }
+
+class UpdatePermissions extends SpaceEvent {
+  bool canComment;
+  bool canEdit;
+  bool canInvite;
+  bool canRemove;
+  bool canPost;
+  String selectedUserID;
+
+  UpdatePermissions(
+      {required this.selectedUserID,
+      required this.canComment,
+      required this.canEdit,
+      required this.canInvite,
+      required this.canRemove,
+      required this.canPost});
+}
+
+class KickUser extends SpaceEvent {
+  String uid;
+
+  KickUser({required this.uid});
+}
