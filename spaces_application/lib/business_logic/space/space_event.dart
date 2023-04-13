@@ -92,3 +92,9 @@ class UpdatePermissions extends SpaceEvent {
       required this.canRemove,
       required this.canPost});
 }
+
+class KickUser extends SpaceEvent {
+  String uid;
+
+  KickUser({required this.uid});
+}

@@ -19,9 +19,9 @@ class CreateSpaceBloc extends Bloc<CreateSpaceEvent, CreateSpaceState> {
     on<CreateSpaceDescriptionChanged>((event, emit) async {
       await _onDescriptionChanged(event.description, emit);
     });
-    // on<CreateSpaceIsPrivateChanged>((event, emit) async {
-    //   await _onIsPrivateChanged(event.isPrivate, emit);
-    // });
+    on<CreateSpaceIsPrivateChanged>((event, emit) async {
+      await _onIsPrivateChanged(event.isPrivate, emit);
+    });
     on<CreateSpaceSubmitted>((event, emit) async {
       await _onFormStatusChanged(emit);
     });
@@ -37,15 +37,16 @@ class CreateSpaceBloc extends Bloc<CreateSpaceEvent, CreateSpaceState> {
     emit(state.copyWith(description: newDescription));
   }
 
-  // Future<void> _onIsPrivateChanged(
-  //     bool newIsPrivate, Emitter<CreateSpaceState> emit) async {
-  //   emit(state.copyWith(isPrivate: newIsPrivate));
-  // }
+  Future<void> _onIsPrivateChanged(
+      bool? newIsPrivate, Emitter<CreateSpaceState> emit) async {
+    emit(state.copyWith(isPrivate: newIsPrivate));
+  }
 
   Future<void> _onFormStatusChanged(Emitter<CreateSpaceState> emit) async {
     emit(state.copyWith(formStatus: FormSubmitting()));
     try {
-      await spaceRepo.createSpace(state.name, state.description);
+      await spaceRepo.createSpace(
+          state.name, state.description, state.isPrivate);
       UserData currentUser = await userRepo.getCurrentUserData();
       emit(state.copyWith(
           formStatus: SubmissionSuccess(), currentUser: currentUser));

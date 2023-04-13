@@ -80,6 +80,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       await _onUpdatePermissions(emit, event.selectedUserID, event.canComment,
           event.canEdit, event.canInvite, event.canPost, event.canRemove);
     });
+    on<KickUser>((event, emit) async {
+      await _onKickUser(emit, event.uid);
+    });
   }
 
   Future<void> _onMessageChanged(
@@ -364,8 +367,19 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
           updatePermissionsStatus: SubmissionFailed(Exception(e))));
     }
   }
-}
 
+  Future<void> _onKickUser(Emitter<SpaceState> emit, String uid) async {
+    emit(state.copyWith(kickUserStatus: FormSubmitting()));
+    try {
+      await spaceRepo.removeUserFromSpace(currentSpaceData.sid, uid);
+      emit(state.copyWith(
+          getUsersStatus: InitialRetrievalStatus(),
+          kickUserStatus: SubmissionSuccess()));
+    } catch (e) {
+      emit(state.copyWith(kickUserStatus: SubmissionFailed(Exception(e))));
+    }
+  }
+}
 
   // async* allows us to yield values out the Stream
 

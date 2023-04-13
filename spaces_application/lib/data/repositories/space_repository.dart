@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:spaces_application/data/models/spaceData.dart';
 import 'package:spaces_application/data/models/userData.dart';
 import 'package:spaces_application/data/repositories/userData_repository.dart';
 
@@ -10,14 +11,16 @@ class SpaceRepository {
   final auth = FirebaseAuth.instance;
   DatabaseReference ref = FirebaseDatabase.instance.ref();
 
-  Future<void> createSpace(String name, String description) async {
+  Future<void> createSpace(
+      String name, String description, bool isPrivate) async {
     // creates a key for the new space (id)
     final newSpaceKey = ref.child("Spaces/").push().key;
     // gives the space a name under its key
-    await ref
-        .child("Spaces/")
-        .child(newSpaceKey!)
-        .set({"spaceName": name, "spaceDescription": description});
+    await ref.child("Spaces/").child(newSpaceKey!).set({
+      "spaceName": name,
+      "spaceDescription": description,
+      "isPrivate": isPrivate
+    });
 
     // gets currentUser data
     final snapshot =
@@ -139,6 +142,16 @@ class SpaceRepository {
     return users;
   }
 
+  Future<List<SpaceData>> getAllSpaces() async {
+    List<SpaceData> publicSpaces = List<SpaceData>.empty(growable: true);
+    final snapshot = await ref.child("Spaces/").get();
+    for (final child in snapshot.children) {
+      final space = SpaceData.fromFirebase(child);
+      publicSpaces.add(space);
+    }
+    return publicSpaces;
+  }
+
   // deletes Space from db
   Future<void> deleteSpace(String spaceID) async {
     // gets list of all users within the space
@@ -257,7 +270,7 @@ class SpaceRepository {
     await ref
         .child("UserData/")
         .child(userID)
-        .child("spacePermissions/")
+        .child("spacesPermissions/")
         .child(spaceID)
         .remove();
 

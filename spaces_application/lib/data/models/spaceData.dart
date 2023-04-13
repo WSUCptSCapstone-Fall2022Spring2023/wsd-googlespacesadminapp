@@ -8,7 +8,7 @@ class SpaceData {
   String spaceName = "";
   List<PermissionData> membersPermissions =
       List<PermissionData>.empty(growable: true);
-  bool isPrivate = true;
+  bool isPrivate = false;
 
   List<PostData> spacePosts = List<PostData>.empty(growable: true);
 

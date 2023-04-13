@@ -118,25 +118,7 @@ class CreateSpacePopUpDialog extends StatelessWidget {
                 _spaceDescriptionField(),
                 const SizedBox(height: 10),
                 Container(
-                  alignment: Alignment.center,
-                  child: Row(children: const [
-                    Text("Make Space private?   ",
-                        style: TextStyle(color: Colors.black, fontSize: 18)),
-                    Icon(Icons.check_box_outline_blank_outlined,
-                        color: Colors.black, size: 20),
-                    // Checkbox(
-                    //   checkColor: Colors.white,
-                    //   fillColor: Colors.red,
-                    //   value: privateSpaceChecked,
-                    //   onChanged: (bool? value) {
-                    //     privateSpaceChecked = value;
-                    //   },
-                    // )
-                  ]),
-                ),
-                // _isPrivateCheckbox(),
-                const SizedBox(height: 10),
-                // _isPrivateCheckbox(),
+                    alignment: Alignment.center, child: _isPrivateCheckbox()),
                 const SizedBox(height: 10),
                 Padding(
                     padding: const EdgeInsets.only(top: 5),
@@ -212,26 +194,21 @@ class CreateSpacePopUpDialog extends StatelessWidget {
     });
   }
 
-  // Widget _isPrivateCheckbox() {
-  //   // bool _value = false;
-
-  //   return BlocBuilder<CreateSpaceBloc, CreateSpaceState>(
-  //     builder: ((context, state) {
-  //       return CheckboxListTile(
-  //           selected: false,
-  //           value: false,
-  //           title: Text('Make Space Private?'),
-  //           // onChanged: (value) => context
-  //           //     .read()<CreateSpaceBloc>()
-  //           //     .add(CreateSpaceIsPrivateChanged(isPrivate: _value)));
-  //           onChanged: (newBool) {
-  //             context
-  //                 .read<CreateSpaceBloc>()
-  //                 .add(CreateSpaceIsPrivateChanged(isPrivate: newBool));
-  //           });
-  //     }),
-  //   );
-  // }
+  Widget _isPrivateCheckbox() {
+    return BlocBuilder<CreateSpaceBloc, CreateSpaceState>(
+      builder: ((context, state) {
+        return CheckboxListTile(
+            selected: false,
+            value: state.isPrivate,
+            title: Text('Make Space Private?'),
+            onChanged: (value) {
+              context
+                  .read<CreateSpaceBloc>()
+                  .add(CreateSpaceIsPrivateChanged(isPrivate: value));
+            });
+      }),
+    );
+  }
 
   Widget _createSpaceButton() {
     return BlocBuilder<CreateSpaceBloc, CreateSpaceState>(
