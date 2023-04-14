@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttermoji/fluttermoji.dart';
@@ -21,12 +23,16 @@ import 'dart:math';
 
 import 'package:path/path.dart';
 
-class SettingsDrawer extends StatelessWidget {
+class SettingsDrawer extends StatefulWidget {
   SettingsDrawer({required this.currentUserData, this.currentSpace});
   SpaceData? currentSpace;
   final UserData currentUserData;
-  bool currentSpace_isPrivate = false;
 
+  @override
+  _SettingsDrawerState createState() => _SettingsDrawerState();
+}
+
+class _SettingsDrawerState extends State<SettingsDrawer> {
   final Color navyBlue = const Color.fromARGB(255, 14, 4, 104);
   final Color picoteeBlue = const Color.fromARGB(255, 45, 40, 138);
   final Color majorelleBlue = const Color.fromARGB(255, 86, 85, 221);
@@ -37,10 +43,11 @@ class SettingsDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List spacesJoined = currentUserData.spacesJoined;
+    final List spacesJoined = widget.currentUserData.spacesJoined;
     var ScreenHeight = MediaQuery.of(context).size.height;
     var ScreenWidth = MediaQuery.of(context).size.width;
     List<UserData> userList = List<UserData>.empty(growable: true);
+    bool isPrivate = widget.currentSpace!.isPrivate;
 
     return Drawer(
       // width: ScreenWidth / 4,
@@ -76,15 +83,20 @@ class SettingsDrawer extends StatelessWidget {
             // if (!currentSpace_isPrivate)
             ListTile(
               leading: const Icon(Icons.lock, color: Colors.black, size: 25),
-              title: const Text("Space Privacy",
+              title: const Text("Private",
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.normal,
                       fontSize: 20)),
-              onTap: () {
-                // currentSpace.isPrivate = true;
-                // currentSpace_isPrivate = false;
-              },
+              trailing: Switch(
+                value: widget.currentSpace!.isPrivate,
+                onChanged: (value) {
+                  context.read<SpaceBloc>().add(ChangePrivacy());
+                  setState(() {
+                    isPrivate = value;
+                  });
+                },
+              ),
             ),
             ListTile(
               leading: const Icon(Icons.supervised_user_circle,
@@ -182,8 +194,7 @@ class SettingsDrawer extends StatelessWidget {
                 )
               ],
             ),
-            const SizedBox(height: 10),
-            if (currentUserData.isFaculty)
+            if (widget.currentUserData.isFaculty)
               ListTile(
                 leading: const Icon(Icons.delete_forever,
                     color: Colors.black, size: 25),
@@ -201,8 +212,8 @@ class SettingsDrawer extends StatelessWidget {
                         return BlocProvider.value(
                           value: BlocProvider.of<SpaceBloc>(context),
                           child: DeleteSpacePopupDialog(
-                              currentSpace: currentSpace,
-                              currentUserData: currentUserData),
+                              currentSpace: widget.currentSpace,
+                              currentUserData: widget.currentUserData),
                         );
                       }));
                 },

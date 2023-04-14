@@ -110,15 +110,17 @@ class LoginView extends StatelessWidget {
                 key: _formKey,
                 child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _emailField(),
-                        const SizedBox(height: 10),
-                        _passwordField(),
-                        const SizedBox(height: 20),
-                        _loginButton(),
-                      ],
+                    child: AutofillGroup(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _emailField(),
+                          const SizedBox(height: 10),
+                          _passwordField(),
+                          const SizedBox(height: 20),
+                          _loginButton(),
+                        ],
+                      ),
                     )))));
   }
 
@@ -138,6 +140,7 @@ class LoginView extends StatelessWidget {
           child: SizedBox(
               width: 600,
               child: TextFormField(
+                autofillHints: const <String>[AutofillHints.email],
                 style: const TextStyle(color: Colors.black, fontSize: 26),
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -179,6 +182,7 @@ class LoginView extends StatelessWidget {
           child: SizedBox(
               width: 600,
               child: TextFormField(
+                autofillHints: const <String>[AutofillHints.password],
                 style: const TextStyle(color: Colors.black, fontSize: 26),
                 obscureText: true,
                 decoration: InputDecoration(

@@ -157,7 +157,7 @@ class MyNavigationDrawer extends StatelessWidget {
                 const SizedBox(height: 10),
                 ExpansionTile(
                   leading: const Icon(
-                    Icons.class_outlined,
+                    Icons.public_outlined,
                     color: Colors.black,
                     size: 34,
                   ),
@@ -307,6 +307,7 @@ class MyNavigationDrawer extends StatelessWidget {
                           builder: ((context) =>
                               SettingsView(currentUserData: currentUserData))));
                     }),
+                const SizedBox(height: 10),
                 ListTile(
                     leading:
                         const Icon(Icons.logout, color: Colors.black, size: 34),

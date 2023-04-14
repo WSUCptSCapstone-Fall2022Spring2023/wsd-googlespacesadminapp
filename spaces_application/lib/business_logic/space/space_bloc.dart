@@ -83,6 +83,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     on<KickUser>((event, emit) async {
       await _onKickUser(emit, event.uid);
     });
+    on<ChangePrivacy>((event, emit) async {
+      await _onChangePrivacy(emit);
+    });
   }
 
   Future<void> _onMessageChanged(
@@ -298,6 +301,14 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       emit(state.copyWith(
           deleteCommentFormStatus: SubmissionFailed(Exception(e))));
     }
+  }
+
+  Future<void> _onChangePrivacy(Emitter<SpaceState> emit) async {
+    await spaceRepo.changePrivacy(
+        state.currentSpace.sid, !(state.currentSpace.isPrivate));
+    final replaceSpace = state.currentSpace;
+    replaceSpace.isPrivate = !(state.currentSpace.isPrivate);
+    emit(state.copyWith(currentSpace: replaceSpace));
   }
 
   Future<void> _onEditPost(Emitter<SpaceState> emit, String newContents,
