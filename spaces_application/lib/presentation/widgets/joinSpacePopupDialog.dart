@@ -39,14 +39,14 @@ class joinSpaceDialog extends StatelessWidget {
 
   static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final Color darkViolet = Color.fromARGB(255, 9, 5, 5);
-  final Color navyBlue = Color.fromARGB(255, 14, 4, 104);
-  final Color picoteeBlue = Color.fromARGB(255, 45, 40, 208);
-  final Color majorelleBlue = Color.fromARGB(255, 86, 85, 221);
-  final Color salmon = Color.fromARGB(255, 252, 117, 106);
-  final Color phthaloBlue = Color.fromARGB(255, 22, 12, 120);
-  final Color lightPink = Color.fromARGB(255, 243, 171, 174);
-  final Color offWhite = Color.fromARGB(255, 255, 255, 240);
+  final Color darkViolet = const Color.fromARGB(255, 9, 5, 5);
+  final Color navyBlue = const Color.fromARGB(255, 14, 4, 104);
+  final Color picoteeBlue = const Color.fromARGB(255, 45, 40, 208);
+  final Color majorelleBlue = const Color.fromARGB(255, 86, 85, 221);
+  final Color salmon = const Color.fromARGB(255, 252, 117, 106);
+  final Color phthaloBlue = const Color.fromARGB(255, 22, 12, 120);
+  final Color lightPink = const Color.fromARGB(255, 243, 171, 174);
+  final Color offWhite = const Color.fromARGB(255, 255, 255, 240);
 
   @override
   Widget build(BuildContext context) {
@@ -66,55 +66,59 @@ class joinSpaceDialog extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Dialog(
-                insetPadding:
-                    const EdgeInsets.symmetric(horizontal: 150, vertical: 250),
-                backgroundColor: Colors.white,
-                child: Stack(alignment: Alignment.topLeft, children: [
-                  Container(
-                      width: double.infinity,
-                      height: ScreenHeight * 0.4,
-                      padding: const EdgeInsets.all(20),
-                      child: Column(children: [
-                        Align(
-                            alignment: Alignment.topRight,
-                            child: IconButton(
-                              icon: const Icon(Icons.close,
-                                  color: Colors.black, size: 25),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            )),
-                        Text("Join Space?", style: TextStyle(fontSize: 50)),
-                        SizedBox(height: 10),
-                        Text(
-                            "Are you sure you want to join the following space:",
-                            style: TextStyle(fontSize: 35)),
-                        SizedBox(height: 10),
-                        Text("${selectedSpace.spaceName}",
-                            style: TextStyle(fontSize: 35)),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
-                              side: const BorderSide(
-                                  color: Colors.black, width: 0.5),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5))),
-                          child: const Text(
-                            "Join Space",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          ),
+        return Dialog(
+            insetPadding:
+                const EdgeInsets.symmetric(horizontal: 150, vertical: 250),
+            backgroundColor: Colors.white,
+            child: Stack(alignment: Alignment.topLeft, children: [
+              Container(
+                  width: double.infinity,
+                  height: ScreenHeight * 0.4,
+                  padding: const EdgeInsets.all(20),
+                  child: Column(children: [
+                    Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                          icon: const Icon(Icons.close,
+                              color: Colors.black, size: 25),
                           onPressed: () {
-                            // join space here
-                            context
-                                .read<NavBarBloc>()
-                                .add(JoinSpace(selectedSpace: selectedSpace));
+                            Navigator.pop(context);
                           },
-                        )
-                      ]))
-                ])));
+                        )),
+                    const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("Join Space?",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 35))),
+                    const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        child: Divider(height: 0)),
+                    Text(
+                        "Are you sure you want to join ${selectedSpace.spaceName}",
+                        style: const TextStyle(fontSize: 20)),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            side: const BorderSide(
+                                color: Colors.black, width: 0.5),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5))),
+                        child: const Text('Join Space',
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 18)),
+                        onPressed: () {
+                          context
+                              .read<NavBarBloc>()
+                              .add(JoinSpace(selectedSpace: selectedSpace));
+                        },
+                      ),
+                    )
+                  ]))
+            ]));
       },
     );
   }

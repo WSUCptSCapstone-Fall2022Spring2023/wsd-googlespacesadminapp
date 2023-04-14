@@ -141,12 +141,6 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                         const Text("Contact"),
                         const SizedBox(height: 10),
                         Text(state.currentUser.email),
-                        const SizedBox(height: 20),
-                        const Text("Biography"),
-                        const SizedBox(height: 10),
-                        Text(
-                            "${widget.selectedUserData.firstName} ${widget.selectedUserData.lastName} has not added a bio."),
-                        const SizedBox(height: 30),
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 20),
                           child: Divider(height: 0),
