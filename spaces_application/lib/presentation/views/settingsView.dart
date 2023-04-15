@@ -33,202 +33,184 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var ScreenHeight = MediaQuery.of(context).size.height;
-    var ScreenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-        backgroundColor: offWhite,
-        drawer: MyNavigationDrawer(
-          currentUserData: currentUserData,
-        ),
-        appBar: AppBar(
-            elevation: 15,
-            title: const Text("Settings"),
-            backgroundColor: bgColor),
-        body: Padding(
-          padding: const EdgeInsets.all(10),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SvgPicture.string(
-                            FluttermojiFunctions().decodeFluttermojifromString(
-                                currentUserData.profilePicString),
-                            height: 100,
-                            width: 100,
+    var screenWidth = MediaQuery.of(context).size.width;
+    return SafeArea(
+      child: Scaffold(
+          backgroundColor: offWhite,
+          drawer: MyNavigationDrawer(
+            currentUserData: currentUserData,
+          ),
+          appBar: AppBar(
+              elevation: 15,
+              title: const Text("Settings"),
+              backgroundColor: bgColor),
+          body: Padding(
+            padding: EdgeInsets.all(screenWidth * 0.1),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Align(
+                      alignment: Alignment.topLeft,
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SvgPicture.string(
+                              FluttermojiFunctions()
+                                  .decodeFluttermojifromString(
+                                      currentUserData.profilePicString),
+                              height: 100,
+                              width: 100,
+                            ),
                           ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                              "${currentUserData.firstName} ${currentUserData.lastName}'s Settings",
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                                "${currentUserData.firstName} ${currentUserData.lastName}'s Settings",
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 35)),
+                          ),
+                        ],
+                      )),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Divider(height: 0),
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            const Text("Full Name: ",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 25)),
+                            const SizedBox(width: 5),
+                            Text(
+                              "${currentUserData.firstName} ${currentUserData.lastName}",
                               style: const TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 35)),
-                        ),
-                      ],
-                    )),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  child: Divider(height: 0),
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          const Text("Full Name: ",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 25)),
-                          const SizedBox(width: 5),
-                          Text(
-                            "${currentUserData.firstName} ${currentUserData.lastName}",
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 20),
-                            textAlign: TextAlign.left,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      const Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          "This name will be displayed in search and class lists.",
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      Row(
-                        children: [
-                          const Text("Display Name: ",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 25)),
-                          const SizedBox(width: 5),
-                          Text(
-                            currentUserData.displayName,
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 20),
-                            textAlign: TextAlign.left,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      const Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          "People will see this in Spaces, Posts, and Comments.",
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      if (currentUserData.parentEmail != null)
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                const Text("Parent Email: ",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 25)),
-                                const SizedBox(width: 5),
-                                Text(
-                                  currentUserData.parentEmail,
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 20),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ],
+                                  fontSize: 20),
+                              textAlign: TextAlign.left,
                             ),
-                            const SizedBox(height: 5),
-                            const Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                "The parent email linked to this account. Parents will have be able to view to all communications.",
-                              ),
-                            ),
-                            const SizedBox(height: 15),
                           ],
                         ),
-                      Row(
-                        children: const [
-                          Text("Dark Mode Enabled: ",
-                              style: TextStyle(
+                        const SizedBox(height: 5),
+                        const Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "This name will be displayed in search and class lists.",
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        Row(
+                          children: [
+                            const Text("Display Name: ",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 25)),
+                            const SizedBox(width: 5),
+                            Text(
+                              currentUserData.displayName,
+                              style: const TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 25)),
-                          SizedBox(width: 5),
-                          // if (currentUserData.darkMode == true)
-                          //   Icon(Icons.check_circle_outlined, color: Colors.green, size: 30)
-                          // else if (currentUserData.darkMode == false)
-                          //   Icon(Icons.unpublished_outlined, color: Colors.red, size: 30)
-                          Icon(Icons.unpublished_outlined,
-                              color: Colors.red, size: 30)
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      const Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          "Determines if the application is in dark mode.",
+                                  fontSize: 20),
+                              textAlign: TextAlign.left,
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 15),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: SizedBox(
-                          width: 150,
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  side: const BorderSide(
-                                      color: Colors.black, width: 0.5),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5))),
-                              child: Row(
-                                children: const [
-                                  Icon(Icons.edit_outlined,
-                                      color: Colors.black, size: 20),
-                                  SizedBox(width: 5),
+                        const SizedBox(height: 5),
+                        const Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "People will see this in Spaces, Posts, and Comments.",
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        if (currentUserData.parentEmail != null)
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  const Text("Parent Email: ",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 25)),
+                                  const SizedBox(width: 5),
                                   Text(
-                                    "Edit Settings",
-                                    style: TextStyle(color: Colors.black),
+                                    currentUserData.parentEmail,
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 20),
+                                    textAlign: TextAlign.left,
                                   ),
                                 ],
                               ),
-                              onPressed: () {
-                                Navigator.of(context)
-                                    .pushReplacement(MaterialPageRoute(
-                                        builder: (context) => EditSettingsView(
-                                              currentUserData: currentUserData,
-                                            )));
-                              }),
+                              const SizedBox(height: 5),
+                              const Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  "The parent email linked to this account. Parents will have be able to view to all communications.",
+                                ),
+                              ),
+                              const SizedBox(height: 15),
+                            ],
+                          ),
+                        const SizedBox(height: 15),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: SizedBox(
+                            width: 150,
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    side: const BorderSide(
+                                        color: Colors.black, width: 0.5),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5))),
+                                child: Row(
+                                  children: const [
+                                    Icon(Icons.edit_outlined,
+                                        color: Colors.black, size: 20),
+                                    SizedBox(width: 5),
+                                    Text(
+                                      "Edit Settings",
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              EditSettingsView(
+                                                currentUserData:
+                                                    currentUserData,
+                                              )));
+                                }),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 5),
-              ],
+                  const SizedBox(height: 5),
+                ],
+              ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 }

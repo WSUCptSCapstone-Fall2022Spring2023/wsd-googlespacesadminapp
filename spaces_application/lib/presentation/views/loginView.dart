@@ -25,44 +25,46 @@ class LoginView extends StatelessWidget {
       body: Center(
         child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text("Welcome to Slate",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.black, fontSize: textSize * 3.5)),
-                if (screenSize.width > 500) const SizedBox(height: 30),
-                Image.asset(
-                  'assets/images/wahkiakumSchoolDistrictLogo.png',
-                  width: imageWidth,
-                  height: imageHeight,
-                ),
-                if (screenSize.width > 500) const SizedBox(height: 60),
-                BlocProvider(
-                  create: (context) => LoginBloc(
-                    authRepo: context.read<AuthRepository>(),
-                    userRepo: context.read<UserDataRepository>(),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("Welcome to Slate",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.black, fontSize: textSize * 3.5)),
+                  if (screenSize.width > 500) const SizedBox(height: 30),
+                  Image.asset(
+                    'assets/images/wahkiakumSchoolDistrictLogo.png',
+                    width: imageWidth,
+                    height: imageHeight,
                   ),
-                  child: _loginForm(context),
-                ),
-                const Padding(padding: EdgeInsets.only(top: 15)),
-                Text.rich(TextSpan(
-                    text: "Need an account? ",
-                    style: TextStyle(color: Colors.black, fontSize: textSize),
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: "Send Administration a Message",
-                          style: const TextStyle(
-                              color: Colors.black,
-                              decoration: TextDecoration.underline),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              MiscWidgets.showException(
-                                  context, "Send Admin Message");
-                            })
-                    ]))
-              ],
+                  if (screenSize.width > 500) const SizedBox(height: 60),
+                  BlocProvider(
+                    create: (context) => LoginBloc(
+                      authRepo: context.read<AuthRepository>(),
+                      userRepo: context.read<UserDataRepository>(),
+                    ),
+                    child: _loginForm(context),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 15)),
+                  Text.rich(TextSpan(
+                      text: "Need an account? ",
+                      style: TextStyle(color: Colors.black, fontSize: textSize),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: "Send Administration a Message",
+                            style: const TextStyle(
+                                color: Colors.black,
+                                decoration: TextDecoration.underline),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                MiscWidgets.showException(
+                                    context, "Send Admin Message");
+                              })
+                      ]))
+                ],
+              ),
             )),
       ),
       backgroundColor: Colors.white,
