@@ -28,17 +28,20 @@ import 'dart:math';
 class MyNavigationDrawer extends StatelessWidget {
   MyNavigationDrawer({required this.currentUserData});
   final UserData currentUserData;
-  final Color navyBlue = const Color.fromARGB(255, 14, 4, 104);
-  final Color picoteeBlue = const Color.fromARGB(255, 45, 40, 138);
-  final Color majorelleBlue = const Color.fromARGB(255, 86, 85, 221);
-  final Color salmon = const Color.fromARGB(255, 252, 117, 106);
-  final Color phthaloBlue = const Color.fromARGB(255, 22, 12, 113);
-  final Color lightPink = const Color.fromARGB(255, 243, 171, 174);
-  final Color offWhite = const Color.fromARGB(255, 255, 255, 240);
+
+  final Color bgColor = const Color.fromARGB(255, 49, 49, 49);
 
   @override
   Widget build(BuildContext context) {
     final List spacesJoined = currentUserData.spacesJoined;
+
+    final Size screenSize = MediaQuery.of(context).size;
+    final double imageWidth = screenSize.width * 0.7;
+    final double imageHeight = screenSize.height * 0.4;
+    final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+    final double textSize = screenSize.width <= 500 ? 12 : 20;
+    final double postBoxConstraints = screenSize.width <= 500 ? 30 : 50;
+    final double commentBoxConstraints = screenSize.width <= 500 ? 20 : 30;
     return BlocProvider(
       create: (context) => NavBarBloc(
           spaceRepo: context.read<SpaceRepository>(),
@@ -83,8 +86,7 @@ class MyNavigationDrawer extends StatelessWidget {
                 const SizedBox(height: 10),
                 ListTile(
                     //visualDensity: VisualDensity(vertical: 1),
-                    leading: const Icon(Icons.home_outlined,
-                        color: Colors.black, size: 34),
+                    leading: Icon(Icons.home, color: bgColor, size: 34),
                     title: const Text('Home',
                         style: TextStyle(
                             color: Colors.black,
@@ -101,8 +103,7 @@ class MyNavigationDrawer extends StatelessWidget {
                 const SizedBox(height: 10),
                 ListTile(
                   //visualDensity: VisualDensity(vertical: 1),
-                  leading: const Icon(Icons.account_circle_outlined,
-                      color: Colors.black, size: 34),
+                  leading: Icon(Icons.account_circle, color: bgColor, size: 34),
                   title: const Text('Profile',
                       style: TextStyle(
                           color: Colors.black,
@@ -118,9 +119,9 @@ class MyNavigationDrawer extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 ExpansionTile(
-                  leading: const Icon(
-                    Icons.class_outlined,
-                    color: Colors.black,
+                  leading: Icon(
+                    Icons.class_,
+                    color: bgColor,
                     size: 34,
                   ),
                   title: const Text('Your Spaces',
@@ -135,7 +136,7 @@ class MyNavigationDrawer extends StatelessWidget {
                       itemCount: spacesJoined.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          leading: Icon(Icons.space_dashboard_outlined,
+                          leading: Icon(Icons.space_dashboard,
                               color: Colors.primaries[
                                   Random().nextInt(Colors.primaries.length)]),
                           title: Text('${spacesJoined[index].spaceName}',
@@ -156,9 +157,9 @@ class MyNavigationDrawer extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 ExpansionTile(
-                  leading: const Icon(
+                  leading: Icon(
                     Icons.class_outlined,
-                    color: Colors.black,
+                    color: bgColor,
                     size: 34,
                   ),
                   title: currentUserData.isFaculty
@@ -181,7 +182,7 @@ class MyNavigationDrawer extends StatelessWidget {
                           return const SizedBox.shrink();
                         } else if (state.spaceRetrievalStatus
                             is DataRetrieving) {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         } else if (state.spaceRetrievalStatus
                             is RetrievalSuccess) {
                           return ListView.builder(
@@ -189,8 +190,9 @@ class MyNavigationDrawer extends StatelessWidget {
                             itemCount: state.publicSpaces.length,
                             itemBuilder: (context, index) {
                               return ListTile(
-                                  leading: Icon(Icons.space_dashboard_outlined,
-                                      color: Colors.grey),
+                                  leading: Icon(Icons.space_dashboard,
+                                      color: Colors.primaries[Random()
+                                          .nextInt(Colors.primaries.length)]),
                                   title: Text(
                                       '${state.publicSpaces[index].spaceName}',
                                       style: const TextStyle(
@@ -215,7 +217,7 @@ class MyNavigationDrawer extends StatelessWidget {
                             },
                           );
                         } else {
-                          return Text(
+                          return const Text(
                               "Data could not be retrieved. Please try again");
                         }
                       },
@@ -225,8 +227,8 @@ class MyNavigationDrawer extends StatelessWidget {
                 if (currentUserData.isFaculty) const SizedBox(height: 10),
                 if (currentUserData.isFaculty)
                   ExpansionTile(
-                    leading: const Icon(Icons.admin_panel_settings_outlined,
-                        color: Colors.black, size: 34),
+                    leading: Icon(Icons.admin_panel_settings,
+                        color: bgColor, size: 34),
                     title: const Text('Admin',
                         style: TextStyle(
                             color: Colors.black,
@@ -235,8 +237,7 @@ class MyNavigationDrawer extends StatelessWidget {
                     children: <Widget>[
                       const SizedBox(height: 10),
                       ListTile(
-                          leading: const Icon(Icons.person_outline_outlined,
-                              color: Colors.black),
+                          leading: Icon(Icons.person_outline, color: bgColor),
                           title: const Text('Create Student Profile',
                               style: TextStyle(
                                   color: Colors.black,
@@ -259,8 +260,7 @@ class MyNavigationDrawer extends StatelessWidget {
                           }),
                       const SizedBox(height: 10),
                       ListTile(
-                          leading: const Icon(Icons.space_dashboard_outlined,
-                              color: Colors.black),
+                          leading: Icon(Icons.space_dashboard, color: bgColor),
                           title: const Text('Create a New Space',
                               style: TextStyle(
                                   color: Colors.black,
@@ -278,8 +278,7 @@ class MyNavigationDrawer extends StatelessWidget {
                   ),
                 const SizedBox(height: 10),
                 ListTile(
-                    leading: const Icon(Icons.help_outline,
-                        color: Colors.black, size: 34),
+                    leading: Icon(Icons.help_outline, color: bgColor, size: 34),
                     title: const Text('Help',
                         style: TextStyle(
                             color: Colors.black,
@@ -295,8 +294,7 @@ class MyNavigationDrawer extends StatelessWidget {
                     }),
                 const SizedBox(height: 10),
                 ListTile(
-                    leading: const Icon(Icons.settings_outlined,
-                        color: Colors.black, size: 34),
+                    leading: Icon(Icons.settings, color: bgColor, size: 34),
                     title: const Text('Settings',
                         style: TextStyle(
                             color: Colors.black,
@@ -308,8 +306,7 @@ class MyNavigationDrawer extends StatelessWidget {
                               SettingsView(currentUserData: currentUserData))));
                     }),
                 ListTile(
-                    leading:
-                        const Icon(Icons.logout, color: Colors.black, size: 34),
+                    leading: Icon(Icons.logout, color: bgColor, size: 34),
                     title: const Text('Logout',
                         style: TextStyle(
                             color: Colors.black,

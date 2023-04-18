@@ -33,30 +33,35 @@ class SettingsDrawer extends StatelessWidget {
   final Color salmon = const Color.fromARGB(255, 252, 117, 106);
   final Color phthaloBlue = const Color.fromARGB(255, 22, 12, 113);
   final Color lightPink = const Color.fromARGB(255, 243, 171, 174);
-  final Color offWhite = const Color.fromARGB(255, 255, 255, 240);
+  final Color offWhite = Color.fromARGB(220, 255, 255, 255);
+
+  final Color bgColor = Color.fromARGB(255, 49, 49, 49);
 
   @override
   Widget build(BuildContext context) {
     final List spacesJoined = currentUserData.spacesJoined;
-    var ScreenHeight = MediaQuery.of(context).size.height;
-    var ScreenWidth = MediaQuery.of(context).size.width;
     List<UserData> userList = List<UserData>.empty(growable: true);
 
+    final Size screenSize = MediaQuery.of(context).size;
+    final double imageWidth = screenSize.width * 0.7;
+    final double imageHeight = screenSize.height * 0.4;
+    final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+    final double textSize = 12;
+    final double postBoxConstraints = screenSize.width <= 500 ? 30 : 50;
+    final double commentBoxConstraints = screenSize.width <= 500 ? 20 : 30;
     return Drawer(
-      // width: ScreenWidth / 4,
-      // height: ScreenHeight,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Text("Space Menu",
+            Text("Space Menu",
                 textAlign: TextAlign.left,
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.normal,
-                    fontSize: 28)),
+                    fontSize: textSize * 2.2)),
             const SizedBox(height: 15),
             // if (currentSpace.isPrivate)
             // if (currentSpace_isPrivate)
@@ -75,25 +80,25 @@ class SettingsDrawer extends StatelessWidget {
             // if (!currentSpace.isPrivate)
             // if (!currentSpace_isPrivate)
             ListTile(
-              leading: const Icon(Icons.lock, color: Colors.black, size: 25),
-              title: const Text("Space Privacy",
+              leading: Icon(Icons.lock, color: bgColor, size: textSize * 2),
+              title: Text("Space Privacy",
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.normal,
-                      fontSize: 20)),
+                      fontSize: textSize * 1.8)),
               onTap: () {
                 // currentSpace.isPrivate = true;
                 // currentSpace_isPrivate = false;
               },
             ),
             ListTile(
-              leading: const Icon(Icons.supervised_user_circle,
-                  color: Colors.black, size: 25),
-              title: const Text("Invite User",
+              leading: Icon(Icons.supervised_user_circle,
+                  color: bgColor, size: textSize * 2),
+              title: Text("Invite User",
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.normal,
-                      fontSize: 20)),
+                      fontSize: textSize * 1.8)),
               onTap: () {
                 showDialog(
                   barrierDismissible: true,
@@ -108,13 +113,13 @@ class SettingsDrawer extends StatelessWidget {
               },
             ),
             ExpansionTile(
-              leading: const Icon(Icons.person_search,
-                  color: Colors.black, size: 34),
-              title: const Text('Space Users',
+              leading:
+                  Icon(Icons.person_search, color: bgColor, size: textSize * 2),
+              title: Text('Space Users',
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.normal,
-                      fontSize: 20)),
+                      fontSize: textSize * 1.8)),
               children: [
                 BlocBuilder<SpaceBloc, SpaceState>(
                   builder: (context, state) {
@@ -122,10 +127,11 @@ class SettingsDrawer extends StatelessWidget {
                       context.read<SpaceBloc>().add(GetSpaceUsers());
                       return const SizedBox.shrink();
                     } else if (state.getUsersStatus is DataRetrieving) {
-                      return const SizedBox(
-                          width: 100,
-                          height: 100,
-                          child: Center(child: CircularProgressIndicator()));
+                      return SizedBox(
+                          width: textSize * 5,
+                          height: textSize * 5,
+                          child:
+                              const Center(child: CircularProgressIndicator()));
                     } else if (state.getUsersStatus is RetrievalSuccess) {
                       userList = state.spaceUsers;
                       return ListView.builder(
@@ -134,7 +140,7 @@ class SettingsDrawer extends StatelessWidget {
                           itemBuilder: ((context, index) {
                             return ListTile(
                               leading: CircleAvatar(
-                                radius: 15,
+                                radius: textSize * 1.4,
                                 backgroundColor: Colors.grey[200],
                                 child: ClipRRect(
                                   borderRadius: const BorderRadius.all(
@@ -152,10 +158,10 @@ class SettingsDrawer extends StatelessWidget {
                                 ),
                               ),
                               title: Text(userList[index].displayName,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.normal,
-                                      fontSize: 10)),
+                                      fontSize: textSize * 1.4)),
                               onTap: () {
                                 showDialog(
                                     barrierDismissible: true,
@@ -185,13 +191,13 @@ class SettingsDrawer extends StatelessWidget {
             const SizedBox(height: 10),
             if (currentUserData.isFaculty)
               ListTile(
-                leading: const Icon(Icons.delete_forever,
-                    color: Colors.black, size: 25),
-                title: const Text("Delete Space",
+                leading: Icon(Icons.delete_forever,
+                    color: bgColor, size: textSize * 2),
+                title: Text("Delete Space",
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.normal,
-                        fontSize: 20)),
+                        fontSize: textSize * 1.8)),
                 onTap: () {
                   showDialog(
                       barrierDismissible: false,

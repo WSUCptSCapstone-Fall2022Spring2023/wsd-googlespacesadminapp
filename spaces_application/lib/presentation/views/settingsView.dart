@@ -34,6 +34,11 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
+    final Size screenSize = MediaQuery.of(context).size;
+    final double imageWidth = screenSize.width * 0.7;
+    final double imageHeight = screenSize.height * 0.4;
+    final double textScaleFactor = screenSize.width <= 515 ? 3 : 5;
+    final double textSize = screenSize.width <= 515 ? 12 : 20;
     return SafeArea(
       child: Scaffold(
           backgroundColor: offWhite,
@@ -49,34 +54,28 @@ class SettingsView extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SvgPicture.string(
-                              FluttermojiFunctions()
-                                  .decodeFluttermojifromString(
-                                      currentUserData.profilePicString),
-                              height: 100,
-                              width: 100,
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                                "${currentUserData.firstName} ${currentUserData.lastName}'s Settings",
-                                style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 35)),
-                          ),
-                        ],
-                      )),
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SvgPicture.string(
+                          FluttermojiFunctions().decodeFluttermojifromString(
+                              currentUserData.profilePicString),
+                          height: 100,
+                          width: 100,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                            "${currentUserData.firstName} ${currentUserData.lastName}'s Settings",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.normal,
+                                fontSize: textSize * 2)),
+                      ),
+                    ],
+                  ),
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
                     child: Divider(height: 0),
@@ -87,54 +86,55 @@ class SettingsView extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            const Text("Full Name: ",
+                            Text("Full Name: ",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.normal,
-                                    fontSize: 25)),
+                                    fontSize: textSize * 1.2)),
                             const SizedBox(width: 5),
                             Text(
                               "${currentUserData.firstName} ${currentUserData.lastName}",
-                              style: const TextStyle(
+                              style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 20),
+                                  fontSize: textSize),
                               textAlign: TextAlign.left,
                             ),
                           ],
                         ),
                         const SizedBox(height: 5),
-                        const Align(
+                        Align(
                           alignment: Alignment.topLeft,
                           child: Text(
                             "This name will be displayed in search and class lists.",
+                            style: TextStyle(fontSize: textSize),
                           ),
                         ),
                         const SizedBox(height: 15),
                         Row(
                           children: [
-                            const Text("Display Name: ",
+                            Text("Display Name: ",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.normal,
-                                    fontSize: 25)),
+                                    fontSize: textSize * 1.2)),
                             const SizedBox(width: 5),
                             Text(
                               currentUserData.displayName,
-                              style: const TextStyle(
+                              style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 20),
+                                  fontSize: textSize),
                               textAlign: TextAlign.left,
                             ),
                           ],
                         ),
                         const SizedBox(height: 5),
-                        const Align(
+                        Align(
                           alignment: Alignment.topLeft,
                           child: Text(
-                            "People will see this in Spaces, Posts, and Comments.",
-                          ),
+                              "People will see this in Spaces, Posts, and Comments.",
+                              style: TextStyle(fontSize: textSize)),
                         ),
                         const SizedBox(height: 15),
                         if (currentUserData.parentEmail != null)
@@ -142,28 +142,28 @@ class SettingsView extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  const Text("Parent Email: ",
+                                  Text("Parent Email: ",
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.normal,
-                                          fontSize: 25)),
+                                          fontSize: textSize * 1.2)),
                                   const SizedBox(width: 5),
                                   Text(
                                     currentUserData.parentEmail,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.normal,
-                                        fontSize: 20),
+                                        fontSize: textSize),
                                     textAlign: TextAlign.left,
                                   ),
                                 ],
                               ),
                               const SizedBox(height: 5),
-                              const Align(
+                              Align(
                                 alignment: Alignment.topLeft,
                                 child: Text(
-                                  "The parent email linked to this account. Parents will have be able to view to all communications.",
-                                ),
+                                    "The parent email linked to this account. Parents will have be able to view to all communications.",
+                                    style: TextStyle(fontSize: textSize)),
                               ),
                               const SizedBox(height: 15),
                             ],
@@ -172,7 +172,7 @@ class SettingsView extends StatelessWidget {
                         Align(
                           alignment: Alignment.topLeft,
                           child: SizedBox(
-                            width: 150,
+                            width: 175,
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.white,
@@ -182,13 +182,15 @@ class SettingsView extends StatelessWidget {
                                         borderRadius:
                                             BorderRadius.circular(5))),
                                 child: Row(
-                                  children: const [
-                                    Icon(Icons.edit_outlined,
+                                  children: [
+                                    const Icon(Icons.edit_outlined,
                                         color: Colors.black, size: 20),
-                                    SizedBox(width: 5),
+                                    const SizedBox(width: 5),
                                     Text(
                                       "Edit Settings",
-                                      style: TextStyle(color: Colors.black),
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: textSize),
                                     ),
                                   ],
                                 ),
