@@ -45,7 +45,6 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    final List spacesJoined = currentUserData.spacesJoined;
     final List spacesJoined = widget.currentUserData.spacesJoined;
     var ScreenHeight = MediaQuery.of(context).size.height;
     var ScreenWidth = MediaQuery.of(context).size.width;
@@ -90,8 +89,9 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
             // if (!currentSpace.isPrivate)
             // if (!currentSpace_isPrivate)
             ListTile(
-              leading: const Icon(Icons.lock, color: Colors.black, size: textSize * 2),
-              title: const Text("Space Privacy",
+              leading:
+                  Icon(Icons.lock, color: Colors.black, size: textSize * 2),
+              title: Text("Private",
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.normal,
