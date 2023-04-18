@@ -305,6 +305,7 @@ class MyNavigationDrawer extends StatelessWidget {
                           builder: ((context) =>
                               SettingsView(currentUserData: currentUserData))));
                     }),
+                const SizedBox(height: 10),
                 ListTile(
                     leading: Icon(Icons.logout, color: bgColor, size: 34),
                     title: const Text('Logout',

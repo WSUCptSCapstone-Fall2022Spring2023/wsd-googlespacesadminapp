@@ -50,6 +50,8 @@ class PostSubmitted extends SpaceEvent {}
 
 class CommentSubmitted extends SpaceEvent {}
 
+class ChangePrivacy extends SpaceEvent {}
+
 class EditComment extends SpaceEvent {
   String newContents;
   CommentData selectedComment;

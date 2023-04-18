@@ -179,6 +179,10 @@ class SpaceRepository {
     await ref.child("Posts/").child(spaceID).remove();
   }
 
+  Future<void> changePrivacy(String spaceID, bool isPrivate) async {
+    await ref.child("Spaces/").child(spaceID).update({"isPrivate": isPrivate});
+  }
+
   Future<void> joinSpace(String spaceID, List<UserData> users) async {
     for (final user in users) {
       if (user.isFaculty) {
