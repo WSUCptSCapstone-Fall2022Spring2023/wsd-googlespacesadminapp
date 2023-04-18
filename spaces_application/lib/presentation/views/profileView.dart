@@ -36,113 +36,132 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _width = MediaQuery.of(context).size.width;
+    var screenWidth = MediaQuery.of(context).size.width;
     Get.put(FluttermojiController());
-    return Scaffold(
-      backgroundColor: offWhite,
-      drawer: MyNavigationDrawer(
-        currentUserData: currentUserData,
-      ),
-      appBar: AppBar(
-        elevation: 15,
-        // title: Text(currentSpace.spaceName,
-        title: const Text("Profile", style: TextStyle(color: Colors.white)),
-        iconTheme: const IconThemeData(color: Colors.white, size: 30),
-        backgroundColor: bgColor,
-        actions: <Widget>[
-          IconButton(
-              icon: const Icon(Icons.settings_outlined),
-              onPressed: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => SettingsView(
-                          currentUserData: currentUserData,
-                        )));
-              })
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(50),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: FluttermojiCircleAvatar(
-                  radius: 100,
-                  backgroundColor: Colors.grey[200],
-                ),
-              ),
-              if (currentUserData.isFaculty)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(currentUserData.email,
-                        style:
-                            const TextStyle(color: Colors.black, fontSize: 22)),
-                    const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
-                        child: Icon(Icons.circle, color: Colors.red, size: 12)),
-                    const Text("Faculty User",
-                        style: TextStyle(color: Colors.black, fontSize: 22)),
-                  ],
-                ),
-              if (currentUserData.isFaculty == false)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                        '${currentUserData.firstName} ${currentUserData.lastName}',
-                        style:
-                            const TextStyle(color: Colors.black, fontSize: 22)),
-                    const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
-                        child: Icon(Icons.circle, color: Colors.red, size: 12)),
-                    Text(currentUserData.email,
-                        style:
-                            const TextStyle(color: Colors.black, fontSize: 22)),
-                    const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
-                        child: Icon(Icons.circle, color: Colors.red, size: 12)),
-                    Text(currentUserData.parentEmail,
-                        style:
-                            const TextStyle(color: Colors.black, fontSize: 22)),
-                  ],
-                ),
-              if (currentUserData.isFaculty == false)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text("Student User",
-                        style: TextStyle(color: Colors.black, fontSize: 22)),
-                  ],
-                ),
-              const SizedBox(height: 20),
-              const Text("Contact"),
-              const SizedBox(height: 10),
-              Text(currentUserData.email),
-              const SizedBox(height: 20),
-              const Text("Biography"),
-              const SizedBox(height: 10),
-              Text(
-                  "${currentUserData.firstName} ${currentUserData.lastName} has not added a bio."),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    side: const BorderSide(color: Colors.black, width: 0.5),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5))),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: offWhite,
+        drawer: MyNavigationDrawer(
+          currentUserData: currentUserData,
+        ),
+        appBar: AppBar(
+          elevation: 15,
+          // title: Text(currentSpace.spaceName,
+          title: const Text("Profile", style: TextStyle(color: Colors.white)),
+          iconTheme: const IconThemeData(color: Colors.white, size: 30),
+          backgroundColor: bgColor,
+          actions: <Widget>[
+            IconButton(
+                icon: const Icon(Icons.settings_outlined),
                 onPressed: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => EditProfileView(
-                      currentUserData: currentUserData,
-                    ),
-                  ));
-                },
-                child: const Text("Edit Profile",
-                    style: TextStyle(color: Colors.black, fontSize: 18)),
-              ),
-            ],
+                      builder: (context) => SettingsView(
+                            currentUserData: currentUserData,
+                          )));
+                })
+          ],
+        ),
+        body: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.01, vertical: screenWidth * 0.01),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: LayoutBuilder(builder:
+                      (BuildContext context, BoxConstraints constraints) {
+                    var screenWidth = MediaQuery.of(context).size.width;
+                    return FluttermojiCircleAvatar(
+                      radius:
+                          screenWidth < 500 ? constraints.maxWidth * 0.3 : 150,
+                      backgroundColor: Colors.grey[200],
+                    );
+                  }),
+                ),
+                if (currentUserData.isFaculty)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(currentUserData.email,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: screenWidth * 0.05)),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12),
+                          child:
+                              Icon(Icons.circle, color: Colors.red, size: 12)),
+                      Text("Faculty User",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: screenWidth * 0.05)),
+                    ],
+                  ),
+                if (currentUserData.isFaculty == false)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                          '${currentUserData.firstName} ${currentUserData.lastName}',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: screenWidth * 0.05)),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12),
+                          child:
+                              Icon(Icons.circle, color: Colors.red, size: 12)),
+                      Text(currentUserData.email,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: screenWidth * 0.05)),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12),
+                          child:
+                              Icon(Icons.circle, color: Colors.red, size: 12)),
+                      Text(currentUserData.parentEmail,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: screenWidth * 0.05)),
+                    ],
+                  ),
+                if (currentUserData.isFaculty == false)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Student User",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: screenWidth * 0.05)),
+                    ],
+                  ),
+                const SizedBox(height: 20),
+                const Text("Contact"),
+                const SizedBox(height: 10),
+                Text(currentUserData.email),
+                const SizedBox(height: 20),
+                const Text("Biography"),
+                const SizedBox(height: 10),
+                Text(
+                    "${currentUserData.firstName} ${currentUserData.lastName} has not added a bio."),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      side: const BorderSide(color: Colors.black, width: 0.5),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5))),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => EditProfileView(
+                        currentUserData: currentUserData,
+                      ),
+                    ));
+                  },
+                  child: const Text("Edit Profile",
+                      style: TextStyle(color: Colors.black, fontSize: 18)),
+                ),
+              ],
+            ),
           ),
         ),
       ),
