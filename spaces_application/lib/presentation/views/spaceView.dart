@@ -60,7 +60,6 @@ class _SpaceViewState extends State<SpaceView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _spaceBloc = SpaceBloc(
       spaceRepo: context.read<SpaceRepository>(),
@@ -80,9 +79,15 @@ class _SpaceViewState extends State<SpaceView> {
 
   @override
   Widget build(BuildContext context) {
-    var ScreenHeight = MediaQuery.of(context).size.height;
-    var ScreenWidth = MediaQuery.of(context).size.width;
     //_scrollController.addListener(_scrollListener);
+    var screenWidth = MediaQuery.of(context).size.width;
+    final Size screenSize = MediaQuery.of(context).size;
+    final double imageWidth = screenSize.width * 0.7;
+    final double imageHeight = screenSize.height * 0.4;
+    final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+    final double textSize = screenSize.width <= 500 ? 12 : 20;
+    final double postBoxConstraints = screenSize.width <= 500 ? 30 : 50;
+    final double commentBoxConstraints = screenSize.width <= 500 ? 20 : 30;
     return BlocProvider<SpaceBloc>(
         create: (context) => _spaceBloc,
         child:
@@ -113,7 +118,7 @@ class _SpaceViewState extends State<SpaceView> {
                   Builder(
                       builder: (context) => IconButton(
                           onPressed: () => Scaffold.of(context).openEndDrawer(),
-                          icon: const Icon(Icons.menu)))
+                          icon: const Icon(Icons.settings)))
                 ],
               ),
               body: Container(
@@ -154,7 +159,7 @@ class _SpaceViewState extends State<SpaceView> {
                             else if (state.getPostsStatus is RetrievalSuccess &&
                                 state.currentSpace.spacePosts.isNotEmpty) {
                               return ListView.builder(
-                                  physics: ClampingScrollPhysics(),
+                                  physics: const ClampingScrollPhysics(),
                                   reverse: true,
                                   controller: _postScrollController,
                                   shrinkWrap: true,
@@ -172,7 +177,7 @@ class _SpaceViewState extends State<SpaceView> {
                                       return SizedBox(
                                           height: 5,
                                           child: isLoading
-                                              ? LinearProgressIndicator()
+                                              ? const LinearProgressIndicator()
                                               : null);
                                     }
                                     return Padding(
@@ -180,11 +185,12 @@ class _SpaceViewState extends State<SpaceView> {
                                         child: ListTile(
                                             dense: true,
                                             leading: ConstrainedBox(
-                                              constraints: const BoxConstraints(
-                                                  maxHeight: 50,
-                                                  maxWidth: 50,
-                                                  minWidth: 50,
-                                                  minHeight: 50),
+                                              constraints: BoxConstraints(
+                                                  maxHeight: postBoxConstraints,
+                                                  maxWidth: postBoxConstraints,
+                                                  minWidth: postBoxConstraints,
+                                                  minHeight:
+                                                      postBoxConstraints),
                                               child: SvgPicture.string(
                                                   FluttermojiFunctions()
                                                       .decodeFluttermojifromString(
@@ -210,49 +216,45 @@ class _SpaceViewState extends State<SpaceView> {
                                                           .postUser
                                                           .displayName
                                                           .toString(),
-                                                      style: const TextStyle(
+                                                      style: TextStyle(
                                                           color: Colors.black,
                                                           fontWeight:
                                                               FontWeight.normal,
-                                                          fontSize: 25)),
+                                                          fontSize:
+                                                              textSize * 1.2)),
                                                   TextSpan(
                                                       text:
                                                           "  ${state.currentSpace.spacePosts[reversedIndex].postedTime.month.toString()}/${state.currentSpace.spacePosts[reversedIndex].postedTime.day.toString()}/${state.currentSpace.spacePosts[reversedIndex].postedTime.year.toString()} ${state.currentSpace.spacePosts[reversedIndex].postedTime.hour.toString()}:${state.currentSpace.spacePosts[reversedIndex].postedTime.minute.toString()}",
-                                                      style: const TextStyle(
-                                                          color: Colors.grey)),
+                                                      style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: textSize)),
                                                   if (state
                                                       .currentSpace
                                                       .spacePosts[reversedIndex]
                                                       .isEdited)
                                                     TextSpan(
                                                         text: "  (edited)",
-                                                        style: const TextStyle(
-                                                            color: Colors.grey))
+                                                        style: TextStyle(
+                                                            color: Colors.grey,
+                                                            fontSize: textSize))
                                                 ])),
-                                            subtitle: Container(
-                                              child: LinkText(
-                                                state
-                                                        .currentSpace
-                                                        .spacePosts[
-                                                            reversedIndex]
-                                                        .contents +
-                                                    " ",
-                                                textStyle: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 25,
-                                                    fontWeight:
-                                                        FontWeight.normal),
-                                                linkStyle: const TextStyle(
-                                                    color: Colors.red,
-                                                    fontSize: 25,
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    decoration: TextDecoration
-                                                        .underline),
-                                              ),
+                                            subtitle: LinkText(
+                                              "${state.currentSpace.spacePosts[reversedIndex].contents} ",
+                                              textStyle: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: textSize * 1.2,
+                                                  fontWeight:
+                                                      FontWeight.normal),
+                                              linkStyle: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: textSize * 1.2,
+                                                  fontWeight: FontWeight.normal,
+                                                  decoration:
+                                                      TextDecoration.underline),
                                             ),
                                             isThreeLine: true,
                                             trailing: PopupMenuButton(
+                                              iconSize: textSize * 1.3,
                                               onSelected: ((value) {
                                                 if (value == '/reply') {
                                                   MiscWidgets.showException(
@@ -328,8 +330,8 @@ class _SpaceViewState extends State<SpaceView> {
                                                   } else {
                                                     return const [
                                                       PopupMenuItem(
-                                                          child: const SizedBox
-                                                              .shrink())
+                                                          child:
+                                                              SizedBox.shrink())
                                                     ];
                                                   }
                                                 }
@@ -350,13 +352,17 @@ class _SpaceViewState extends State<SpaceView> {
                                                                   reversedIndex])),
                                                         child: Dialog(
                                                             insetPadding:
-                                                                const EdgeInsets
-                                                                    .all(200),
+                                                                EdgeInsets.all(
+                                                                    (screenSize.width <=
+                                                                            1000)
+                                                                        ? 30
+                                                                        : 50),
                                                             child: Stack(
                                                               alignment:
                                                                   Alignment
                                                                       .center,
-                                                              children: <Widget>[
+                                                              children: <
+                                                                  Widget>[
                                                                 Container(
                                                                     width: double
                                                                         .infinity,
@@ -373,18 +379,15 @@ class _SpaceViewState extends State<SpaceView> {
                                                                             Row(
                                                                               children: [
                                                                                 ConstrainedBox(
-                                                                                  constraints: const BoxConstraints(maxHeight: 50, maxWidth: 50, minWidth: 50, minHeight: 50),
+                                                                                  constraints: BoxConstraints(maxHeight: commentBoxConstraints, maxWidth: commentBoxConstraints, minWidth: commentBoxConstraints, minHeight: commentBoxConstraints),
                                                                                   child: SvgPicture.string(FluttermojiFunctions().decodeFluttermojifromString(state.currentSpace.spacePosts[reversedIndex].postUser.profilePicString)),
                                                                                 ),
                                                                                 Column(
                                                                                   children: [
-                                                                                    Text(state.currentSpace.spacePosts[reversedIndex].postUser.displayName.toString(), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 25)),
+                                                                                    Text(state.currentSpace.spacePosts[reversedIndex].postUser.displayName.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: textSize * 1.2)),
                                                                                     Text(
                                                                                       "${state.currentSpace.spacePosts[reversedIndex].postedTime.month.toString()}/${state.currentSpace.spacePosts[reversedIndex].postedTime.day.toString()}/${state.currentSpace.spacePosts[reversedIndex].postedTime.year.toString()} ${state.currentSpace.spacePosts[reversedIndex].postedTime.hour.toString()}:${state.currentSpace.spacePosts[reversedIndex].postedTime.minute.toString()}",
-                                                                                      style: const TextStyle(
-                                                                                        color: Colors.grey,
-                                                                                        fontWeight: FontWeight.normal,
-                                                                                      ),
+                                                                                      style: TextStyle(color: Colors.grey, fontWeight: FontWeight.normal, fontSize: textSize),
                                                                                       textAlign: TextAlign.left,
                                                                                     )
                                                                                   ],
@@ -394,7 +397,7 @@ class _SpaceViewState extends State<SpaceView> {
                                                                             Align(
                                                                               alignment: Alignment.topRight,
                                                                               child: IconButton(
-                                                                                icon: const Icon(Icons.close, color: Colors.black, size: 25),
+                                                                                icon: Icon(Icons.close, color: Colors.black, size: textSize * 1.5),
                                                                                 onPressed: (() {
                                                                                   Navigator.pop(context);
                                                                                 }),
@@ -412,8 +415,8 @@ class _SpaceViewState extends State<SpaceView> {
                                                                             child:
                                                                                 LinkText(
                                                                               state.currentSpace.spacePosts[reversedIndex].contents,
-                                                                              textStyle: const TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.normal),
-                                                                              linkStyle: const TextStyle(color: Colors.red, fontSize: 25, fontWeight: FontWeight.normal, decoration: TextDecoration.underline),
+                                                                              textStyle: TextStyle(color: Colors.black, fontSize: textSize * 1.2, fontWeight: FontWeight.normal),
+                                                                              linkStyle: TextStyle(color: Colors.red, fontSize: textSize * 1.2, fontWeight: FontWeight.normal, decoration: TextDecoration.underline),
                                                                             ),
                                                                           ),
                                                                         ),
@@ -433,15 +436,17 @@ class _SpaceViewState extends State<SpaceView> {
                                                                                         if (state.getCommentsStatus is DataRetrieving) ...[
                                                                                           const SizedBox(width: 100, height: 100, child: Center(child: CircularProgressIndicator()))
                                                                                         ] else if (state.getCommentsStatus is RetrievalSuccess && state.selectedPost!.comments.isEmpty) ...[
-                                                                                          Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: const [
+                                                                                          Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
                                                                                             Padding(
-                                                                                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                                                                                              child: Text("No replies"),
-                                                                                            )
+                                                                                                padding: EdgeInsets.symmetric(vertical: 8.0),
+                                                                                                child: Text(
+                                                                                                  "No replies",
+                                                                                                  style: TextStyle(fontSize: textSize),
+                                                                                                ))
                                                                                           ])
                                                                                         ] else if (state.getCommentsStatus is RetrievalSuccess && state.selectedPost!.comments.isNotEmpty) ...[
                                                                                           ListView.builder(
-                                                                                              physics: ClampingScrollPhysics(),
+                                                                                              physics: const ClampingScrollPhysics(),
                                                                                               controller: _commentScrollController,
                                                                                               reverse: true,
                                                                                               shrinkWrap: true,
@@ -453,18 +458,19 @@ class _SpaceViewState extends State<SpaceView> {
                                                                                                     child: ListTile(
                                                                                                       dense: true,
                                                                                                       leading: ConstrainedBox(
-                                                                                                        constraints: const BoxConstraints(maxHeight: 30, maxWidth: 30, minWidth: 30, minHeight: 30),
+                                                                                                        constraints: BoxConstraints(maxHeight: commentBoxConstraints, maxWidth: commentBoxConstraints, minWidth: commentBoxConstraints, minHeight: commentBoxConstraints),
                                                                                                         child: SvgPicture.string(FluttermojiFunctions().decodeFluttermojifromString(state.selectedPost!.comments[reversedIndex2].commentUser.profilePicString)),
                                                                                                       ),
                                                                                                       shape: const Border(top: BorderSide(width: 5)),
                                                                                                       selectedTileColor: Colors.grey,
                                                                                                       title: RichText(
                                                                                                           text: TextSpan(children: [
-                                                                                                        TextSpan(text: state.selectedPost!.comments[reversedIndex2].commentUser.displayName.toString(), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 25)),
+                                                                                                        TextSpan(text: state.selectedPost!.comments[reversedIndex2].commentUser.displayName.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: textSize * 1.2)),
                                                                                                         TextSpan(text: "  ${state.selectedPost!.comments[reversedIndex2].commentedTime.month.toString()}/${state.selectedPost!.comments[reversedIndex2].commentedTime.day.toString()}/${state.selectedPost!.comments[reversedIndex2].commentedTime.year.toString()} ${state.selectedPost!.comments[reversedIndex2].commentedTime.hour.toString()}:${state.selectedPost!.comments[reversedIndex2].commentedTime.minute.toString()}", style: const TextStyle(color: Colors.grey))
                                                                                                       ])),
-                                                                                                      subtitle: Text(state.selectedPost!.comments[reversedIndex2].contents, style: const TextStyle(fontSize: 20)),
+                                                                                                      subtitle: Text(state.selectedPost!.comments[reversedIndex2].contents, style: TextStyle(fontSize: textSize)),
                                                                                                       trailing: PopupMenuButton(
+                                                                                                        iconSize: textSize * 1.5,
                                                                                                         onSelected: ((value) {
                                                                                                           if (value == '/edit') {
                                                                                                             showDialog(
@@ -616,6 +622,13 @@ class _SpaceViewState extends State<SpaceView> {
 
   Widget _messageField() {
     return BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
+      final Size screenSize = MediaQuery.of(context).size;
+      final double imageWidth = screenSize.width * 0.7;
+      final double imageHeight = screenSize.height * 0.4;
+      final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+      final double textSize = screenSize.width <= 500 ? 12 : 20;
+      final double postBoxConstraints = screenSize.width <= 500 ? 30 : 50;
+      final double commentBoxConstraints = screenSize.width <= 500 ? 20 : 30;
       return Flexible(
         child: Container(
             width: double.infinity,
@@ -625,12 +638,13 @@ class _SpaceViewState extends State<SpaceView> {
             ),
             child: TextFormField(
               controller: _postController,
-              style: const TextStyle(color: Colors.black, fontSize: 18),
+              style: TextStyle(color: Colors.black, fontSize: textSize * 0.9),
               decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5)),
                   hintText: 'Message ${widget.currentSpace.spaceName}',
-                  hintStyle: const TextStyle(color: Colors.grey, fontSize: 18)),
+                  hintStyle:
+                      TextStyle(color: Colors.grey, fontSize: textSize * 0.9)),
               onChanged: (value) => context
                   .read<SpaceBloc>()
                   .add(PostMessageChanged(message: value)),
@@ -657,6 +671,13 @@ class _SpaceViewState extends State<SpaceView> {
 
   Widget _createPostButton(GlobalKey<FormState> key) {
     return BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
+      final Size screenSize = MediaQuery.of(context).size;
+      final double imageWidth = screenSize.width * 0.7;
+      final double imageHeight = screenSize.height * 0.4;
+      final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+      final double textSize = screenSize.width <= 500 ? 12 : 20;
+      final double postBoxConstraints = screenSize.width <= 500 ? 30 : 50;
+      final double commentBoxConstraints = screenSize.width <= 500 ? 20 : 30;
       return state.postFormStatus is FormSubmitting
           ? const CircularProgressIndicator()
           : ElevatedButton(
@@ -677,8 +698,9 @@ class _SpaceViewState extends State<SpaceView> {
                   side: const BorderSide(color: Colors.black, width: 0.5),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5))),
-              child: const Text('Post',
-                  style: TextStyle(color: Colors.black, fontSize: 13)));
+              child: Text('Post',
+                  style: TextStyle(
+                      color: Colors.black, fontSize: textSize * 0.7)));
     });
   }
 
@@ -714,6 +736,13 @@ class _SpaceViewState extends State<SpaceView> {
 
   Widget _commentField() {
     return BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
+      final Size screenSize = MediaQuery.of(context).size;
+      final double imageWidth = screenSize.width * 0.7;
+      final double imageHeight = screenSize.height * 0.4;
+      final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+      final double textSize = screenSize.width <= 500 ? 12 : 20;
+      final double postBoxConstraints = screenSize.width <= 500 ? 30 : 50;
+      final double commentBoxConstraints = screenSize.width <= 500 ? 20 : 30;
       return Flexible(
           child: Container(
               width: double.infinity,
@@ -723,13 +752,13 @@ class _SpaceViewState extends State<SpaceView> {
               ),
               child: TextFormField(
                 controller: _commentController,
-                style: const TextStyle(color: Colors.black, fontSize: 18),
+                style: TextStyle(color: Colors.black, fontSize: textSize * 0.9),
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5)),
                     hintText: 'Reply',
-                    hintStyle:
-                        const TextStyle(color: Colors.grey, fontSize: 18)),
+                    hintStyle: TextStyle(
+                        color: Colors.grey, fontSize: textSize * 0.9)),
                 onChanged: (value) => context
                     .read<SpaceBloc>()
                     .add(CommentMessageChanged(message: value)),
@@ -754,6 +783,13 @@ class _SpaceViewState extends State<SpaceView> {
 
   Widget _createCommentButton(GlobalKey<FormState> key) {
     return BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
+      final Size screenSize = MediaQuery.of(context).size;
+      final double imageWidth = screenSize.width * 0.7;
+      final double imageHeight = screenSize.height * 0.4;
+      final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+      final double textSize = screenSize.width <= 500 ? 12 : 20;
+      final double postBoxConstraints = screenSize.width <= 500 ? 30 : 50;
+      final double commentBoxConstraints = screenSize.width <= 500 ? 20 : 30;
       return state.commentFormStatus is FormSubmitting
           ? const CircularProgressIndicator()
           : ElevatedButton(
@@ -774,8 +810,9 @@ class _SpaceViewState extends State<SpaceView> {
                   side: const BorderSide(color: Colors.black, width: 0.5),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5))),
-              child: const Text('Reply',
-                  style: TextStyle(color: Colors.black, fontSize: 13)));
+              child: Text('Reply',
+                  style: TextStyle(
+                      color: Colors.black, fontSize: textSize * 0.7)));
     });
   }
 }

@@ -11,6 +11,8 @@ import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
 import '../../business_logic/auth/form_submission_status.dart';
 import '../../data/repositories/userData_repository.dart';
 
+final Color bgColor = const Color.fromARGB(255, 49, 49, 49);
+
 class LoginView extends StatelessWidget {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -138,7 +140,7 @@ class LoginView extends StatelessWidget {
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5)),
                     prefixIcon:
-                        Icon(Icons.email, color: Colors.black, size: textSize),
+                        Icon(Icons.email, color: bgColor, size: textSize),
                     hintText: 'Email',
                     hintStyle:
                         TextStyle(color: Colors.black, fontSize: textSize)),
@@ -184,7 +186,7 @@ class LoginView extends StatelessWidget {
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5)),
                     prefixIcon:
-                        Icon(Icons.lock, color: Colors.black, size: textSize),
+                        Icon(Icons.lock, color: bgColor, size: textSize),
                     hintText: 'Password',
                     hintStyle:
                         TextStyle(color: Colors.black, fontSize: textSize)),
