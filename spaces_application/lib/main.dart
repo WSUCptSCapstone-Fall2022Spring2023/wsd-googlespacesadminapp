@@ -8,6 +8,8 @@ import 'package:spaces_application/presentation/widgets/createStudentPopUpDialog
 
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_web/webview_flutter_web.dart';
 import 'data/repositories/space_repository.dart';
 
 Future<void> main() async {
@@ -22,6 +24,7 @@ Future<void> main() async {
           messagingSenderId: "743951780713",
           appId: "1:743951780713:web:a2b87f322356347591cbf8",
           measurementId: "G-BPCJ3X2NZ0"));
+  WebView.platform = WebWebViewPlatform();
   runApp(MyApp());
 }
 

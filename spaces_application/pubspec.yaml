@@ -49,8 +49,10 @@ dependencies:
   equatable: ^2.0.5
   fluttermoji: ^1.0.1
   profanity_filter: ^2.0.0
-  easy_web_view: ^1.6.0
   link_text: ^0.2.0
+  webview_flutter_web: ^0.1.0+1
+  webview_flutter: ^3.0.1
+  pointer_interceptor: ^0.9.3+4
 
 dev_dependencies:
   flutter_test:
