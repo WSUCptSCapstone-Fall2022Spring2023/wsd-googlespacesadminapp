@@ -53,7 +53,7 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                     width: double.infinity,
                     height: state.currentUser.isFaculty ||
                             state.currentUser.uid == widget.selectedUserData.uid
-                        ? ScreenHeight * 0.8
+                        ? ScreenHeight * 0.75
                         : ScreenHeight * 0.6,
                     padding: const EdgeInsets.all(20),
                     child: Column(
@@ -156,6 +156,7 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                                       color: Colors.black,
                                       fontWeight: FontWeight.normal,
                                       fontSize: 20))),
+                        const SizedBox(height: 10),
                         if (state.currentUser.isFaculty ||
                             state.currentUser.uid ==
                                 widget.selectedUserData.uid)
@@ -221,6 +222,7 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                               });
                             },
                           ),
+                        const SizedBox(height: 25),
                         if (state.currentUser.isFaculty)
                           Row(children: [
                             ElevatedButton(
@@ -312,13 +314,16 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                                                                     alignment:
                                                                         Alignment
                                                                             .bottomCenter,
-                                                                    child: Text(
-                                                                        "Are you sure you want to kick this user from the space?",
-                                                                        style: const TextStyle(
-                                                                            color:
-                                                                                Colors.black,
-                                                                            fontWeight: FontWeight.normal,
-                                                                            fontSize: 35))),
+                                                                    child: widget.selectedUserData.uid ==
+                                                                            state
+                                                                                .currentUser.uid
+                                                                        ? Text(
+                                                                            "Are you sure you want to leave this space?",
+                                                                            style: const TextStyle(
+                                                                                color: Colors.black,
+                                                                                fontWeight: FontWeight.normal,
+                                                                                fontSize: 35))
+                                                                        : Text("Are you sure you want to kick this user from the space?", style: const TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 35))),
                                                                 Padding(
                                                                   padding: const EdgeInsets
                                                                           .only(
@@ -339,7 +344,7 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                                                                         } else if (state.kickUserStatus
                                                                             is SubmissionFailed) {
                                                                           return Text(
-                                                                              "User could not be kicked. Please try again.");
+                                                                              "User could not be removed. Please try again.");
                                                                         } else {
                                                                           return ElevatedButton(
                                                                               onPressed: () {
@@ -347,7 +352,7 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                                                                                 Navigator.pop(context);
                                                                               },
                                                                               style: ElevatedButton.styleFrom(backgroundColor: Colors.red, side: const BorderSide(color: Colors.black, width: 0.5), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
-                                                                              child: const Text('Kick', style: TextStyle(color: Colors.white, fontSize: 18)));
+                                                                              child: widget.selectedUserData.uid == state.currentUser.uid ? const Text('Leave', style: TextStyle(color: Colors.white, fontSize: 18)) : const Text('Kick', style: TextStyle(color: Colors.white, fontSize: 18)));
                                                                         }
                                                                       },
                                                                     ),
@@ -364,9 +369,15 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(5))),
-                                child: const Text('Kick',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 18))),
+                                child: widget.selectedUserData.uid ==
+                                        state.currentUser.uid
+                                    ? const Text('Leave',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 18))
+                                    : const Text('Kick',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18))),
                           ])
                       ],
                     )),

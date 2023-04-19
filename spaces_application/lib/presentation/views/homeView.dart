@@ -37,6 +37,12 @@ class _HomeState extends State<HomeView> {
           currentUserData: widget.currentUserData,
         ),
       ),
+      endDrawer: SettingsDrawer(currentUserData: widget.currentUserData),
+      onEndDrawerChanged: ((isOpened) {
+        setState(() {
+          isDrawerOpen = !isDrawerOpen;
+        });
+      }),
       onDrawerChanged: (isOpened) {
         setState(() {
           isDrawerOpen = !isDrawerOpen;
@@ -49,6 +55,12 @@ class _HomeState extends State<HomeView> {
         title: const Text("Home Page", style: TextStyle(color: Colors.white)),
         iconTheme: const IconThemeData(color: Colors.white, size: 30),
         backgroundColor: bgColor,
+        actions: [
+          Builder(
+              builder: (context) => IconButton(
+                  onPressed: () => Scaffold.of(context).openEndDrawer(),
+                  icon: const Icon(Icons.settings)))
+        ],
       ),
       body: Stack(
         children: [

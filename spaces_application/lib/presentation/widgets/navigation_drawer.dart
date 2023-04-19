@@ -73,15 +73,24 @@ class MyNavigationDrawer extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 15),
-                  Text(currentUserData.displayName,
+                  RichText(
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 10),
+                      text: TextSpan(
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
+                          children: <TextSpan>[
+                            TextSpan(text: currentUserData.displayName),
+                            if (currentUserData.isFaculty)
+                              TextSpan(
+                                  text: " [A]",
+                                  style: TextStyle(color: Colors.red))
+                          ])),
+                  const SizedBox(height: 7),
                   Text(currentUserData.email,
                       textAlign: TextAlign.center,
-                      style:
-                          const TextStyle(color: Colors.black, fontSize: 18)),
+                      style: const TextStyle(color: Colors.black)),
                   const SizedBox(height: 15),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
@@ -243,7 +252,7 @@ class MyNavigationDrawer extends StatelessWidget {
                       children: <Widget>[
                         const SizedBox(height: 10),
                         ListTile(
-                            leading: Icon(Icons.person_outline, color: bgColor),
+                            leading: Icon(Icons.person, color: bgColor),
                             title: const Text('Create Student Profile',
                                 style: TextStyle(
                                     color: Colors.black,
@@ -283,50 +292,50 @@ class MyNavigationDrawer extends StatelessWidget {
                             }),
                       ],
                     ),
-                  const SizedBox(height: 10),
-                  ListTile(
-                      leading:
-                          Icon(Icons.help_outline, color: bgColor, size: 34),
-                      title: const Text('Help',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 22)),
-                      onTap: () {
-                        showDialog(
-                            barrierDismissible: true,
-                            context: context,
-                            builder: (context) {
-                              return HelpPopUpDialog();
-                            });
-                      }),
-                  const SizedBox(height: 10),
-                  ListTile(
-                      leading: Icon(Icons.settings, color: bgColor, size: 34),
-                      title: const Text('Settings',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 22)),
-                      onTap: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: ((context) => SettingsView(
-                                currentUserData: currentUserData))));
-                      }),
-                  const SizedBox(height: 10),
-                  ListTile(
-                      leading: Icon(Icons.logout, color: bgColor, size: 34),
-                      title: const Text('Logout',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 22)),
-                      // onTap: () => {Navigator.of(context).pop()}
-                      onTap: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => LoginView(),
-                        ));
-                      }),
+                  // const SizedBox(height: 10),
+                  // ListTile(
+                  //     leading:
+                  //         Icon(Icons.help_outline, color: bgColor, size: 34),
+                  //     title: const Text('Help',
+                  //         style: TextStyle(
+                  //             color: Colors.black,
+                  //             fontWeight: FontWeight.normal,
+                  //             fontSize: 22)),
+                  //     onTap: () {
+                  //       showDialog(
+                  //           barrierDismissible: true,
+                  //           context: context,
+                  //           builder: (context) {
+                  //             return HelpPopUpDialog();
+                  //           });
+                  //     }),
+                  // const SizedBox(height: 10),
+                  // ListTile(
+                  //     leading: Icon(Icons.settings, color: bgColor, size: 34),
+                  //     title: const Text('Settings',
+                  //         style: TextStyle(
+                  //             color: Colors.black,
+                  //             fontWeight: FontWeight.normal,
+                  //             fontSize: 22)),
+                  //     onTap: () {
+                  //       Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  //           builder: ((context) => SettingsView(
+                  //               currentUserData: currentUserData))));
+                  //     }),
+                  // const SizedBox(height: 10),
+                  // ListTile(
+                  //     leading: Icon(Icons.logout, color: bgColor, size: 34),
+                  //     title: const Text('Logout',
+                  //         style: TextStyle(
+                  //             color: Colors.black,
+                  //             fontWeight: FontWeight.normal,
+                  //             fontSize: 22)),
+                  //     // onTap: () => {Navigator.of(context).pop()}
+                  //     onTap: () {
+                  //       Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  //         builder: (context) => LoginView(),
+                  //       ));
+                  //     }),
                 ]),
           )),
     );

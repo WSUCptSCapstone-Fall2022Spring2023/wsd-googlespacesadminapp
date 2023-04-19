@@ -17,6 +17,7 @@ import 'package:spaces_application/presentation/widgets/navigation_drawer.dart';
 import 'package:spaces_application/presentation/widgets/settingsDrawer.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:link_text/link_text.dart';
 
 import '../../business_logic/auth/form_submission_status.dart';
@@ -208,6 +209,20 @@ class _SpaceViewState extends State<SpaceView> {
                                                 text: TextSpan(
                                                     style: const TextStyle(),
                                                     children: [
+                                                  if (state
+                                                      .currentSpace
+                                                      .spacePosts[reversedIndex]
+                                                      .postUser
+                                                      .isFaculty)
+                                                    TextSpan(
+                                                        text: "[A] ",
+                                                        style: TextStyle(
+                                                            color: Colors.red,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontSize: textSize *
+                                                                1.2)),
                                                   TextSpan(
                                                       text: state
                                                           .currentSpace
@@ -224,7 +239,7 @@ class _SpaceViewState extends State<SpaceView> {
                                                               textSize * 1.2)),
                                                   TextSpan(
                                                       text:
-                                                          "  ${state.currentSpace.spacePosts[reversedIndex].postedTime.month.toString()}/${state.currentSpace.spacePosts[reversedIndex].postedTime.day.toString()}/${state.currentSpace.spacePosts[reversedIndex].postedTime.year.toString()} ${state.currentSpace.spacePosts[reversedIndex].postedTime.hour.toString()}:${state.currentSpace.spacePosts[reversedIndex].postedTime.minute.toString()}",
+                                                          "  ${DateFormat('MM-dd-yyyy hh:mm a').format(state.currentSpace.spacePosts[reversedIndex].postedTime)}",
                                                       style: TextStyle(
                                                           color: Colors.grey,
                                                           fontSize: textSize)),
@@ -386,7 +401,7 @@ class _SpaceViewState extends State<SpaceView> {
                                                                                   children: [
                                                                                     Text(state.currentSpace.spacePosts[reversedIndex].postUser.displayName.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: textSize * 1.2)),
                                                                                     Text(
-                                                                                      "${state.currentSpace.spacePosts[reversedIndex].postedTime.month.toString()}/${state.currentSpace.spacePosts[reversedIndex].postedTime.day.toString()}/${state.currentSpace.spacePosts[reversedIndex].postedTime.year.toString()} ${state.currentSpace.spacePosts[reversedIndex].postedTime.hour.toString()}:${state.currentSpace.spacePosts[reversedIndex].postedTime.minute.toString()}",
+                                                                                      "  ${DateFormat('MM-dd-yyyy hh:mm a').format(state.currentSpace.spacePosts[reversedIndex].postedTime)}",
                                                                                       style: TextStyle(color: Colors.grey, fontWeight: FontWeight.normal, fontSize: textSize),
                                                                                       textAlign: TextAlign.left,
                                                                                     )
@@ -466,7 +481,7 @@ class _SpaceViewState extends State<SpaceView> {
                                                                                                       title: RichText(
                                                                                                           text: TextSpan(children: [
                                                                                                         TextSpan(text: state.selectedPost!.comments[reversedIndex2].commentUser.displayName.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: textSize * 1.2)),
-                                                                                                        TextSpan(text: "  ${state.selectedPost!.comments[reversedIndex2].commentedTime.month.toString()}/${state.selectedPost!.comments[reversedIndex2].commentedTime.day.toString()}/${state.selectedPost!.comments[reversedIndex2].commentedTime.year.toString()} ${state.selectedPost!.comments[reversedIndex2].commentedTime.hour.toString()}:${state.selectedPost!.comments[reversedIndex2].commentedTime.minute.toString()}", style: const TextStyle(color: Colors.grey))
+                                                                                                        TextSpan(text: "  ${DateFormat('MM-dd-yyyy hh:mm a').format(state.selectedPost!.comments[reversedIndex2].commentedTime)}", style: const TextStyle(color: Colors.grey))
                                                                                                       ])),
                                                                                                       subtitle: Text(state.selectedPost!.comments[reversedIndex2].contents, style: TextStyle(fontSize: textSize)),
                                                                                                       trailing: PopupMenuButton(
@@ -694,13 +709,13 @@ class _SpaceViewState extends State<SpaceView> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
+                  backgroundColor: Colors.red,
                   side: const BorderSide(color: Colors.black, width: 0.5),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5))),
               child: Text('Post',
                   style: TextStyle(
-                      color: Colors.black, fontSize: textSize * 0.7)));
+                      color: Colors.white, fontSize: textSize * 0.7)));
     });
   }
 
@@ -806,13 +821,13 @@ class _SpaceViewState extends State<SpaceView> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
+                  backgroundColor: Colors.red,
                   side: const BorderSide(color: Colors.black, width: 0.5),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5))),
               child: Text('Reply',
                   style: TextStyle(
-                      color: Colors.black, fontSize: textSize * 0.7)));
+                      color: Colors.white, fontSize: textSize * 0.7)));
     });
   }
 }

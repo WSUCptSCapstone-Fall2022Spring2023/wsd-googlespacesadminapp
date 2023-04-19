@@ -18,10 +18,13 @@ import '../../business_logic/space/space_state.dart';
 
 import '../../data/repositories/userData_repository.dart';
 import '../views/edit_profileView.dart';
+import '../views/loginView.dart';
 import '../views/spaceView.dart';
 import 'dart:math';
 
 import 'package:path/path.dart';
+
+import 'helpPopUpDialog.dart';
 
 class SettingsDrawer extends StatefulWidget {
   SettingsDrawer({required this.currentUserData, this.currentSpace});
@@ -40,11 +43,11 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
   final Color phthaloBlue = const Color.fromARGB(255, 22, 12, 113);
   final Color lightPink = const Color.fromARGB(255, 243, 171, 174);
   final Color offWhite = Color.fromARGB(220, 255, 255, 255);
-
   final Color bgColor = Color.fromARGB(255, 49, 49, 49);
 
   @override
   Widget build(BuildContext context) {
+    widget.currentSpace ??= SpaceData("null", "null", "null", true);
     final List spacesJoined = widget.currentUserData.spacesJoined;
     var ScreenHeight = MediaQuery.of(context).size.height;
     var ScreenWidth = MediaQuery.of(context).size.width;
@@ -65,168 +68,223 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text("Space Menu",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.normal,
-                    fontSize: textSize * 2.2)),
-            const SizedBox(height: 15),
-            // if (currentSpace.isPrivate)
-            // if (currentSpace_isPrivate)
-            // ListTile(
-            //     leading: const Icon(Icons.lock_open_outlined,
-            //         color: Colors.black, size: 34),
-            //     title: const Text("Make Space not private.",
-            //         style: TextStyle(
-            //             color: Colors.black,
-            //             fontWeight: FontWeight.normal,
-            //             fontSize: 22)),
-            //     onTap: () {
-            //       // currentSpace.isPrivate = false;
-            //       currentSpace_isPrivate = true;
-            //     }),
-            // if (!currentSpace.isPrivate)
-            // if (!currentSpace_isPrivate)
-            ListTile(
-              leading:
-                  Icon(Icons.lock, color: Colors.black, size: textSize * 2),
-              title: Text("Private",
+            if (widget.currentSpace!.sid != "null") ...[
+              Text("Space Settings",
+                  textAlign: TextAlign.left,
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.normal,
-                      fontSize: textSize * 1.8)),
-              trailing: Switch(
-                value: widget.currentSpace!.isPrivate,
-                onChanged: (value) {
-                  context.read<SpaceBloc>().add(ChangePrivacy());
-                  setState(() {
-                    isPrivate = value;
-                  });
-                },
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.supervised_user_circle,
-                  color: bgColor, size: textSize * 2),
-              title: Text("Invite User",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.normal,
-                      fontSize: textSize * 1.8)),
-              onTap: () {
-                showDialog(
-                  barrierDismissible: true,
-                  context: context,
-                  builder: (_) {
-                    return BlocProvider.value(
-                      value: BlocProvider.of<SpaceBloc>(context),
-                      child: CreateInviteUserPopUpDialog(),
-                    );
-                  },
-                );
-              },
-            ),
-            ExpansionTile(
-              leading:
-                  Icon(Icons.person_search, color: bgColor, size: textSize * 2),
-              title: Text('Space Users',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.normal,
-                      fontSize: textSize * 1.8)),
-              children: [
-                BlocBuilder<SpaceBloc, SpaceState>(
-                  builder: (context, state) {
-                    if (state.getUsersStatus is InitialRetrievalStatus) {
-                      context.read<SpaceBloc>().add(GetSpaceUsers());
-                      return const SizedBox.shrink();
-                    } else if (state.getUsersStatus is DataRetrieving) {
-                      return SizedBox(
-                          width: textSize * 5,
-                          height: textSize * 5,
-                          child:
-                              const Center(child: CircularProgressIndicator()));
-                    } else if (state.getUsersStatus is RetrievalSuccess) {
-                      userList = state.spaceUsers;
-                      return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: userList.length,
-                          itemBuilder: ((context, index) {
-                            return ListTile(
-                              leading: CircleAvatar(
-                                radius: textSize * 1.4,
-                                backgroundColor: Colors.grey[200],
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(
-                                      150,
-                                    ),
-                                  ),
-                                  child: SvgPicture.string(
-                                    FluttermojiFunctions()
-                                        .decodeFluttermojifromString(
-                                            userList[index].profilePicString),
-                                    height: 150,
-                                    width: 150,
-                                  ),
-                                ),
-                              ),
-                              title: Text(userList[index].displayName,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: textSize * 1.4)),
-                              onTap: () {
-                                showDialog(
-                                    barrierDismissible: true,
-                                    context: context,
-                                    builder: ((_) {
-                                      return BlocProvider.value(
-                                        value:
-                                            BlocProvider.of<SpaceBloc>(context),
-                                        child: ViewProfileDialog(
-                                            selectedUserData: userList[index]),
-                                      );
-                                    }));
-                              },
-                            );
-                          }));
-                    } else if (state.getUsersStatus is RetrievalFailed) {
-                      return const Center(
-                          child: Text(
-                              "Error with Data Retrieval. Please Refresh."));
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                )
-              ],
-            ),
-            if (widget.currentUserData.isFaculty)
+                      fontSize: textSize * 2.2)),
+              const SizedBox(height: 15),
+              // if (currentSpace.isPrivate)
+              // if (currentSpace_isPrivate)
+              // ListTile(
+              //     leading: const Icon(Icons.lock_open_outlined,
+              //         color: Colors.black, size: 34),
+              //     title: const Text("Make Space not private.",
+              //         style: TextStyle(
+              //             color: Colors.black,
+              //             fontWeight: FontWeight.normal,
+              //             fontSize: 22)),
+              //     onTap: () {
+              //       // currentSpace.isPrivate = false;
+              //       currentSpace_isPrivate = true;
+              //     }),
+              // if (!currentSpace.isPrivate)
+              // if (!currentSpace_isPrivate)
               ListTile(
-                leading: Icon(Icons.delete_forever,
+                leading:
+                    Icon(Icons.lock, color: Colors.black, size: textSize * 2),
+                title: Text("Private",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
+                        fontSize: textSize * 1.8)),
+                trailing: Switch(
+                  value: widget.currentSpace!.isPrivate,
+                  onChanged: (value) {
+                    context.read<SpaceBloc>().add(ChangePrivacy());
+                    setState(() {
+                      isPrivate = value;
+                    });
+                  },
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.supervised_user_circle,
                     color: bgColor, size: textSize * 2),
-                title: Text("Delete Space",
+                title: Text("Invite User",
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.normal,
                         fontSize: textSize * 1.8)),
                 onTap: () {
                   showDialog(
-                      barrierDismissible: false,
-                      barrierColor: Colors.red,
-                      context: context,
-                      builder: ((_) {
-                        return BlocProvider.value(
-                          value: BlocProvider.of<SpaceBloc>(context),
-                          child: DeleteSpacePopupDialog(
-                              currentSpace: widget.currentSpace,
-                              currentUserData: widget.currentUserData),
-                        );
-                      }));
+                    barrierDismissible: true,
+                    context: context,
+                    builder: (_) {
+                      return BlocProvider.value(
+                        value: BlocProvider.of<SpaceBloc>(context),
+                        child: CreateInviteUserPopUpDialog(),
+                      );
+                    },
+                  );
                 },
               ),
+              ExpansionTile(
+                leading: Icon(Icons.person_search,
+                    color: bgColor, size: textSize * 2),
+                title: Text('Space Users',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
+                        fontSize: textSize * 1.8)),
+                children: [
+                  BlocBuilder<SpaceBloc, SpaceState>(
+                    builder: (context, state) {
+                      if (state.getUsersStatus is InitialRetrievalStatus) {
+                        context.read<SpaceBloc>().add(GetSpaceUsers());
+                        return const SizedBox.shrink();
+                      } else if (state.getUsersStatus is DataRetrieving) {
+                        return SizedBox(
+                            width: textSize * 5,
+                            height: textSize * 5,
+                            child: const Center(
+                                child: CircularProgressIndicator()));
+                      } else if (state.getUsersStatus is RetrievalSuccess) {
+                        userList = state.spaceUsers;
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: userList.length,
+                            itemBuilder: ((context, index) {
+                              return ListTile(
+                                leading: CircleAvatar(
+                                  radius: textSize * 1.4,
+                                  backgroundColor: Colors.grey[200],
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(
+                                        150,
+                                      ),
+                                    ),
+                                    child: SvgPicture.string(
+                                      FluttermojiFunctions()
+                                          .decodeFluttermojifromString(
+                                              userList[index].profilePicString),
+                                      height: 150,
+                                      width: 150,
+                                    ),
+                                  ),
+                                ),
+                                title: RichText(
+                                    text: TextSpan(
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: textSize * 1.4),
+                                        children: [
+                                      if (userList[index].isFaculty)
+                                        TextSpan(
+                                            text: "[A] ",
+                                            style:
+                                                TextStyle(color: Colors.red)),
+                                      TextSpan(
+                                          text: userList[index].displayName)
+                                    ])),
+                                onTap: () {
+                                  showDialog(
+                                      barrierDismissible: true,
+                                      context: context,
+                                      builder: ((_) {
+                                        return BlocProvider.value(
+                                          value: BlocProvider.of<SpaceBloc>(
+                                              context),
+                                          child: ViewProfileDialog(
+                                              selectedUserData:
+                                                  userList[index]),
+                                        );
+                                      }));
+                                },
+                              );
+                            }));
+                      } else if (state.getUsersStatus is RetrievalFailed) {
+                        return const Center(
+                            child: Text(
+                                "Error with Data Retrieval. Please Refresh."));
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    },
+                  )
+                ],
+              ),
+              if (widget.currentUserData.isFaculty)
+                ListTile(
+                  leading: Icon(Icons.delete_forever,
+                      color: bgColor, size: textSize * 2),
+                  title: Text("Delete Space",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.normal,
+                          fontSize: textSize * 1.8)),
+                  onTap: () {
+                    showDialog(
+                        barrierDismissible: false,
+                        barrierColor: Colors.red,
+                        context: context,
+                        builder: ((_) {
+                          return BlocProvider.value(
+                            value: BlocProvider.of<SpaceBloc>(context),
+                            child: DeleteSpacePopupDialog(
+                                currentSpace: widget.currentSpace,
+                                currentUserData: widget.currentUserData),
+                          );
+                        }));
+                  },
+                ),
+              const SizedBox(height: 15),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Divider(height: 0),
+              ),
+              const SizedBox(height: 20),
+            ],
+            Text("Personal Settings",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.normal,
+                    fontSize: textSize * 2.2)),
+            const SizedBox(height: 10),
+            ListTile(
+                leading: Icon(Icons.help, color: bgColor, size: textSize * 2),
+                title: Text('Help',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
+                        fontSize: textSize * 1.8)),
+                onTap: () {
+                  showDialog(
+                      barrierDismissible: true,
+                      context: context,
+                      builder: (context) {
+                        return HelpPopUpDialog();
+                      });
+                }),
+            ListTile(
+                leading: Icon(Icons.logout_rounded,
+                    color: bgColor, size: textSize * 2),
+                title: Text('Logout',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
+                        fontSize: textSize * 1.8)),
+                // onTap: () => {Navigator.of(context).pop()}
+                onTap: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => LoginView(),
+                  ));
+                }),
           ],
         ),
       ),
