@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:spaces_application/data/models/permissionData.dart';
 import 'package:spaces_application/data/models/spaceData.dart';
 import 'package:spaces_application/data/models/userData.dart';
 import 'package:spaces_application/data/repositories/userData_repository.dart';
@@ -57,19 +58,31 @@ class SpaceRepository {
 
   Future<void> createPost(String message, String userID, String spaceID,
       DateTime currentTime) async {
-    final timeStr = currentTime.toString().replaceAll('.', ':');
-    await ref
-        .child("Posts/")
-        .child(spaceID)
-        .child(timeStr)
-        .set({"userID": userID, "contents": message, "isEdited": false});
+    final permissions = await getPermissions(userID, spaceID);
+    if (permissions.canPost) {
+      final timeStr = currentTime.toString().replaceAll('.', ':');
+      await ref
+          .child("Posts/")
+          .child(spaceID)
+          .child(timeStr)
+          .set({"userID": userID, "contents": message, "isEdited": false});
+    } else {
+      throw Exception(
+          "You do not have permission to do that. Please contact a Space Administrator.");
+    }
   }
 
-  Future<void> deletePost(
-      DateTime postTime, String spaceID, String postAuthorID) async {
-    final timeStr = postTime.toString().replaceAll('.', ':');
-    await ref.child("Posts/").child(spaceID).child(timeStr).remove();
-    await ref.child("Comments/").child(postAuthorID).child(timeStr).remove();
+  Future<void> deletePost(String userID, DateTime postTime, String spaceID,
+      String postAuthorID) async {
+    final permissions = await getPermissions(userID, spaceID);
+    if (permissions.canRemove || userID == postAuthorID) {
+      final timeStr = postTime.toString().replaceAll('.', ':');
+      await ref.child("Posts/").child(spaceID).child(timeStr).remove();
+      await ref.child("Comments/").child(postAuthorID).child(timeStr).remove();
+    } else {
+      throw Exception(
+          "You do not have permission to do that. Please contact a Space Administrator.");
+    }
   }
 
   // returns a list of spaces searched for by spacesJoined field in UserData
@@ -286,6 +299,17 @@ class SpaceRepository {
     });
   }
 
+  Future<PermissionData> getPermissions(String userID, String spaceID) async {
+    final snapshot = await ref
+        .child("UserData/")
+        .child(userID)
+        .child("spacesPermissions/")
+        .child(spaceID)
+        .get();
+    PermissionData permissions = PermissionData.fromUser(snapshot);
+    return permissions;
+  }
+
   Future<void> removeUserFromSpace(String spaceID, String userID) async {
     await ref
         .child("UserData/")
@@ -309,19 +333,25 @@ class SpaceRepository {
       String spaceID,
       DateTime postDate,
       DateTime currentTime) async {
-    final timeStr = currentTime.toString().replaceAll('.', ':');
-    final postDateStr = postDate.toString().replaceAll('.', ':');
-    await ref
-        .child("Comments/")
-        .child(postAuthorID)
-        .child(postDateStr)
-        .child(timeStr)
-        .set({
-      "spaceID": spaceID,
-      "contents": message,
-      "commenter": commenterID,
-      "isEdited": false
-    });
+    final permissions = await getPermissions(commenterID, spaceID);
+    if (permissions.canComment) {
+      final timeStr = currentTime.toString().replaceAll('.', ':');
+      final postDateStr = postDate.toString().replaceAll('.', ':');
+      await ref
+          .child("Comments/")
+          .child(postAuthorID)
+          .child(postDateStr)
+          .child(timeStr)
+          .set({
+        "spaceID": spaceID,
+        "contents": message,
+        "commenter": commenterID,
+        "isEdited": false
+      });
+    } else {
+      throw Exception(
+          "You do not have permission to do that. Please contact a Space Administrator.");
+    }
   }
 
   Future<CommentData> getComment(DataSnapshot snapshot) async {
@@ -354,31 +384,75 @@ class SpaceRepository {
     return spaceRef;
   }
 
-  Future<void> editPost(
-      DateTime postedDate, String newContents, String spaceID) async {
+  Future<void> editPost(String userID, DateTime postedDate, String newContents,
+      String spaceID) async {
+    final permissions = await getPermissions(userID, spaceID);
     final postTimeStr = postedDate.toString().replaceAll('.', ':');
-    await ref
+    final posterID = await ref
         .child("Posts/")
         .child(spaceID)
         .child(postTimeStr)
-        .update({'contents': newContents, 'isEdited': true});
+        .child("userID")
+        .get();
+    if (permissions.canEdit || posterID.value == userID) {
+      await ref
+          .child("Posts/")
+          .child(spaceID)
+          .child(postTimeStr)
+          .update({'contents': newContents, 'isEdited': true});
+    } else {
+      throw Exception(
+          "You do not have permission to do that. Please contact a Space Administrator.");
+    }
   }
 
-  Future<void> editComment(DateTime commentDate, DateTime postDate,
-      String newContents, String posterID) async {
+  Future<void> editComment(String userID, String spaceID, DateTime commentDate,
+      DateTime postDate, String newContents, String posterID) async {
+    final permissions = await getPermissions(userID, spaceID);
     final postTimeStr = postDate.toString().replaceAll('.', ':');
     final commentTimeStr = commentDate.toString().replaceAll('.', ':');
-    await ref
+    final commenterID = await ref
         .child("Comments/")
         .child(posterID)
         .child(postTimeStr)
         .child(commentTimeStr)
-        .update({"contents": newContents});
+        .child("commenter")
+        .get();
+    if (permissions.canEdit || commenterID.value == userID) {
+      await ref
+          .child("Comments/")
+          .child(posterID)
+          .child(postTimeStr)
+          .child(commentTimeStr)
+          .update({"contents": newContents});
+    } else {
+      throw Exception(
+          "You do not have permission to do that. Please contact a Space Administrator.");
+    }
   }
 
-  Future<void> deleteComment(
-      DateTime commentDate, DateTime postDate, String posterID) async {
+  Future<void> deleteComment(String userID, spaceID, DateTime commentDate,
+      DateTime postDate, String posterID) async {
+    final permissions = await getPermissions(userID, spaceID);
     final postTimeStr = postDate.toString().replaceAll('.', ':');
-    await ref.child("Comments/").child(posterID).child(postTimeStr).remove();
+    final commentTimeStr = commentDate.toString().replaceAll('.', ':');
+    final commenterID = await ref
+        .child("Comments/")
+        .child(posterID)
+        .child(postTimeStr)
+        .child(commentTimeStr)
+        .child("commenter")
+        .get();
+    if (permissions.canRemove || commenterID.value == userID) {
+      await ref
+          .child("Comments/")
+          .child(posterID)
+          .child(postTimeStr)
+          .child(commentTimeStr)
+          .remove();
+    } else {
+      throw Exception(
+          "You do not have permission to do that. Please contact a Space Administrator.");
+    }
   }
 }

@@ -112,6 +112,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     emit(state.copyWith(getPostsStatus: DataRetrieving()));
     try {
       final posts = await spaceRepo.getSpacePosts(state.currentSpace.sid);
+      final permissions = await spaceRepo.getPermissions(
+          state.currentUser.uid, state.currentSpace.sid);
       // final DatabaseReference spaceRef =
       //     await spaceRepo.getSpaceReference(state.currentSpace.sid);
       // spaceRef.onChildAdded.listen((event) {
@@ -123,9 +125,10 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       // });
       final replaceSpace = state.currentSpace;
       replaceSpace.spacePosts = posts;
-
       emit(state.copyWith(
-          currentSpace: replaceSpace, getPostsStatus: RetrievalSuccess()));
+          currentSpace: replaceSpace,
+          getPostsStatus: RetrievalSuccess(),
+          permissions: permissions));
     } catch (e) {
       emit(state.copyWith(getPostsStatus: RetrievalFailed(Exception(e))));
     }
@@ -212,7 +215,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       Emitter<SpaceState> emit, PostData selectedPost) async {
     emit(state.copyWith(deletePostStatus: DataRetrieving()));
     try {
-      await spaceRepo.deletePost(selectedPost.postedTime,
+      await spaceRepo.deletePost(state.currentUser.uid, selectedPost.postedTime,
           state.currentSpace.sid, selectedPost.postUser.uid);
       final replaceSpace = state.currentSpace;
       replaceSpace.spacePosts.removeWhere(
@@ -287,8 +290,12 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       Emitter<SpaceState> emit, CommentData selectedComment) async {
     emit(state.copyWith(deleteCommentFormStatus: FormSubmitting()));
     try {
-      await spaceRepo.deleteComment(selectedComment.commentedTime,
-          state.selectedPost!.postedTime, state.selectedPost!.postUser.uid);
+      await spaceRepo.deleteComment(
+          state.currentUser.uid,
+          state.currentSpace.sid,
+          selectedComment.commentedTime,
+          state.selectedPost!.postedTime,
+          state.selectedPost!.postUser.uid);
       final replaceSpace = state.currentSpace;
       final replacePost = state.selectedPost;
       replacePost!.comments.removeWhere(
@@ -320,8 +327,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       PostData selectedPost) async {
     emit(state.copyWith(editPostFormStatus: FormSubmitting()));
     try {
-      await spaceRepo.editPost(
-          selectedPost.postedTime, newContents, currentSpaceData.sid);
+      await spaceRepo.editPost(state.currentUser.uid, selectedPost.postedTime,
+          newContents, currentSpaceData.sid);
       final replaceSpace = state.currentSpace;
       final index = replaceSpace.spacePosts.indexWhere(
         (element) => element.postedTime == selectedPost.postedTime,
@@ -339,6 +346,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     emit(state.copyWith(editCommentFormStatus: FormSubmitting()));
     try {
       await spaceRepo.editComment(
+          state.currentUser.uid,
+          state.currentSpace.sid,
           selectedComment.commentedTime,
           state.selectedPost!.postedTime,
           newContents,
@@ -388,9 +397,11 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     emit(state.copyWith(kickUserStatus: FormSubmitting()));
     try {
       await spaceRepo.removeUserFromSpace(currentSpaceData.sid, uid);
+      UserData c = await userRepo.getCurrentUserData();
       emit(state.copyWith(
           getUsersStatus: InitialRetrievalStatus(),
-          kickUserStatus: SubmissionSuccess()));
+          kickUserStatus: SubmissionSuccess(),
+          currentUser: c));
     } catch (e) {
       emit(state.copyWith(kickUserStatus: SubmissionFailed(Exception(e))));
     }

@@ -92,43 +92,52 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
               //     }),
               // if (!currentSpace.isPrivate)
               // if (!currentSpace_isPrivate)
-              ListTile(
-                leading:
-                    Icon(Icons.lock, color: Colors.black, size: textSize * 2),
-                title: Text("Private",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                        fontSize: textSize * 1.8)),
-                trailing: Switch(
-                  value: widget.currentSpace!.isPrivate,
-                  onChanged: (value) {
-                    context.read<SpaceBloc>().add(ChangePrivacy());
-                    setState(() {
-                      isPrivate = value;
-                    });
-                  },
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.supervised_user_circle,
-                    color: bgColor, size: textSize * 2),
-                title: Text("Invite User",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                        fontSize: textSize * 1.8)),
-                onTap: () {
-                  showDialog(
-                    barrierDismissible: true,
-                    context: context,
-                    builder: (_) {
-                      return BlocProvider.value(
-                        value: BlocProvider.of<SpaceBloc>(context),
-                        child: CreateInviteUserPopUpDialog(),
-                      );
+              if (widget.currentUserData.isFaculty)
+                ListTile(
+                  leading:
+                      Icon(Icons.lock, color: Colors.black, size: textSize * 2),
+                  title: Text("Private",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.normal,
+                          fontSize: textSize * 1.8)),
+                  trailing: Switch(
+                    value: widget.currentSpace!.isPrivate,
+                    onChanged: (value) {
+                      context.read<SpaceBloc>().add(ChangePrivacy());
+                      setState(() {
+                        isPrivate = value;
+                      });
                     },
-                  );
+                  ),
+                ),
+              BlocBuilder<SpaceBloc, SpaceState>(
+                builder: (context, state) {
+                  if (state.permissions!.canInvite) {
+                    return ListTile(
+                      leading: Icon(Icons.supervised_user_circle,
+                          color: bgColor, size: textSize * 2),
+                      title: Text("Invite User",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal,
+                              fontSize: textSize * 1.8)),
+                      onTap: () {
+                        showDialog(
+                          barrierDismissible: true,
+                          context: context,
+                          builder: (_) {
+                            return BlocProvider.value(
+                              value: BlocProvider.of<SpaceBloc>(context),
+                              child: CreateInviteUserPopUpDialog(),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
                 },
               ),
               ExpansionTile(

@@ -13,6 +13,7 @@ import '../../business_logic/space/space_bloc.dart';
 import '../../business_logic/space/space_state.dart';
 import '../../data/models/spaceData.dart';
 import '../../data/models/userData.dart';
+import '../views/homeView.dart';
 
 class ViewProfileDialog extends StatefulWidget {
   final UserData selectedUserData;
@@ -37,7 +38,23 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
   Widget build(BuildContext context) {
     var ScreenHeight = MediaQuery.of(context).size.height;
     var ScreenWidth = MediaQuery.of(context).size.width;
-    return BlocBuilder<SpaceBloc, SpaceState>(
+    return BlocConsumer<SpaceBloc, SpaceState>(
+      listener: (context, state) {
+        final dataStatus = state.kickUserStatus;
+        if (dataStatus is SubmissionSuccess) {
+          if (widget.selectedUserData.uid == state.currentUser.uid) {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => HomeView(
+                currentUserData: state.currentUser,
+              ),
+            ));
+          } else {
+            Navigator.pop(context);
+          }
+        } else if (dataStatus is SubmissionFailed) {
+          MiscWidgets.showException(context, dataStatus.exception.toString());
+        }
+      },
       builder: (context, state) {
         final permission = widget.selectedUserData.spacesPermissions
             .firstWhere((element) => element.spaceID == state.currentSpace.sid);
@@ -223,8 +240,8 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                             },
                           ),
                         const SizedBox(height: 25),
-                        if (state.currentUser.isFaculty)
-                          Row(children: [
+                        Row(children: [
+                          if (state.currentUser.isFaculty)
                             ElevatedButton(
                                 onPressed: () {
                                   Navigator.pop(context);
@@ -239,7 +256,8 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                                 child: const Text('Cancel',
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 18))),
-                            const SizedBox(width: 10),
+                          const SizedBox(width: 10),
+                          if (state.currentUser.isFaculty)
                             ElevatedButton(
                                 onPressed: () {
                                   context.read<SpaceBloc>().add(
@@ -263,122 +281,131 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                                 child: const Text('Save',
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 18))),
-                            const SizedBox(width: 10),
-                            ElevatedButton(
-                                onPressed: () {
-                                  showDialog(
-                                      barrierDismissible: true,
-                                      context: context,
-                                      builder: ((_) {
-                                        return BlocProvider.value(
-                                            value: BlocProvider.of<SpaceBloc>(
-                                                context),
-                                            child: Dialog(
-                                                insetPadding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 250),
-                                                backgroundColor: Colors.white,
-                                                child: Stack(
-                                                    alignment: Alignment.center,
-                                                    children: <Widget>[
-                                                      Container(
-                                                          width:
-                                                              double.infinity,
-                                                          height: ScreenHeight *
-                                                              0.25,
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(20),
-                                                          child: Column(
-                                                              children: [
-                                                                Align(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .topRight,
-                                                                    child:
-                                                                        IconButton(
-                                                                      icon: const Icon(
-                                                                          Icons
-                                                                              .close,
+                          const SizedBox(width: 10),
+                          ElevatedButton(
+                              onPressed: () {
+                                showDialog(
+                                    barrierDismissible: true,
+                                    context: context,
+                                    builder: ((_) {
+                                      return BlocProvider.value(
+                                          value: BlocProvider.of<SpaceBloc>(
+                                              context),
+                                          child: Dialog(
+                                              insetPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 250),
+                                              backgroundColor: Colors.white,
+                                              child: Stack(
+                                                  alignment: Alignment.center,
+                                                  children: <Widget>[
+                                                    Container(
+                                                        width: double.infinity,
+                                                        height:
+                                                            ScreenHeight * 0.25,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(20),
+                                                        child:
+                                                            Column(children: [
+                                                          Align(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .topRight,
+                                                              child: IconButton(
+                                                                icon: const Icon(
+                                                                    Icons.close,
+                                                                    color: Colors
+                                                                        .black,
+                                                                    size: 25),
+                                                                onPressed: () {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                              )),
+                                                          Align(
+                                                              alignment: Alignment
+                                                                  .bottomCenter,
+                                                              child: widget
+                                                                          .selectedUserData
+                                                                          .uid ==
+                                                                      state
+                                                                          .currentUser
+                                                                          .uid
+                                                                  ? Text(
+                                                                      "Are you sure you want to leave this space?",
+                                                                      style: const TextStyle(
                                                                           color: Colors
                                                                               .black,
-                                                                          size:
-                                                                              25),
-                                                                      onPressed:
-                                                                          () {
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      },
-                                                                    )),
-                                                                Align(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .bottomCenter,
-                                                                    child: widget.selectedUserData.uid ==
-                                                                            state
-                                                                                .currentUser.uid
-                                                                        ? Text(
-                                                                            "Are you sure you want to leave this space?",
-                                                                            style: const TextStyle(
-                                                                                color: Colors.black,
-                                                                                fontWeight: FontWeight.normal,
-                                                                                fontSize: 35))
-                                                                        : Text("Are you sure you want to kick this user from the space?", style: const TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 35))),
-                                                                Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .only(
-                                                                      top: 20),
-                                                                  child: Align(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .topCenter,
-                                                                    child: BlocBuilder<
-                                                                        SpaceBloc,
-                                                                        SpaceState>(
-                                                                      builder:
-                                                                          (context,
-                                                                              state) {
-                                                                        if (state.kickUserStatus
-                                                                            is FormSubmitting) {
-                                                                          return CircularProgressIndicator();
-                                                                        } else if (state.kickUserStatus
-                                                                            is SubmissionFailed) {
-                                                                          return Text(
-                                                                              "User could not be removed. Please try again.");
-                                                                        } else {
-                                                                          return ElevatedButton(
-                                                                              onPressed: () {
-                                                                                context.read<SpaceBloc>().add(KickUser(uid: widget.selectedUserData.uid));
-                                                                                Navigator.pop(context);
-                                                                              },
-                                                                              style: ElevatedButton.styleFrom(backgroundColor: Colors.red, side: const BorderSide(color: Colors.black, width: 0.5), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
-                                                                              child: widget.selectedUserData.uid == state.currentUser.uid ? const Text('Leave', style: TextStyle(color: Colors.white, fontSize: 18)) : const Text('Kick', style: TextStyle(color: Colors.white, fontSize: 18)));
-                                                                        }
-                                                                      },
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ]))
-                                                    ])));
-                                      }));
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.red,
-                                    side: const BorderSide(
-                                        color: Colors.black, width: 0.5),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5))),
-                                child: widget.selectedUserData.uid ==
-                                        state.currentUser.uid
-                                    ? const Text('Leave',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 18))
-                                    : const Text('Kick',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18))),
-                          ])
+                                                                          fontWeight: FontWeight
+                                                                              .normal,
+                                                                          fontSize:
+                                                                              35))
+                                                                  : Text(
+                                                                      "Are you sure you want to kick this user from the space?",
+                                                                      style: const TextStyle(
+                                                                          color: Colors
+                                                                              .black,
+                                                                          fontWeight:
+                                                                              FontWeight.normal,
+                                                                          fontSize: 35))),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    top: 20),
+                                                            child: Align(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .topCenter,
+                                                              child: BlocBuilder<
+                                                                  SpaceBloc,
+                                                                  SpaceState>(
+                                                                builder:
+                                                                    (context,
+                                                                        state) {
+                                                                  if (state
+                                                                          .kickUserStatus
+                                                                      is FormSubmitting) {
+                                                                    return CircularProgressIndicator();
+                                                                  } else {
+                                                                    return ElevatedButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          context
+                                                                              .read<SpaceBloc>()
+                                                                              .add(KickUser(uid: widget.selectedUserData.uid));
+                                                                        },
+                                                                        style: ElevatedButton.styleFrom(
+                                                                            backgroundColor:
+                                                                                Colors.red,
+                                                                            side: const BorderSide(color: Colors.black, width: 0.5),
+                                                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+                                                                        child: widget.selectedUserData.uid == state.currentUser.uid ? const Text('Leave', style: TextStyle(color: Colors.white, fontSize: 18)) : const Text('Kick', style: TextStyle(color: Colors.white, fontSize: 18)));
+                                                                  }
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ]))
+                                                  ])));
+                                    }));
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  side: const BorderSide(
+                                      color: Colors.black, width: 0.5),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5))),
+                              child: widget.selectedUserData.uid ==
+                                      state.currentUser.uid
+                                  ? const Text('Leave',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 18))
+                                  : const Text('Kick',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 18))),
+                        ])
                       ],
                     )),
               ],
