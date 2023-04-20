@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttermoji/fluttermoji.dart';
 import 'package:profanity_filter/profanity_filter.dart';
 import 'package:spaces_application/business_logic/data_retrieval_status.dart';
+import 'package:spaces_application/data/models/postData.dart';
 import 'package:spaces_application/presentation/views/settingsView.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -78,6 +80,21 @@ class _SpaceViewState extends State<SpaceView> {
     }
   }
 
+  void getNewPosts(BuildContext context) {
+    Timer.periodic(
+      Duration(seconds: 3),
+      (timer) {
+        var state = _spaceBloc.state;
+        context.read<SpaceBloc>().add(GetNewPosts(
+            lastPostTime: state.currentSpace.spacePosts.last.postedTime));
+        // if (state.newPosts.isNotEmpty) {
+        //   state.copyWith(getNewPostsStatus: DataRetrieving());
+        //   state.newPosts.clear();
+        // }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     //_scrollController.addListener(_scrollListener);
@@ -90,7 +107,9 @@ class _SpaceViewState extends State<SpaceView> {
     final double postBoxConstraints = screenSize.width <= 500 ? 30 : 50;
     final double commentBoxConstraints = screenSize.width <= 500 ? 20 : 30;
     return BlocProvider<SpaceBloc>(
-        create: (context) => _spaceBloc,
+        create: (context) {
+          return _spaceBloc;
+        },
         child:
             BlocBuilder<SpaceBloc, SpaceState>(buildWhen: (previous, current) {
           if (ModalRoute.of(context)?.isCurrent == true) {
@@ -134,6 +153,7 @@ class _SpaceViewState extends State<SpaceView> {
                           builder: ((context, state) {
                             // build Progress indicator when posts are being retrieved
                             if (state.getPostsStatus is DataRetrieving) {
+                              getNewPosts(context);
                               return const SizedBox(
                                   width: 100,
                                   height: 100,
@@ -157,8 +177,10 @@ class _SpaceViewState extends State<SpaceView> {
                               );
                             }
                             // build posts when there are posts
-                            else if (state.getPostsStatus is RetrievalSuccess &&
-                                state.currentSpace.spacePosts.isNotEmpty) {
+                            else if ((state.getPostsStatus
+                                        is RetrievalSuccess &&
+                                    state.currentSpace.spacePosts.isNotEmpty) ||
+                                state.getNewPostsStatus is RetrievalSuccess) {
                               return ListView.builder(
                                   physics: const ClampingScrollPhysics(),
                                   reverse: true,

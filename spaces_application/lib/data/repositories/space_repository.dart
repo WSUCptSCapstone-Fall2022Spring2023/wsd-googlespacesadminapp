@@ -79,10 +79,11 @@ class SpaceRepository {
     String uid = snapshot.child("userID/").value as String;
     DataSnapshot userSnapshot = await ref.child("UserData/").child(uid).get();
     post.postUser = UserData.fromFirebase(userSnapshot);
+    final timeStr = post.postedTime.toString().replaceAll('.', ':');
     final commentSnapshot = await ref
         .child('Comments/')
         .child(post.postUser.uid)
-        .child(post.postedTime.toString().replaceAll('.', ':'))
+        .child(timeStr)
         .get();
     post.commentCount = commentSnapshot.children.length;
     return post;
@@ -117,6 +118,21 @@ class SpaceRepository {
           return spacePosts;
         }
       }
+      spacePosts.add(await getPost(post));
+    }
+    return spacePosts;
+  }
+
+  Future<List<PostData>> getNewPosts(String spaceID, DateTime lastPost) async {
+    final postRef = FirebaseDatabase.instance
+        .ref("Posts/")
+        .child(spaceID)
+        .orderByKey()
+        .startAfter(lastPost.toString().replaceAll('.', ':'));
+    final postSnapshot = await postRef.get();
+    List<PostData> spacePosts = List<PostData>.empty(growable: true);
+    final numPosts = postSnapshot.children.length;
+    for (final post in postSnapshot.children) {
       spacePosts.add(await getPost(post));
     }
     return spacePosts;

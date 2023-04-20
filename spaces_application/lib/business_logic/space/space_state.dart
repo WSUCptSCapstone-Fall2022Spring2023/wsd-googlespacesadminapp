@@ -14,6 +14,7 @@ class SpaceState {
   final String newEditContents;
   final List<UserData> spaceUsers;
   final List<UserData> allUsers;
+  final List<PostData> newPosts;
   final FormSubmissionStatus postFormStatus;
   final FormSubmissionStatus inviteUserStatus;
   final FormSubmissionStatus commentFormStatus;
@@ -24,6 +25,7 @@ class SpaceState {
   final FormSubmissionStatus kickUserStatus;
   final DataRetrievalStatus getPostsStatus;
   final DataRetrievalStatus getMorePostsStatus;
+  final DataRetrievalStatus getNewPostsStatus;
   final DataRetrievalStatus deleteSpaceStatus;
   final DataRetrievalStatus getUsersStatus;
   final DataRetrievalStatus getCommentsStatus;
@@ -41,6 +43,7 @@ class SpaceState {
     this.selectedPost,
     List<UserData>? spaceUsers,
     List<UserData>? allUsers,
+    List<PostData>? newPosts,
     this.permissions,
     this.postFormStatus = const InitialFormStatus(),
     this.kickUserStatus = const InitialFormStatus(),
@@ -51,6 +54,7 @@ class SpaceState {
     this.editCommentFormStatus = const InitialFormStatus(),
     this.editPostFormStatus = const InitialFormStatus(),
     this.getPostsStatus = const InitialRetrievalStatus(),
+    this.getNewPostsStatus = const InitialRetrievalStatus(),
     this.getMorePostsStatus = const InitialRetrievalStatus(),
     this.deleteSpaceStatus = const InitialRetrievalStatus(),
     this.getUsersStatus = const InitialRetrievalStatus(),
@@ -60,7 +64,8 @@ class SpaceState {
     required this.currentSpace,
     required this.currentUser,
   })  : spaceUsers = spaceUsers ?? List<UserData>.empty(),
-        allUsers = allUsers ?? List<UserData>.empty();
+        allUsers = allUsers ?? List<UserData>.empty(),
+        newPosts = newPosts ?? List<PostData>.empty();
 
   SpaceState copyWith({
     String? newPostContents,
@@ -68,6 +73,7 @@ class SpaceState {
     String? newEditContents,
     List<UserData>? spaceUsers,
     List<UserData>? nonspaceUsers,
+    List<PostData>? newPosts,
     PostData? selectedPost,
     FormSubmissionStatus? postFormStatus,
     FormSubmissionStatus? kickUserStatus,
@@ -80,6 +86,7 @@ class SpaceState {
     DataRetrievalStatus? deleteSpaceStatus,
     DataRetrievalStatus? getUsersStatus,
     DataRetrievalStatus? getPostsStatus,
+    DataRetrievalStatus? getNewPostsStatus,
     DataRetrievalStatus? getMorePostsStatus,
     DataRetrievalStatus? getCommentsStatus,
     DataRetrievalStatus? deletePostStatus,
@@ -96,6 +103,7 @@ class SpaceState {
       newEditContents: newEditContents ?? this.newEditContents,
       spaceUsers: spaceUsers ?? this.spaceUsers,
       allUsers: nonspaceUsers ?? this.allUsers,
+      newPosts: newPosts ?? this.newPosts,
       selectedPost: selectedPost ?? this.selectedPost,
       postFormStatus: postFormStatus ?? this.postFormStatus,
       inviteUserStatus: inviteUserStatus ?? this.inviteUserStatus,
@@ -109,6 +117,7 @@ class SpaceState {
           deleteCommentFormStatus ?? this.deleteCommentFormStatus,
       deletePostStatus: deletePostStatus ?? this.deletePostStatus,
       getPostsStatus: getPostsStatus ?? this.getPostsStatus,
+      getNewPostsStatus: getNewPostsStatus ?? this.getNewPostsStatus,
       getMorePostsStatus: getMorePostsStatus ?? this.getMorePostsStatus,
       deleteSpaceStatus: deleteSpaceStatus ?? this.deleteSpaceStatus,
       getUsersStatus: getUsersStatus ?? this.getUsersStatus,

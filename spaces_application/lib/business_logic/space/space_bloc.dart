@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spaces_application/business_logic/auth/form_submission_status.dart';
@@ -85,6 +87,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     });
     on<ChangePrivacy>((event, emit) async {
       await _onChangePrivacy(emit);
+    });
+    on<GetNewPosts>((event, emit) async {
+      await _getNewPosts(emit, event.lastPostTime);
     });
   }
 
@@ -388,6 +393,25 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
           kickUserStatus: SubmissionSuccess()));
     } catch (e) {
       emit(state.copyWith(kickUserStatus: SubmissionFailed(Exception(e))));
+    }
+  }
+
+  Future<void> _getNewPosts(
+      Emitter<SpaceState> emit, DateTime lastPostTime) async {
+    try {
+      final posts =
+          await spaceRepo.getNewPosts(state.currentSpace.sid, lastPostTime);
+      if (posts.isNotEmpty) {
+        final replaceSpace = state.currentSpace;
+        for (final post in posts) {
+          if (!replaceSpace.spacePosts.contains(post)) {
+            replaceSpace.spacePosts.add(post);
+          }
+        }
+        emit(state.copyWith(currentSpace: replaceSpace));
+      }
+    } catch (e) {
+      emit(state.copyWith(getNewPostsStatus: RetrievalFailed(Exception(e))));
     }
   }
 }

@@ -52,6 +52,12 @@ class CommentSubmitted extends SpaceEvent {}
 
 class ChangePrivacy extends SpaceEvent {}
 
+class GetNewPosts extends SpaceEvent {
+  DateTime lastPostTime;
+
+  GetNewPosts({required this.lastPostTime});
+}
+
 class EditComment extends SpaceEvent {
   String newContents;
   CommentData selectedComment;
