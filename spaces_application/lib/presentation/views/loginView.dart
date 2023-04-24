@@ -7,6 +7,7 @@ import 'package:spaces_application/business_logic/auth/login/login_state.dart';
 import 'package:spaces_application/data/repositories/auth_repository.dart';
 import 'package:spaces_application/presentation/views/homeView.dart';
 import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
+import 'package:spaces_application/presentation/widgets/resetPasswordDialog.dart';
 
 import '../../business_logic/auth/form_submission_status.dart';
 import '../../data/repositories/userData_repository.dart';
@@ -23,53 +24,65 @@ class LoginView extends StatelessWidget {
     final double imageHeight = screenSize.height * 0.4;
     final double textScaleFactor = screenSize.width < 500 ? 3 : 5;
     final double textSize = screenSize.width < 500 ? 12 : 20;
-    return Scaffold(
-      body: Center(
-        child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text("Welcome to Slate",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.black, fontSize: textSize * 3.5)),
-                  if (screenSize.width > 500) const SizedBox(height: 30),
-                  Image.asset(
-                    'assets/images/wahkiakumSchoolDistrictLogo.png',
-                    width: imageWidth,
-                    height: imageHeight,
-                  ),
-                  if (screenSize.width > 500) const SizedBox(height: 60),
-                  BlocProvider(
-                    create: (context) => LoginBloc(
-                      authRepo: context.read<AuthRepository>(),
-                      userRepo: context.read<UserDataRepository>(),
-                    ),
-                    child: _loginForm(context),
-                  ),
-                  const Padding(padding: EdgeInsets.only(top: 15)),
-                  Text.rich(TextSpan(
-                      text: "Need an account? ",
-                      style: TextStyle(color: Colors.black, fontSize: textSize),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: "Send Administration a Message",
-                            style: const TextStyle(
-                                color: Colors.black,
-                                decoration: TextDecoration.underline),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                MiscWidgets.showException(
-                                    context, "Send Admin Message");
-                              })
-                      ]))
-                ],
-              ),
-            )),
+    return BlocProvider(
+      create: (context) => LoginBloc(
+        authRepo: context.read<AuthRepository>(),
+        userRepo: context.read<UserDataRepository>(),
       ),
-      backgroundColor: Colors.white,
+      child: Scaffold(
+        body: Center(
+          child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("Welcome to Slate",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.black, fontSize: textSize * 3.5)),
+                    if (screenSize.width > 500) const SizedBox(height: 30),
+                    Image.asset(
+                      'assets/images/wahkiakumSchoolDistrictLogo.png',
+                      width: imageWidth,
+                      height: imageHeight,
+                    ),
+                    if (screenSize.width > 500) const SizedBox(height: 60),
+                    _loginForm(context),
+                    const Padding(padding: EdgeInsets.only(top: 15)),
+                    Text.rich(TextSpan(
+                        style:
+                            TextStyle(color: Colors.black, fontSize: textSize),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "Forgot your Password?",
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  decoration: TextDecoration.underline),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  showDialog(
+                                    barrierDismissible: true,
+                                    context: context,
+                                    builder: (_) {
+                                      return BlocProvider<LoginBloc>(
+                                        create: (context) => LoginBloc(
+                                            authRepo:
+                                                context.read<AuthRepository>(),
+                                            userRepo: context
+                                                .read<UserDataRepository>()),
+                                        child: ResetPasswordDialog(),
+                                      );
+                                    },
+                                  );
+                                })
+                        ]))
+                  ],
+                ),
+              )),
+        ),
+        backgroundColor: Colors.white,
+      ),
     );
   }
 

@@ -51,4 +51,8 @@ class AuthRepository {
       'profilePic': profilePic
     });
   }
+
+  Future<void> resetPassword(String email) async {
+    await auth.sendPasswordResetEmail(email: email);
+  }
 }

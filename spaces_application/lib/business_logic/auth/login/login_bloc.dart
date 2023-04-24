@@ -16,17 +16,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginEmailChanged>((event, emit) async {
       await _onEmailChanged(event.email, emit);
     });
+    on<ResetEmailChanged>((event, emit) async {
+      await _onResetEmailChanged(event.email, emit);
+    });
     on<LoginPasswordChanged>((event, emit) async {
       await _onPasswordChanged(event.password, emit);
     });
     on<LoginSubmitted>((event, emit) async {
       await _onFormStatusChanged(emit);
     });
+    on<PasswordResetSubmit>((event, emit) async {
+      await _onPasswordReset(emit);
+    });
   }
 
   Future<void> _onEmailChanged(
       String newEmail, Emitter<LoginState> emit) async {
     emit(state.copyWith(email: newEmail));
+  }
+
+  Future<void> _onResetEmailChanged(
+      String newEmail, Emitter<LoginState> emit) async {
+    emit(state.copyWith(resetEmail: newEmail));
   }
 
   Future<void> _onPasswordChanged(
@@ -43,6 +54,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           formStatus: SubmissionSuccess(), currentUser: currentUser));
     } catch (e) {
       emit(state.copyWith(formStatus: SubmissionFailed(Exception(e))));
+    }
+  }
+
+  Future<void> _onPasswordReset(Emitter<LoginState> emit) async {
+    emit(state.copyWith(resetStatus: FormSubmitting()));
+    try {
+      await authRepo.resetPassword(state.resetEmail);
+      emit(state.copyWith(resetStatus: SubmissionSuccess()));
+    } catch (e) {
+      emit(state.copyWith(resetStatus: SubmissionFailed(Exception(e))));
     }
   }
 }

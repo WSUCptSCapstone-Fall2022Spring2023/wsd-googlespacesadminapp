@@ -6,6 +6,14 @@ class LoginEmailChanged extends LoginEvent {
   LoginEmailChanged({required this.email});
 }
 
+class ResetEmailChanged extends LoginEvent {
+  final String email;
+
+  ResetEmailChanged({required this.email});
+}
+
+class PasswordResetSubmit extends LoginEvent {}
+
 class LoginPasswordChanged extends LoginEvent {
   final String password;
 
