@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:spaces_application/data/models/permissionData.dart';
 import 'package:spaces_application/data/models/spaceData.dart';
 import 'package:spaces_application/data/models/userData.dart';
+import 'package:spaces_application/data/models/userHistoryData.dart';
 import 'package:spaces_application/data/repositories/userData_repository.dart';
 
 import '../models/commentData.dart';
@@ -66,6 +67,14 @@ class SpaceRepository {
           .child(spaceID)
           .child(timeStr)
           .set({"userID": userID, "contents": message, "isEdited": false});
+      await ref
+          .child("UserHistory/")
+          .child(currentTime.year.toString())
+          .child(currentTime.month.toString())
+          .child(userID)
+          .child(spaceID)
+          .child(timeStr)
+          .set({"contents": message, "isComment": false});
     } else {
       throw Exception(
           "You do not have permission to do that. Please contact a Space Administrator.");
@@ -348,6 +357,14 @@ class SpaceRepository {
         "commenter": commenterID,
         "isEdited": false
       });
+      await ref
+          .child("UserHistory/")
+          .child(currentTime.year.toString())
+          .child(currentTime.month.toString())
+          .child(commenterID)
+          .child(spaceID)
+          .child(timeStr)
+          .set({"contents": message, "isComment": true});
     } else {
       throw Exception(
           "You do not have permission to do that. Please contact a Space Administrator.");
@@ -400,6 +417,14 @@ class SpaceRepository {
           .child(spaceID)
           .child(postTimeStr)
           .update({'contents': newContents, 'isEdited': true});
+      await ref
+          .child("UserHistory/")
+          .child(postedDate.year.toString())
+          .child(postedDate.month.toString())
+          .child(posterID.value as String)
+          .child(spaceID)
+          .child(postTimeStr)
+          .update({"contents": newContents});
     } else {
       throw Exception(
           "You do not have permission to do that. Please contact a Space Administrator.");
@@ -423,6 +448,14 @@ class SpaceRepository {
           .child("Comments/")
           .child(posterID)
           .child(postTimeStr)
+          .child(commentTimeStr)
+          .update({"contents": newContents});
+      await ref
+          .child("UserHistory/")
+          .child(commentDate.year.toString())
+          .child(commentDate.month.toString())
+          .child(commenterID.value as String)
+          .child(spaceID)
           .child(commentTimeStr)
           .update({"contents": newContents});
     } else {
@@ -454,5 +487,50 @@ class SpaceRepository {
       throw Exception(
           "You do not have permission to do that. Please contact a Space Administrator.");
     }
+  }
+
+  // last month
+  Future<List<UserHistoryData>> getUserPostHistory(
+      String userID, String selectedMonth, String selectedYear) async {
+    List<UserHistoryData> userHistory =
+        List<UserHistoryData>.empty(growable: true);
+    final snapshot = await ref
+        .child("UserHistory/")
+        .child(selectedYear)
+        .child(selectedMonth)
+        .child(userID)
+        .get();
+    for (final child in snapshot.children) {
+      final s2 = await ref
+          .child("Spaces/")
+          .child(child.key.toString())
+          .child("spaceName/")
+          .get();
+      final spaceName = s2.value as String;
+      for (final child2 in child.children) {
+        UserHistoryData historyEntry =
+            UserHistoryData.fromFirebase(child2, spaceName);
+        userHistory.add(historyEntry);
+      }
+    }
+    return userHistory;
+  }
+
+  Future<List<String>> getYearHistoryOptions() async {
+    final snapshot = await ref.child("UserHistory/").get();
+    List<String> years = List<String>.empty(growable: true);
+    for (final child in snapshot.children) {
+      years.add(child.value as String);
+    }
+    return years;
+  }
+
+  Future<List<String>> getMonthHistoryOptions(String year) async {
+    final snapshot = await ref.child("UserHistory/").child(year).get();
+    List<String> months = List<String>.empty(growable: true);
+    for (final child in snapshot.children) {
+      months.add(child.value as String);
+    }
+    return months;
   }
 }

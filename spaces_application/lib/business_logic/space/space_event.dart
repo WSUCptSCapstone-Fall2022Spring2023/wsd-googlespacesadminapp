@@ -106,3 +106,17 @@ class KickUser extends SpaceEvent {
 
   KickUser({required this.uid});
 }
+
+class GetUserHistory extends SpaceEvent {
+  String displayName;
+  String email;
+  String uid;
+  String month;
+  String year;
+  GetUserHistory(
+      {required this.displayName,
+      required this.email,
+      required this.uid,
+      required this.month,
+      required this.year});
+}

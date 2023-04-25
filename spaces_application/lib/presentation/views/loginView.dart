@@ -148,6 +148,7 @@ class LoginView extends StatelessWidget {
           child: SizedBox(
               width: fieldWidth,
               child: TextFormField(
+                textInputAction: TextInputAction.next,
                 style: TextStyle(color: Colors.black, fontSize: textSize),
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -209,6 +210,8 @@ class LoginView extends StatelessWidget {
                 onChanged: (value) => context
                     .read<LoginBloc>()
                     .add(LoginPasswordChanged(password: value)),
+                onFieldSubmitted: (value) =>
+                    context.read<LoginBloc>().add(LoginSubmitted()),
               )));
     });
   }
