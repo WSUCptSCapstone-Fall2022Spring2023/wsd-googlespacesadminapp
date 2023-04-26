@@ -394,71 +394,95 @@ class _SpaceViewState extends State<SpaceView> {
                                                                     .infinity,
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(20),
+                                                                            .only(
+                                                                        top: 7),
                                                                 child: Column(
                                                                   children: [
-                                                                    Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceBetween,
-                                                                      children: [
-                                                                        Row(
-                                                                          children: [
-                                                                            ConstrainedBox(
-                                                                              constraints: BoxConstraints(maxHeight: commentBoxConstraints, maxWidth: commentBoxConstraints, minWidth: commentBoxConstraints, minHeight: commentBoxConstraints),
-                                                                              child: SvgPicture.string(FluttermojiFunctions().decodeFluttermojifromString(state.currentSpace.spacePosts[reversedIndex].postUser.profilePicString)),
-                                                                            ),
-                                                                            Column(
-                                                                              children: [
-                                                                                Text(state.currentSpace.spacePosts[reversedIndex].postUser.displayName.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: textSize * 1.2)),
-                                                                                Text(
-                                                                                  "  ${DateFormat('MM-dd-yyyy hh:mm a').format(state.currentSpace.spacePosts[reversedIndex].postedTime)}",
-                                                                                  style: TextStyle(color: Colors.grey, fontWeight: FontWeight.normal, fontSize: textSize),
-                                                                                  textAlign: TextAlign.left,
-                                                                                )
-                                                                              ],
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                        Align(
-                                                                          alignment:
-                                                                              Alignment.topRight,
-                                                                          child:
-                                                                              IconButton(
-                                                                            icon: Icon(Icons.close,
-                                                                                color: Colors.black,
-                                                                                size: textSize * 1.5),
-                                                                            onPressed:
-                                                                                (() {
-                                                                              Navigator.pop(context);
-                                                                            }),
-                                                                          ),
-                                                                        )
-                                                                      ],
-                                                                    ),
-                                                                    Container(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .centerLeft,
+                                                                    Material(
+                                                                      elevation:
+                                                                          2,
+                                                                      color: Colors
+                                                                          .white,
                                                                       child:
                                                                           Padding(
                                                                         padding:
-                                                                            const EdgeInsets.symmetric(vertical: 8.0),
+                                                                            const EdgeInsets.symmetric(horizontal: 5.0),
                                                                         child:
-                                                                            LinkText(
-                                                                          state
-                                                                              .currentSpace
-                                                                              .spacePosts[reversedIndex]
-                                                                              .contents,
-                                                                          textStyle: TextStyle(
-                                                                              color: Colors.black,
-                                                                              fontSize: textSize * 1.2,
-                                                                              fontWeight: FontWeight.normal),
-                                                                          linkStyle: TextStyle(
-                                                                              color: Colors.red,
-                                                                              fontSize: textSize * 1.2,
-                                                                              fontWeight: FontWeight.normal,
-                                                                              decoration: TextDecoration.underline),
+                                                                            Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.spaceBetween,
+                                                                          children: [
+                                                                            Container(
+                                                                              padding: EdgeInsets.symmetric(horizontal: 20),
+                                                                              child: Row(
+                                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                children: [
+                                                                                  ConstrainedBox(
+                                                                                    constraints: BoxConstraints(maxHeight: commentBoxConstraints * 1.8, maxWidth: commentBoxConstraints * 1.8, minWidth: commentBoxConstraints * 1.8, minHeight: commentBoxConstraints * 1.8),
+                                                                                    child: SvgPicture.string(FluttermojiFunctions().decodeFluttermojifromString(state.currentSpace.spacePosts[reversedIndex].postUser.profilePicString)),
+                                                                                  ),
+                                                                                  SizedBox(
+                                                                                    width: 10,
+                                                                                  ),
+                                                                                  Column(
+                                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                    children: [
+                                                                                      RichText(
+                                                                                          textAlign: TextAlign.left,
+                                                                                          text: TextSpan(style: const TextStyle(), children: [
+                                                                                            if (state.currentSpace.spacePosts[reversedIndex].postUser.isFaculty) TextSpan(text: "[A] ", style: TextStyle(color: Colors.red, fontWeight: FontWeight.normal, fontSize: textSize * 1.2)),
+                                                                                            TextSpan(text: state.currentSpace.spacePosts[reversedIndex].postUser.displayName.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: textSize * 1.2))
+                                                                                          ])),
+                                                                                      Text(
+                                                                                        " ${DateFormat('MM-dd-yyyy hh:mm a').format(state.currentSpace.spacePosts[reversedIndex].postedTime)}",
+                                                                                        style: TextStyle(color: Colors.grey, fontWeight: FontWeight.normal, fontSize: textSize),
+                                                                                        textAlign: TextAlign.left,
+                                                                                      )
+                                                                                    ],
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                            Align(
+                                                                              alignment: Alignment.topRight,
+                                                                              child: IconButton(
+                                                                                icon: Icon(Icons.close, color: Colors.black, size: textSize * 1.5),
+                                                                                onPressed: (() {
+                                                                                  Navigator.pop(context);
+                                                                                }),
+                                                                              ),
+                                                                            )
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Material(
+                                                                      elevation:
+                                                                          2,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      child:
+                                                                          Container(
+                                                                        alignment:
+                                                                            Alignment.centerLeft,
+                                                                        child:
+                                                                            Padding(
+                                                                          padding: const EdgeInsets.symmetric(
+                                                                              vertical: 8,
+                                                                              horizontal: 20),
+                                                                          child:
+                                                                              LinkText(
+                                                                            state.currentSpace.spacePosts[reversedIndex].contents,
+                                                                            textStyle: TextStyle(
+                                                                                color: Colors.black,
+                                                                                fontSize: textSize * 1.2,
+                                                                                fontWeight: FontWeight.normal),
+                                                                            linkStyle: TextStyle(
+                                                                                color: Colors.red,
+                                                                                fontSize: textSize * 1.2,
+                                                                                fontWeight: FontWeight.normal,
+                                                                                decoration: TextDecoration.underline),
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ),
@@ -500,13 +524,14 @@ class _SpaceViewState extends State<SpaceView> {
                                                                                                 child: ListTile(
                                                                                                   dense: true,
                                                                                                   leading: ConstrainedBox(
-                                                                                                    constraints: BoxConstraints(maxHeight: commentBoxConstraints, maxWidth: commentBoxConstraints, minWidth: commentBoxConstraints, minHeight: commentBoxConstraints),
+                                                                                                    constraints: BoxConstraints(maxHeight: commentBoxConstraints * 1.4, maxWidth: commentBoxConstraints * 1.4, minWidth: commentBoxConstraints * 1.4, minHeight: commentBoxConstraints * 1.4),
                                                                                                     child: SvgPicture.string(FluttermojiFunctions().decodeFluttermojifromString(state.selectedPost!.comments[reversedIndex2].commentUser.profilePicString)),
                                                                                                   ),
                                                                                                   shape: const Border(top: BorderSide(width: 5)),
                                                                                                   selectedTileColor: Colors.grey,
                                                                                                   title: RichText(
                                                                                                       text: TextSpan(children: [
+                                                                                                    if (state.selectedPost!.comments[reversedIndex2].commentUser.isFaculty) TextSpan(text: "[A] ", style: TextStyle(color: Colors.red, fontWeight: FontWeight.normal, fontSize: textSize * 1.2)),
                                                                                                     TextSpan(text: state.selectedPost!.comments[reversedIndex2].commentUser.displayName.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: textSize * 1.2)),
                                                                                                     TextSpan(text: "  ${DateFormat('MM-dd-yyyy hh:mm a').format(state.selectedPost!.comments[reversedIndex2].commentedTime)}", style: const TextStyle(color: Colors.grey))
                                                                                                   ])),
@@ -580,21 +605,14 @@ class _SpaceViewState extends State<SpaceView> {
                                                                                 // ]
                                                                                 ))),
                                                                     Material(
-                                                                      elevation:
-                                                                          2,
-                                                                      color: Colors
-                                                                          .white,
-                                                                      child: Container(
-                                                                          padding: EdgeInsets.symmetric(
-                                                                              horizontal:
-                                                                                  8,
-                                                                              vertical:
-                                                                                  2),
-                                                                          color: Colors
-                                                                              .white,
-                                                                          child:
-                                                                              _createCommentForm()),
-                                                                    )
+                                                                        elevation:
+                                                                            2,
+                                                                        color: Colors
+                                                                            .white,
+                                                                        child: Container(
+                                                                            padding:
+                                                                                EdgeInsets.symmetric(horizontal: 5),
+                                                                            child: _createCommentForm())),
                                                                   ],
                                                                 )),
                                                           ],
@@ -646,12 +664,15 @@ class _SpaceViewState extends State<SpaceView> {
         },
         child: Form(
             key: _formKey,
-            child: Row(
-              children: [
-                _messageField(_formKey),
-                const SizedBox(width: 10),
-                _createPostButton(_formKey),
-              ],
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+              child: Row(
+                children: [
+                  _messageField(_formKey),
+                  const SizedBox(width: 10),
+                  _createPostButton(_formKey),
+                ],
+              ),
             )));
   }
 
@@ -793,17 +814,20 @@ class _SpaceViewState extends State<SpaceView> {
       },
       child: Form(
           key: _formKey,
-          child: Row(
-            children: [
-              _commentField(),
-              const SizedBox(width: 10),
-              _createCommentButton(_formKey)
-            ],
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            child: Row(
+              children: [
+                _commentField(_formKey),
+                const SizedBox(width: 10),
+                _createCommentButton(_formKey)
+              ],
+            ),
           )),
     );
   }
 
-  Widget _commentField() {
+  Widget _commentField(GlobalKey<FormState> key) {
     return BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
       final Size screenSize = MediaQuery.of(context).size;
       final double imageWidth = screenSize.width * 0.7;
@@ -831,9 +855,18 @@ class _SpaceViewState extends State<SpaceView> {
                 onChanged: (value) => context
                     .read<SpaceBloc>()
                     .add(CommentMessageChanged(message: value)),
-                onFieldSubmitted: (value) => context
-                    .read<SpaceBloc>()
-                    .add(CommentMessageChanged(message: value)),
+                onFieldSubmitted: (value) {
+                  if (key.currentState!.validate()) {
+                    if (state.permissions!.canPost) {
+                      context.read<SpaceBloc>().add(CommentSubmitted());
+                      _commentController.clear();
+                      scrollAnimateToEnd(_commentScrollController);
+                    } else {
+                      MiscWidgets.showException(context,
+                          "You do not have permission to do that. Please contact a Space Administrator.");
+                    }
+                  }
+                },
                 validator: (value) {
                   final filter = ProfanityFilter();
                   if (value!.isEmpty) {

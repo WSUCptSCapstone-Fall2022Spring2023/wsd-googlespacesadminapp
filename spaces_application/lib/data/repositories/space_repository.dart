@@ -501,12 +501,17 @@ class SpaceRepository {
         .child(userID)
         .get();
     for (final child in snapshot.children) {
+      String spaceName = "";
       final s2 = await ref
           .child("Spaces/")
           .child(child.key.toString())
           .child("spaceName/")
           .get();
-      final spaceName = s2.value as String;
+      if (s2.value == null) {
+        spaceName = "Deleted Space";
+      } else {
+        spaceName = s2.value as String;
+      }
       for (final child2 in child.children) {
         UserHistoryData historyEntry =
             UserHistoryData.fromFirebase(child2, spaceName);

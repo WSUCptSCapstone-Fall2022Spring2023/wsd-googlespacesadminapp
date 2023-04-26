@@ -117,15 +117,17 @@ class LoginView extends StatelessWidget {
             alignment: Alignment.topCenter,
             child: Form(
                 key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _emailField(),
-                    const SizedBox(height: 10),
-                    _passwordField(),
-                    const SizedBox(height: 20),
-                    _loginButton(),
-                  ],
+                child: AutofillGroup(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _emailField(),
+                      const SizedBox(height: 10),
+                      _passwordField(),
+                      const SizedBox(height: 20),
+                      _loginButton(),
+                    ],
+                  ),
                 ))));
   }
 
@@ -148,6 +150,7 @@ class LoginView extends StatelessWidget {
           child: SizedBox(
               width: fieldWidth,
               child: TextFormField(
+                autofillHints: [AutofillHints.email],
                 textInputAction: TextInputAction.next,
                 style: TextStyle(color: Colors.black, fontSize: textSize),
                 decoration: InputDecoration(
@@ -194,25 +197,28 @@ class LoginView extends StatelessWidget {
           child: SizedBox(
               width: fieldWidth,
               child: TextFormField(
-                style: TextStyle(color: Colors.black, fontSize: textSize),
-                obscureText: true,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    prefixIcon:
-                        Icon(Icons.lock, color: bgColor, size: textSize),
-                    hintText: 'Password',
-                    hintStyle:
-                        TextStyle(color: Colors.black, fontSize: textSize)),
-                // validator returns null when valid value is passed
-                validator: (value) =>
-                    state.isValidPassword ? null : 'Password is too short',
-                onChanged: (value) => context
-                    .read<LoginBloc>()
-                    .add(LoginPasswordChanged(password: value)),
-                onFieldSubmitted: (value) =>
-                    context.read<LoginBloc>().add(LoginSubmitted()),
-              )));
+                  autofillHints: [AutofillHints.password],
+                  style: TextStyle(color: Colors.black, fontSize: textSize),
+                  obscureText: true,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      prefixIcon:
+                          Icon(Icons.lock, color: bgColor, size: textSize),
+                      hintText: 'Password',
+                      hintStyle:
+                          TextStyle(color: Colors.black, fontSize: textSize)),
+                  // validator returns null when valid value is passed
+                  validator: (value) =>
+                      state.isValidPassword ? null : 'Password is too short',
+                  onChanged: (value) => context
+                      .read<LoginBloc>()
+                      .add(LoginPasswordChanged(password: value)),
+                  onFieldSubmitted: (value) {
+                    if (_formKey.currentState!.validate()) {
+                      context.read<LoginBloc>().add(LoginSubmitted());
+                    }
+                  })));
     });
   }
 
