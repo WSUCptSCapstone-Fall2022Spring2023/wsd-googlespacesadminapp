@@ -11,6 +11,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_web/webview_flutter_web.dart';
 import 'data/repositories/space_repository.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,6 +53,11 @@ class MyApp extends StatelessWidget {
             create: (context) => UserDataRepository()),
       ],
       child: MaterialApp(
+          localizationsDelegates: [
+            GlobalWidgetsLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            MonthYearPickerLocalizations.delegate,
+          ],
           title: 'Home Page',
           home: LoginView(),
           theme: ThemeData(fontFamily: 'Circular', primarySwatch: Colors.red)),

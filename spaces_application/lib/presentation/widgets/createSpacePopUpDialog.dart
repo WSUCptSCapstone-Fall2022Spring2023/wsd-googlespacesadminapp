@@ -154,6 +154,7 @@ class CreateSpacePopUpDialog extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(5)),
           ),
           child: TextFormField(
+            textInputAction: TextInputAction.next,
             style: const TextStyle(color: Colors.black, fontSize: 20),
             decoration: InputDecoration(
                 border:
@@ -176,6 +177,7 @@ class CreateSpacePopUpDialog extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(5)),
         ),
         child: TextFormField(
+            textInputAction: TextInputAction.next,
             style: const TextStyle(color: Colors.black, fontSize: 20),
             obscureText: false,
             decoration: InputDecoration(

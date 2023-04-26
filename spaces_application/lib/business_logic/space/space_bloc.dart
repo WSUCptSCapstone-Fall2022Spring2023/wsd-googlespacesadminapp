@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spaces_application/business_logic/auth/form_submission_status.dart';
 import 'package:spaces_application/business_logic/data_retrieval_status.dart';
@@ -90,6 +91,10 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     });
     on<GetNewPosts>((event, emit) async {
       await _getNewPosts(emit, event.lastPostTime);
+    });
+    on<GetUserHistory>((event, emit) async {
+      await _getUserHistory(emit, event.displayName, event.email, event.uid,
+          event.month, event.year);
     });
   }
 
@@ -423,6 +428,40 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       }
     } catch (e) {
       emit(state.copyWith(getNewPostsStatus: RetrievalFailed(Exception(e))));
+    }
+  }
+
+  Future<void> _getUserHistory(Emitter<SpaceState> emit, String displayName,
+      String email, String uid, String month, String year) async {
+    emit(state.copyWith(getUserHistoryStatus: DataRetrieving()));
+    try {
+      final userHistory = await spaceRepo.getUserPostHistory(uid, month, year);
+      if (userHistory.isEmpty) {
+        String ret =
+            "No Recorded $month/$year Post and Comment history for $displayName ($email).\n";
+        await Clipboard.setData(ClipboardData(text: ret));
+      } else {
+        String spaceName = "";
+        String ret =
+            "$month/$year Post and Comment history for $displayName ($email):\n";
+
+        for (final entry in userHistory) {
+          if (spaceName != entry.spaceName) {
+            ret += "\n-----${entry.spaceName}-----\n";
+            spaceName = entry.spaceName;
+          }
+          String tag = entry.isComment ? "[C]" : "[P]";
+          String print = "${entry.postedTime} \"${entry.contents}\" $tag\n";
+          ret += print;
+        }
+        await Clipboard.setData(ClipboardData(text: ret));
+      }
+      emit(state.copyWith(
+          getUserHistoryStatus: RetrievalSuccess(), userHistory: userHistory));
+      emit(
+          state.copyWith(getUserHistoryStatus: const InitialRetrievalStatus()));
+    } catch (e) {
+      emit(state.copyWith(getUserHistoryStatus: RetrievalFailed(Exception(e))));
     }
   }
 }

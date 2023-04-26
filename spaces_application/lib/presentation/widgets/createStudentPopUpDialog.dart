@@ -134,6 +134,7 @@ class CreateStudentPopUpDialog extends StatelessWidget {
             borderRadius: const BorderRadius.all(Radius.circular(5)),
           ),
           child: TextFormField(
+            textInputAction: TextInputAction.next,
             style: TextStyle(color: Colors.black, fontSize: 20),
             decoration: InputDecoration(
                 border:
@@ -157,6 +158,7 @@ class CreateStudentPopUpDialog extends StatelessWidget {
             borderRadius: const BorderRadius.all(Radius.circular(5)),
           ),
           child: TextFormField(
+            textInputAction: TextInputAction.next,
             style: TextStyle(color: Colors.black, fontSize: 20),
             decoration: InputDecoration(
                 border:
@@ -180,6 +182,7 @@ class CreateStudentPopUpDialog extends StatelessWidget {
             borderRadius: const BorderRadius.all(Radius.circular(5)),
           ),
           child: TextFormField(
+            textInputAction: TextInputAction.next,
             style: const TextStyle(color: Colors.black, fontSize: 20),
             decoration: InputDecoration(
                 border:
@@ -216,6 +219,11 @@ class CreateStudentPopUpDialog extends StatelessWidget {
             onChanged: (value) => context
                 .read<RegisterBloc>()
                 .add(RegisterLastNameChanged(lastName: value)),
+            onFieldSubmitted: (value) {
+              if (_formKey.currentState!.validate()) {
+                context.read<RegisterBloc>().add(RegisterSubmitted());
+              }
+            },
           ));
     });
   }

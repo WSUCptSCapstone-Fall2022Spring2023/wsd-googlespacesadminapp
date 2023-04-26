@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttermoji/fluttermoji.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 import 'package:spaces_application/business_logic/auth/form_submission_status.dart';
+import 'package:spaces_application/business_logic/data_retrieval_status.dart';
 import 'package:spaces_application/business_logic/space/space_event.dart';
 import 'package:spaces_application/data/repositories/space_repository.dart';
 import 'package:spaces_application/data/repositories/userData_repository.dart';
 import 'package:fluttermoji/fluttermoji.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:spaces_application/presentation/widgets/miscWidgets.dart';
+import 'package:flutter/services.dart';
 
 import '../../business_logic/space/space_bloc.dart';
 import '../../business_logic/space/space_state.dart';
@@ -26,6 +29,7 @@ class ViewProfileDialog extends StatefulWidget {
 class _ViewProfileDialogState extends State<ViewProfileDialog> {
   _ViewProfileDialogState();
   bool isEnable = true;
+  DateTime _selected = DateTime.now();
 
   late SpaceBloc _spaceBloc;
 
@@ -34,14 +38,43 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
     super.initState();
   }
 
+  Future<void> _onPressed({
+    required BuildContext context,
+    String? locale,
+  }) async {
+    final localeObj = locale != null ? Locale(locale) : null;
+    final selected = await showMonthYearPicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2023),
+      lastDate: DateTime.now(),
+      locale: localeObj,
+    );
+    // final selected = await showDatePicker(
+    //   context: context,
+    //   initialDate: _selected ?? DateTime.now(),
+    //   firstDate: DateTime(2019),
+    //   lastDate: DateTime(2022),
+    //   locale: localeObj,
+    // );
+    if (selected != null) {
+      context.read<SpaceBloc>().add(GetUserHistory(
+          displayName: widget.selectedUserData.displayName,
+          email: widget.selectedUserData.email,
+          uid: widget.selectedUserData.uid,
+          month: selected.month.toString(),
+          year: selected.year.toString()));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var ScreenHeight = MediaQuery.of(context).size.height;
     var ScreenWidth = MediaQuery.of(context).size.width;
     return BlocConsumer<SpaceBloc, SpaceState>(
       listener: (context, state) {
-        final dataStatus = state.kickUserStatus;
-        if (dataStatus is SubmissionSuccess) {
+        final kickStatus = state.kickUserStatus;
+        if (kickStatus is SubmissionSuccess) {
           if (widget.selectedUserData.uid == state.currentUser.uid) {
             Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) => HomeView(
@@ -51,8 +84,15 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
           } else {
             Navigator.pop(context);
           }
-        } else if (dataStatus is SubmissionFailed) {
-          MiscWidgets.showException(context, dataStatus.exception.toString());
+        } else if (kickStatus is SubmissionFailed) {
+          MiscWidgets.showException(context, kickStatus.exception.toString());
+        }
+        final historyStatus = state.getUserHistoryStatus;
+        if (historyStatus is RetrievalSuccess) {
+          MiscWidgets.showException(context, "User History had been copied.");
+        } else if (historyStatus is RetrievalFailed) {
+          MiscWidgets.showException(
+              context, historyStatus.exception.toString());
         }
       },
       builder: (context, state) {
@@ -70,7 +110,7 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                     width: double.infinity,
                     height: state.currentUser.isFaculty ||
                             state.currentUser.uid == widget.selectedUserData.uid
-                        ? ScreenHeight * 0.75
+                        ? ScreenHeight * 0.65
                         : ScreenHeight * 0.6,
                     padding: const EdgeInsets.all(20),
                     child: Column(
@@ -154,10 +194,10 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                                       color: Colors.black, fontSize: 22)),
                             ],
                           ),
-                        const SizedBox(height: 20),
-                        const Text("Contact"),
-                        const SizedBox(height: 10),
-                        Text(state.currentUser.email),
+                        // const SizedBox(height: 20),
+                        // const Text("Contact"),
+                        // const SizedBox(height: 10),
+                        // Text(state.currentUser.email),
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 20),
                           child: Divider(height: 0),
@@ -394,6 +434,23 @@ class _ViewProfileDialogState extends State<ViewProfileDialog> {
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 18))),
+                          Spacer(),
+                          const SizedBox(width: 10),
+                          if (state.currentUser.isFaculty)
+                            ElevatedButton(
+                                onPressed: () {
+                                  _onPressed(context: context);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.yellow[700],
+                                    side: const BorderSide(
+                                        color: Colors.black, width: 0.5),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5))),
+                                child: const Text('History',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18))),
                         ])
                       ],
                     )),

@@ -3,6 +3,7 @@ import 'package:spaces_application/business_logic/auth/form_submission_status.da
 import 'package:spaces_application/business_logic/data_retrieval_status.dart';
 import 'package:spaces_application/data/models/commentData.dart';
 import 'package:spaces_application/data/models/permissionData.dart';
+import 'package:spaces_application/data/models/userHistoryData.dart';
 
 import '../../data/models/postData.dart';
 import '../../data/models/spaceData.dart';
@@ -12,6 +13,7 @@ class SpaceState {
   final String newPostContents;
   final String newComment;
   final String newEditContents;
+  final List<UserHistoryData> userHistory;
   final List<UserData> spaceUsers;
   final List<UserData> allUsers;
   final List<PostData> newPosts;
@@ -24,6 +26,7 @@ class SpaceState {
   final FormSubmissionStatus updatePermissionsStatus;
   final FormSubmissionStatus kickUserStatus;
   final DataRetrievalStatus getPostsStatus;
+  final DataRetrievalStatus getUserHistoryStatus;
   final DataRetrievalStatus getMorePostsStatus;
   final DataRetrievalStatus getNewPostsStatus;
   final DataRetrievalStatus deleteSpaceStatus;
@@ -44,6 +47,7 @@ class SpaceState {
     List<UserData>? spaceUsers,
     List<UserData>? allUsers,
     List<PostData>? newPosts,
+    List<UserHistoryData>? userHistory,
     this.permissions,
     this.postFormStatus = const InitialFormStatus(),
     this.kickUserStatus = const InitialFormStatus(),
@@ -53,6 +57,7 @@ class SpaceState {
     this.deleteCommentFormStatus = const InitialFormStatus(),
     this.editCommentFormStatus = const InitialFormStatus(),
     this.editPostFormStatus = const InitialFormStatus(),
+    this.getUserHistoryStatus = const InitialRetrievalStatus(),
     this.getPostsStatus = const InitialRetrievalStatus(),
     this.getNewPostsStatus = const InitialRetrievalStatus(),
     this.getMorePostsStatus = const InitialRetrievalStatus(),
@@ -65,7 +70,8 @@ class SpaceState {
     required this.currentUser,
   })  : spaceUsers = spaceUsers ?? List<UserData>.empty(),
         allUsers = allUsers ?? List<UserData>.empty(),
-        newPosts = newPosts ?? List<PostData>.empty();
+        newPosts = newPosts ?? List<PostData>.empty(),
+        userHistory = userHistory ?? List<UserHistoryData>.empty();
 
   SpaceState copyWith({
     String? newPostContents,
@@ -74,6 +80,7 @@ class SpaceState {
     List<UserData>? spaceUsers,
     List<UserData>? nonspaceUsers,
     List<PostData>? newPosts,
+    List<UserHistoryData>? userHistory,
     PostData? selectedPost,
     FormSubmissionStatus? postFormStatus,
     FormSubmissionStatus? kickUserStatus,
@@ -83,6 +90,7 @@ class SpaceState {
     FormSubmissionStatus? editCommentFormStatus,
     FormSubmissionStatus? editPostFormStatus,
     FormSubmissionStatus? deleteCommentFormStatus,
+    DataRetrievalStatus? getUserHistoryStatus,
     DataRetrievalStatus? deleteSpaceStatus,
     DataRetrievalStatus? getUsersStatus,
     DataRetrievalStatus? getPostsStatus,
@@ -101,6 +109,7 @@ class SpaceState {
       kickUserStatus: kickUserStatus ?? this.kickUserStatus,
       newComment: newComment ?? this.newComment,
       newEditContents: newEditContents ?? this.newEditContents,
+      userHistory: userHistory ?? this.userHistory,
       spaceUsers: spaceUsers ?? this.spaceUsers,
       allUsers: nonspaceUsers ?? this.allUsers,
       newPosts: newPosts ?? this.newPosts,
@@ -116,6 +125,7 @@ class SpaceState {
       deleteCommentFormStatus:
           deleteCommentFormStatus ?? this.deleteCommentFormStatus,
       deletePostStatus: deletePostStatus ?? this.deletePostStatus,
+      getUserHistoryStatus: getUserHistoryStatus ?? this.getUserHistoryStatus,
       getPostsStatus: getPostsStatus ?? this.getPostsStatus,
       getNewPostsStatus: getNewPostsStatus ?? this.getNewPostsStatus,
       getMorePostsStatus: getMorePostsStatus ?? this.getMorePostsStatus,

@@ -95,28 +95,34 @@ class joinSpaceDialog extends StatelessWidget {
                     const Padding(
                         padding: EdgeInsets.symmetric(vertical: 20),
                         child: Divider(height: 0)),
-                    Text(
-                        "Are you sure you want to join ${selectedSpace.spaceName}",
+                    Text("Are you sure you want to join this space?",
                         style: const TextStyle(fontSize: 20)),
+                    Text("Space Name: ${selectedSpace.spaceName}",
+                        style: const TextStyle(fontSize: 20)),
+                    Text("Space Description: ${selectedSpace.spaceDescription}",
+                        style: const TextStyle(fontSize: 20)),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Align(
-                      alignment: Alignment.centerLeft,
+                      alignment: Alignment.bottomCenter,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
+                            backgroundColor: Colors.green,
                             side: const BorderSide(
-                                color: Colors.black, width: 0.5),
+                                color: Colors.white, width: 0.5),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5))),
                         child: const Text('Join Space',
                             style:
-                                TextStyle(color: Colors.black, fontSize: 18)),
+                                TextStyle(color: Colors.white, fontSize: 18)),
                         onPressed: () {
                           context
                               .read<NavBarBloc>()
                               .add(JoinSpace(selectedSpace: selectedSpace));
                         },
                       ),
-                    )
+                    ),
                   ]))
             ]));
       },

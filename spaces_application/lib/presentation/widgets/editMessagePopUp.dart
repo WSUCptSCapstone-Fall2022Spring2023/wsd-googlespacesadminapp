@@ -108,7 +108,7 @@ class _EditMessagePopUpState extends State<EditMessagePopUp> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              _messageField(),
+              _messageField(_formKey),
               const SizedBox(height: 10),
               Row(
                 children: [
@@ -122,7 +122,7 @@ class _EditMessagePopUpState extends State<EditMessagePopUp> {
     );
   }
 
-  Widget _messageField() {
+  Widget _messageField(GlobalKey<FormState> key) {
     return BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
       return Flexible(
           child: Container(
@@ -143,9 +143,19 @@ class _EditMessagePopUpState extends State<EditMessagePopUp> {
                 onChanged: (value) => context
                     .read<SpaceBloc>()
                     .add(EditFieldChanged(message: value)),
-                onFieldSubmitted: (value) => context
-                    .read<SpaceBloc>()
-                    .add(EditFieldChanged(message: value)),
+                onFieldSubmitted: (value) {
+                  if (key.currentState!.validate()) {
+                    if (post is PostData) {
+                      context.read<SpaceBloc>().add(EditPost(
+                          newContents: state.newEditContents,
+                          selectedPost: post));
+                    } else if (post is CommentData) {
+                      context.read<SpaceBloc>().add(EditComment(
+                          newContents: state.newEditContents,
+                          selectedComment: post));
+                    }
+                  }
+                },
                 validator: (value) {
                   final filter = ProfanityFilter();
                   if (value!.isEmpty) {
