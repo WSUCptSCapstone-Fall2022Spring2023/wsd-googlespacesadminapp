@@ -82,7 +82,7 @@ class _SpaceViewState extends State<SpaceView> {
 
   void getNewPosts(BuildContext context) {
     Timer.periodic(
-      Duration(seconds: 3),
+      const Duration(seconds: 3),
       (timer) {
         var state = _spaceBloc.state;
         context.read<SpaceBloc>().add(GetNewPosts(
@@ -105,7 +105,6 @@ class _SpaceViewState extends State<SpaceView> {
     final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
     final double textSize = screenSize.width <= 500 ? 12 : 20;
     final double postBoxConstraints = screenSize.width <= 500 ? 30 : 50;
-    final double commentBoxConstraints = screenSize.width <= 500 ? 20 : 30;
     return BlocProvider<SpaceBloc>(
         create: (context) {
           return _spaceBloc;
@@ -370,6 +369,12 @@ class _SpaceViewState extends State<SpaceView> {
                                               barrierDismissible: true,
                                               context: context,
                                               builder: ((_) {
+                                                final double
+                                                    commentBoxConstraints =
+                                                    screenSize.width <= 500
+                                                        ? 20
+                                                        : 30;
+
                                                 return BlocProvider.value(
                                                     value: BlocProvider.of<
                                                         SpaceBloc>(context)
@@ -413,7 +418,7 @@ class _SpaceViewState extends State<SpaceView> {
                                                                               MainAxisAlignment.spaceBetween,
                                                                           children: [
                                                                             Container(
-                                                                              padding: EdgeInsets.symmetric(horizontal: 20),
+                                                                              padding: const EdgeInsets.symmetric(horizontal: 20),
                                                                               child: Row(
                                                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                                                 children: [
@@ -421,7 +426,7 @@ class _SpaceViewState extends State<SpaceView> {
                                                                                     constraints: BoxConstraints(maxHeight: commentBoxConstraints * 1.8, maxWidth: commentBoxConstraints * 1.8, minWidth: commentBoxConstraints * 1.8, minHeight: commentBoxConstraints * 1.8),
                                                                                     child: SvgPicture.string(FluttermojiFunctions().decodeFluttermojifromString(state.currentSpace.spacePosts[reversedIndex].postUser.profilePicString)),
                                                                                   ),
-                                                                                  SizedBox(
+                                                                                  const SizedBox(
                                                                                     width: 10,
                                                                                   ),
                                                                                   Column(
@@ -504,7 +509,7 @@ class _SpaceViewState extends State<SpaceView> {
                                                                                     ] else if (state.getCommentsStatus is RetrievalSuccess && state.selectedPost!.comments.isEmpty) ...[
                                                                                       Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
                                                                                         Padding(
-                                                                                            padding: EdgeInsets.symmetric(vertical: 8.0),
+                                                                                            padding: const EdgeInsets.symmetric(vertical: 8.0),
                                                                                             child: Text(
                                                                                               "No replies",
                                                                                               style: TextStyle(fontSize: textSize),
@@ -533,7 +538,7 @@ class _SpaceViewState extends State<SpaceView> {
                                                                                                       text: TextSpan(children: [
                                                                                                     if (state.selectedPost!.comments[reversedIndex2].commentUser.isFaculty) TextSpan(text: "[A] ", style: TextStyle(color: Colors.red, fontWeight: FontWeight.normal, fontSize: textSize * 1.2)),
                                                                                                     TextSpan(text: state.selectedPost!.comments[reversedIndex2].commentUser.displayName.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: textSize * 1.2)),
-                                                                                                    TextSpan(text: "  ${DateFormat('MM-dd-yyyy hh:mm a').format(state.selectedPost!.comments[reversedIndex2].commentedTime)}", style: const TextStyle(color: Colors.grey))
+                                                                                                    TextSpan(text: "  ${DateFormat('MM-dd-yyyy hh:mm a').format(state.selectedPost!.comments[reversedIndex2].commentedTime)}", style: TextStyle(color: Colors.grey, fontSize: textSize))
                                                                                                   ])),
                                                                                                   subtitle: Text(state.selectedPost!.comments[reversedIndex2].contents, style: TextStyle(fontSize: textSize)),
                                                                                                   trailing: PopupMenuButton(
@@ -599,7 +604,7 @@ class _SpaceViewState extends State<SpaceView> {
                                                                                   ],
                                                                                 );
                                                                               } else {
-                                                                                return const Center(child: SizedBox(width: 100, height: 100, child: CircularProgressIndicator()));
+                                                                                return Center(child: SizedBox(width: textSize * 5, height: textSize * 5, child: const CircularProgressIndicator()));
                                                                               }
                                                                             }
                                                                                 // ]
@@ -611,7 +616,7 @@ class _SpaceViewState extends State<SpaceView> {
                                                                             .white,
                                                                         child: Container(
                                                                             padding:
-                                                                                EdgeInsets.symmetric(horizontal: 5),
+                                                                                const EdgeInsets.symmetric(horizontal: 5),
                                                                             child: _createCommentForm())),
                                                                   ],
                                                                 )),
@@ -637,7 +642,8 @@ class _SpaceViewState extends State<SpaceView> {
                 elevation: 2,
                 color: Colors.white,
                 child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     color: Colors.white,
                     child: _createPostForm()),
               )
@@ -665,7 +671,7 @@ class _SpaceViewState extends State<SpaceView> {
         child: Form(
             key: _formKey,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
               child: Row(
                 children: [
                   _messageField(_formKey),
@@ -815,7 +821,7 @@ class _SpaceViewState extends State<SpaceView> {
       child: Form(
           key: _formKey,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             child: Row(
               children: [
                 _commentField(_formKey),

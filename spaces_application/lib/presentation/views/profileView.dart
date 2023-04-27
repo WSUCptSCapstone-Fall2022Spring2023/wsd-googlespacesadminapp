@@ -38,8 +38,11 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
+    var screenSize = MediaQuery.of(context).size;
     Get.put(FluttermojiController());
+
+    final double textSize = screenSize.width <= 500 ? 12 : 20;
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: offWhite,
@@ -62,7 +65,8 @@ class ProfileView extends StatelessWidget {
         ),
         body: Padding(
           padding: EdgeInsets.symmetric(
-              horizontal: screenWidth * 0.01, vertical: screenWidth * 0.01),
+              horizontal: screenSize.width * 0.01,
+              vertical: screenSize.width * 0.01),
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -83,13 +87,15 @@ class ProfileView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(currentUserData.email,
-                          style: TextStyle(color: Colors.black, fontSize: 25)),
+                          style: TextStyle(
+                              color: Colors.black, fontSize: textSize * 1.2)),
                       const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 12),
                           child:
                               Icon(Icons.circle, color: Colors.red, size: 12)),
                       Text("Faculty User",
-                          style: TextStyle(color: Colors.black, fontSize: 25)),
+                          style: TextStyle(
+                              color: Colors.black, fontSize: textSize * 1.2)),
                     ],
                   ),
                 if (currentUserData.isFaculty == false)
@@ -98,19 +104,22 @@ class ProfileView extends StatelessWidget {
                     children: [
                       Text(
                           '${currentUserData.firstName} ${currentUserData.lastName}',
-                          style: TextStyle(color: Colors.black, fontSize: 25)),
+                          style: TextStyle(
+                              color: Colors.black, fontSize: textSize * 1.2)),
                       const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 12),
                           child:
                               Icon(Icons.circle, color: Colors.red, size: 12)),
                       Text(currentUserData.email,
-                          style: TextStyle(color: Colors.black, fontSize: 25)),
+                          style: TextStyle(
+                              color: Colors.black, fontSize: textSize * 1.2)),
                       const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 12),
                           child:
                               Icon(Icons.circle, color: Colors.red, size: 12)),
                       Text(currentUserData.parentEmail,
-                          style: TextStyle(color: Colors.black, fontSize: 25)),
+                          style: TextStyle(
+                              color: Colors.black, fontSize: textSize * 1.2)),
                     ],
                   ),
                 if (currentUserData.isFaculty == false)
@@ -118,7 +127,8 @@ class ProfileView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text("Student User",
-                          style: TextStyle(color: Colors.black, fontSize: 25)),
+                          style: TextStyle(
+                              color: Colors.black, fontSize: textSize * 1.2)),
                     ],
                   ),
                 const SizedBox(height: 20),
@@ -144,8 +154,9 @@ class ProfileView extends StatelessWidget {
                       ),
                     ));
                   },
-                  child: const Text("Edit Profile",
-                      style: TextStyle(color: Colors.black, fontSize: 18)),
+                  child: Text("Edit Profile",
+                      style: TextStyle(
+                          color: Colors.black, fontSize: textSize * 0.9)),
                 ),
               ],
             ),

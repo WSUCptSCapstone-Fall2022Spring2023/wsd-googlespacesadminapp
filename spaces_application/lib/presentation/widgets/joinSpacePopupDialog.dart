@@ -50,8 +50,12 @@ class joinSpaceDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var ScreenHeight = MediaQuery.of(context).size.height;
-    var ScreenWidth = MediaQuery.of(context).size.width;
+    final Size screenSize = MediaQuery.of(context).size;
+    final double imageWidth = screenSize.width * 0.7;
+    final double imageHeight = screenSize.height * 0.4;
+    final double textScaleFactor = screenSize.width < 700 ? 3 : 5;
+    final double textSize = screenSize.width < 700 ? 12 : 20;
+
     return BlocConsumer<NavBarBloc, NavBarState>(
       listener: (context, state) {
         final dataStatus = state.joinSpaceStatus;
@@ -67,45 +71,43 @@ class joinSpaceDialog extends StatelessWidget {
       },
       builder: (context, state) {
         return Dialog(
-            insetPadding:
-                const EdgeInsets.symmetric(horizontal: 150, vertical: 250),
+            insetPadding: EdgeInsets.symmetric(
+                horizontal: 50, vertical: screenSize.width < 700 ? 310 : 275),
             backgroundColor: Colors.white,
             child: Stack(alignment: Alignment.topLeft, children: [
               Container(
-                  width: double.infinity,
-                  height: ScreenHeight * 0.4,
                   padding: const EdgeInsets.all(20),
                   child: Column(children: [
                     Align(
                         alignment: Alignment.topRight,
                         child: IconButton(
-                          icon: const Icon(Icons.close,
-                              color: Colors.black, size: 25),
+                          icon: Icon(Icons.close,
+                              color: Colors.black, size: textSize * 1.25),
                           onPressed: () {
                             Navigator.pop(context);
                           },
                         )),
-                    const Align(
+                    Align(
                         alignment: Alignment.centerLeft,
                         child: Text("Join Space?",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.normal,
-                                fontSize: 35))),
-                    const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20),
-                        child: Divider(height: 0)),
+                                fontSize: textSize * 1.7))),
+                    Padding(
+                        padding: EdgeInsets.symmetric(vertical: textSize),
+                        child: const Divider(height: 0)),
                     Text("Are you sure you want to join this space?",
-                        style: const TextStyle(fontSize: 20)),
+                        style: TextStyle(fontSize: textSize)),
                     Text("Space Name: ${selectedSpace.spaceName}",
-                        style: const TextStyle(fontSize: 20)),
+                        style: TextStyle(fontSize: textSize)),
                     Text("Space Description: ${selectedSpace.spaceDescription}",
-                        style: const TextStyle(fontSize: 20)),
+                        style: TextStyle(fontSize: textSize)),
                     SizedBox(
-                      height: 20,
+                      height: textSize,
                     ),
                     Align(
-                      alignment: Alignment.bottomCenter,
+                      alignment: Alignment.center,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
@@ -113,9 +115,9 @@ class joinSpaceDialog extends StatelessWidget {
                                 color: Colors.white, width: 0.5),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5))),
-                        child: const Text('Join Space',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 18)),
+                        child: Text('Join Space',
+                            style: TextStyle(
+                                color: Colors.white, fontSize: textSize * 0.8)),
                         onPressed: () {
                           context
                               .read<NavBarBloc>()

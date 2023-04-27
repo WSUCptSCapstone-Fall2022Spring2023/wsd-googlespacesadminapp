@@ -38,6 +38,9 @@ class EditProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     var _width = MediaQuery.of(context).size.width;
     Get.put(FluttermojiController());
+
+    final double textSize = MediaQuery.of(context).size.width <= 500 ? 12 : 20;
+
     return Scaffold(
       backgroundColor: offWhite,
       drawer: MyNavigationDrawer(
@@ -77,12 +80,14 @@ class EditProfileView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(currentUserData.email,
-                        style: TextStyle(color: Colors.black, fontSize: 22)),
+                        style: TextStyle(
+                            color: Colors.black, fontSize: textSize * 1.1)),
                     Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: Icon(Icons.circle, color: Colors.red, size: 12)),
                     Text("Faculty User",
-                        style: TextStyle(color: Colors.black, fontSize: 22)),
+                        style: TextStyle(
+                            color: Colors.black, fontSize: textSize * 1.1)),
                   ],
                 ),
               if (currentUserData.isFaculty == false)
@@ -93,17 +98,20 @@ class EditProfileView extends StatelessWidget {
                         currentUserData.firstName +
                             ' ' +
                             currentUserData.lastName,
-                        style: TextStyle(color: Colors.black, fontSize: 22)),
+                        style: TextStyle(
+                            color: Colors.black, fontSize: textSize * 1.1)),
                     Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: Icon(Icons.circle, color: Colors.red, size: 12)),
                     Text(currentUserData.email,
-                        style: TextStyle(color: Colors.black, fontSize: 22)),
+                        style: TextStyle(
+                            color: Colors.black, fontSize: textSize * 1.1)),
                     Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: Icon(Icons.circle, color: Colors.red, size: 12)),
                     Text(currentUserData.parentEmail,
-                        style: TextStyle(color: Colors.black, fontSize: 22)),
+                        style: TextStyle(
+                            color: Colors.black, fontSize: textSize * 1.1)),
                   ],
                 ),
               if (currentUserData.isFaculty == false)
@@ -111,7 +119,8 @@ class EditProfileView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("Student User",
-                        style: TextStyle(color: Colors.black, fontSize: 22)),
+                        style: TextStyle(
+                            color: Colors.black, fontSize: textSize * 1.1)),
                   ],
                 ),
               BlocProvider(
@@ -121,7 +130,8 @@ class EditProfileView extends StatelessWidget {
                           displayName: currentUserData.displayName)),
                   child: SizedBox(
                     width: 600,
-                    child: Container(width: 550, child: _createSpaceForm()),
+                    child:
+                        Container(width: 550, child: _createSpaceForm(context)),
                   )),
               Padding(
                 padding:
@@ -140,7 +150,8 @@ class EditProfileView extends StatelessWidget {
     );
   }
 
-  Widget _createSpaceForm() {
+  Widget _createSpaceForm(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
     return BlocListener<EditProfileBloc, EditProfileState>(
         listenWhen: (previous, current) {
           if (current.formStatus == previous.formStatus)
@@ -168,18 +179,34 @@ class EditProfileView extends StatelessWidget {
             key: _formKey,
             child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                child: Row(
+                child: Column(
                   children: [
-                    const Padding(padding: EdgeInsets.only(left: 15)),
-                    _displayNameField(currentUserData),
-                    const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10)),
-                    _editProfileButton()
+                    if (screenSize.width >= 500)
+                      Row(
+                        children: [
+                          const Padding(padding: EdgeInsets.only(left: 60)),
+                          _displayNameField(currentUserData, context),
+                          const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10)),
+                          _editProfileButton()
+                        ],
+                      ),
+                    if (screenSize.width < 500)
+                      Column(
+                        children: [
+                          _displayNameField(currentUserData, context),
+                          const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10)),
+                          _editProfileButton()
+                        ],
+                      ),
                   ],
                 ))));
   }
 
-  Widget _displayNameField(UserData currentUser) {
+  Widget _displayNameField(UserData currentUser, BuildContext context) {
+    final double textSize = MediaQuery.of(context).size.width <= 500 ? 12 : 20;
+
     return BlocBuilder<EditProfileBloc, EditProfileState>(
         builder: (context, state) {
       return Container(
@@ -191,18 +218,19 @@ class EditProfileView extends StatelessWidget {
                     color: Colors.black,
                     blurRadius: 1,
                     spreadRadius: 0,
-                    offset: const Offset(2, 2))
+                    offset: Offset(2, 2))
               ]),
           child: SizedBox(
-              width: 400,
+              width: textSize * 15,
               child: TextFormField(
                 initialValue: currentUser.displayName,
-                style: const TextStyle(color: Colors.black, fontSize: 26),
+                style: TextStyle(color: Colors.black, fontSize: textSize * 1.2),
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5)),
                     hintText: 'Display Name',
-                    hintStyle: TextStyle(color: Colors.black, fontSize: 26)),
+                    hintStyle: TextStyle(
+                        color: Colors.black, fontSize: textSize * 1.2)),
                 validator: (value) {
                   if (state.isValidDisplayName) {
                     return null;
