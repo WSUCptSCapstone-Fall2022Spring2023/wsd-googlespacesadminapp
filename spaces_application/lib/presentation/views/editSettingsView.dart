@@ -32,8 +32,10 @@ class EditSettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
     var ScreenHeight = MediaQuery.of(context).size.height;
     var ScreenWidth = MediaQuery.of(context).size.width;
+    final double textSize = screenSize.width <= 515 ? 12 : 20;
     return Scaffold(
         backgroundColor: offWhite,
         drawer: MyNavigationDrawer(
@@ -57,8 +59,8 @@ class EditSettingsView extends StatelessWidget {
                           child: SvgPicture.string(
                             FluttermojiFunctions().decodeFluttermojifromString(
                                 currentUserData.profilePicString),
-                            height: 100,
-                            width: 100,
+                            height: textSize * 5,
+                            width: textSize * 5,
                           ),
                         ),
                         const Padding(
@@ -68,10 +70,10 @@ class EditSettingsView extends StatelessWidget {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                               "${currentUserData.firstName} ${currentUserData.lastName}'s Settings",
-                              style: const TextStyle(
+                              style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 35)),
+                                  fontSize: textSize * 1.75)),
                         ),
                       ],
                     )),
@@ -85,53 +87,55 @@ class EditSettingsView extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          const Text("Full Name: ",
+                          Text("Full Name: ",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 25)),
+                                  fontSize: textSize * 1.2)),
                           const SizedBox(width: 5),
                           Text(
                             "${currentUserData.firstName} ${currentUserData.lastName}",
-                            style: const TextStyle(
+                            style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.normal,
-                                fontSize: 20),
+                                fontSize: textSize),
                             textAlign: TextAlign.left,
                           ),
                         ],
                       ),
                       const SizedBox(height: 5),
-                      const Align(
+                      Align(
                         alignment: Alignment.topLeft,
                         child: Text(
                           "You cannot change this setting.",
+                          style: TextStyle(fontSize: textSize),
                         ),
                       ),
                       const SizedBox(height: 15),
                       Row(
                         children: [
-                          const Text("Display Name: ",
+                          Text("Display Name: ",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 25)),
+                                  fontSize: textSize * 1.2)),
                           const SizedBox(width: 5),
                           Text(
                             currentUserData.displayName,
-                            style: const TextStyle(
+                            style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.normal,
-                                fontSize: 20),
+                                fontSize: textSize),
                             textAlign: TextAlign.left,
                           ),
                         ],
                       ),
                       const SizedBox(height: 5),
-                      const Align(
+                      Align(
                         alignment: Alignment.topLeft,
                         child: Text(
                           "You cannot change this setting.",
+                          style: TextStyle(fontSize: textSize),
                         ),
                       ),
                       const SizedBox(height: 15),
@@ -140,53 +144,31 @@ class EditSettingsView extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                const Text("Parent Email: ",
+                                Text("Parent Email: ",
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.normal,
-                                        fontSize: 25)),
+                                        fontSize: textSize * 1.2)),
                                 const SizedBox(width: 5),
                                 Text(
                                   currentUserData.parentEmail,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.normal,
-                                      fontSize: 20),
+                                      fontSize: textSize),
                                   textAlign: TextAlign.left,
                                 ),
                               ],
                             ),
                             const SizedBox(height: 5),
-                            const Align(
+                            Align(
                               alignment: Alignment.topLeft,
-                              child: Text("You cannot change this setting."),
+                              child: Text("You cannot change this setting.",
+                                  style: TextStyle(fontSize: textSize)),
                             ),
                             const SizedBox(height: 15),
                           ],
                         ),
-                      Row(
-                        children: const [
-                          Text("Dark Mode Enabled? ",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 25)),
-                          SizedBox(width: 5),
-                          // if (currentUserData.darkMode == true)
-                          //   Icon(Icons.check_circle_outlined, color: Colors.green, size: 30)
-                          // else if (currentUserData.darkMode == false)
-                          //   Icon(Icons.unpublished_outlined, color: Colors.red, size: 30)
-                          Icon(Icons.check_box_outline_blank,
-                              color: Colors.black, size: 30)
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      const Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          "Determines if the application is in dark mode.",
-                        ),
-                      ),
                       const SizedBox(height: 15),
                       Align(
                         alignment: Alignment.topLeft,
@@ -200,13 +182,15 @@ class EditSettingsView extends StatelessWidget {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5))),
                               child: Row(
-                                children: const [
+                                children: [
                                   Icon(Icons.save,
-                                      color: Colors.black, size: 20),
+                                      color: Colors.black, size: textSize),
                                   SizedBox(width: 5),
                                   Text(
                                     "Save Settings",
-                                    style: TextStyle(color: Colors.black),
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: textSize),
                                   ),
                                 ],
                               ),

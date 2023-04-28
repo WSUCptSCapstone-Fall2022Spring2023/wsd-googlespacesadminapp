@@ -9,8 +9,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:convert';
 import 'dart:io';
 
-import '../../presentation/HTML_pages/clear_cache.html';
-
 import 'package:flutter/services.dart' show rootBundle;
 
 import '../../business_logic/auth/form_submission_status.dart';
@@ -37,7 +35,7 @@ class HelpPopUpDialog extends StatelessWidget {
     final double postBoxConstraints = screenSize.width <= 500 ? 30 : 50;
     final double commentBoxConstraints = screenSize.width <= 500 ? 20 : 30;
     return Dialog(
-        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        insetPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 200),
         child: Stack(alignment: Alignment.center, children: [
           Container(
             width: double.infinity,
