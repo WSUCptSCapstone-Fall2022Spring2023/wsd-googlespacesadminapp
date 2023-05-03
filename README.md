@@ -65,7 +65,7 @@ TODO: Leave the steps below if you want others to contribute to your project.
 ## Additional Documentation
 
 TODO: Provide links to additional documentation that may exist in the repo, e.g.,
-  * [MVP Project Final Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/TeamToto_FinalMVP_Report.pdf)
+  * [MVP Project Final Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/TeamToto_FinalMVP_Report.pdf)
   * [Project Description](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/Project_Description.docx.pdf)
   * [Prototype Project Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/Prototype_Project_Report.pdf)
   * [Requirements and Specifications](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/Requirements_and_Specifications.docx.pdf)
