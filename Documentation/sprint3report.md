@@ -21,7 +21,7 @@ Here are links to the issues that we completed in this sprint:
 ## Code Files for Review
 Please review the following important code files, which were actively developed/created during this sprint, for quality:
  * [pubspec.yaml]
- Business_Logic
+ * Business_Logic
  * [lib/business_logic/data_retrieval_status.dart]
  * [lib/business_logic/create_space/create_space_bloc.dart]
  * [lib/business_logic/create_space/create_space_event.dart]
@@ -29,13 +29,13 @@ Please review the following important code files, which were actively developed/
  * [lib/business_logic/home/home_bloc.dart]
  * [lib/business_logic/home/home_event.dart]
  * [lib/business_logic/home/home_state.dart]
- Data
+ * Data
  * [lib/data/repositories/userData_repository.dart]
  * [lib/data/models/permissionData.dart]
  * [lib/data/models/spaceData.dart]
- Presentation
+ * Presentation
  * [lib/presentation/views/spaceView.dart]
- Test
+ * Test
  * [test/login/login_bloc_test.dart]
  * [test/login/login_event_test.dart]
  * [test/login/login_state_test.dart]

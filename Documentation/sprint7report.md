@@ -30,7 +30,7 @@ Please review the following important code files, which were actively developed/
  * [pubspec.yaml]
  * [lib/main.dart]
  * [.firebase]
- Business_Logic
+ * Business_Logic
  * [lib/business_logic/auth/login_bloc.dart]
  * [lib/business_logic/auth/login_event.dart]
  * [lib/business_logic/auth/login_state.dart]
@@ -42,13 +42,13 @@ Please review the following important code files, which were actively developed/
  * [lib/business_logic/nav_bar/nav_state.dart]
  * [lib/business_logic/space/space_bloc.dart]
  * [lib/business_logic/space/space_event.dart]
-* [lib/business_logic/space/space_state.dart]
- Data
+ * [lib/business_logic/space/space_state.dart]
+ * Data
  * [lib/data/models/spaceData.dart]
  * [lib/data/models/userHistoryData.dart]
  * [lib/data/repositories/auth_repository.dart]
  * [lib/data/repositories/space_repository.dart]
- Presentation
+ * Presentation
  * [lib/presentation/views/editSettingsView.dart]
  * [lib/presentation/views/edit_profileView.dart]
  * [lib/presentation/views/homeView.dart]
