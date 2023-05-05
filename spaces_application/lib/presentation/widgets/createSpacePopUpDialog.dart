@@ -26,6 +26,10 @@ class CreateSpacePopUpDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+    final double textSize = screenSize.width <= 500 ? 12 : 20;
+    final double userProfilePicConstraints = screenSize.width <= 500 ? 22 : 30;
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Dialog(
@@ -43,19 +47,19 @@ class CreateSpacePopUpDialog extends StatelessWidget {
                     Align(
                       alignment: Alignment.topRight,
                       child: IconButton(
-                          icon: const Icon(Icons.close,
-                              color: Colors.black, size: 25),
+                          icon: Icon(Icons.close,
+                              color: Colors.black, size: textSize * 1.2),
                           onPressed: (() {
                             Navigator.pop(context);
                           })),
                     ),
-                    const Align(
+                    Align(
                       alignment: Alignment.centerLeft,
                       child: Text("Create a Space",
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.normal,
-                              fontSize: 35)),
+                              fontSize: textSize * 1.7)),
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 20),
@@ -78,6 +82,10 @@ class CreateSpacePopUpDialog extends StatelessWidget {
 
   Widget _createSpaceForm(BuildContext context) {
     bool isChecked = false;
+    final Size screenSize = MediaQuery.of(context).size;
+    final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+    final double textSize = screenSize.width <= 500 ? 12 : 20;
+    final double userProfilePicConstraints = screenSize.width <= 500 ? 22 : 30;
     return BlocListener<CreateSpaceBloc, CreateSpaceState>(
         listenWhen: (previous, current) {
           if (current.formStatus == previous.formStatus) {
@@ -113,9 +121,9 @@ class CreateSpacePopUpDialog extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _spaceNameField(),
+                _spaceNameField(context),
                 const SizedBox(height: 10),
-                _spaceDescriptionField(),
+                _spaceDescriptionField(context),
                 const SizedBox(height: 10),
                 Container(
                     alignment: Alignment.center, child: _isPrivateCheckbox()),
@@ -134,18 +142,23 @@ class CreateSpacePopUpDialog extends StatelessWidget {
                                     color: Colors.black, width: 0.5),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5))),
-                            child: const Text('Cancel',
+                            child: Text('Cancel',
                                 style: TextStyle(
-                                    color: Colors.black, fontSize: 18))),
+                                    color: Colors.black,
+                                    fontSize: textSize * 0.9))),
                         const SizedBox(width: 10),
-                        _createSpaceButton()
+                        _createSpaceButton(context)
                       ],
                     )),
               ],
             )));
   }
 
-  Widget _spaceNameField() {
+  Widget _spaceNameField(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+    final double textSize = screenSize.width <= 500 ? 12 : 20;
+    final double userProfilePicConstraints = screenSize.width <= 500 ? 22 : 30;
     return BlocBuilder<CreateSpaceBloc, CreateSpaceState>(
         builder: (context, state) {
       return Container(
@@ -155,12 +168,12 @@ class CreateSpacePopUpDialog extends StatelessWidget {
           ),
           child: TextFormField(
             textInputAction: TextInputAction.next,
-            style: const TextStyle(color: Colors.black, fontSize: 20),
+            style: TextStyle(color: Colors.black, fontSize: textSize),
             decoration: InputDecoration(
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                 hintText: 'Space Name',
-                hintStyle: const TextStyle(color: Colors.grey, fontSize: 20)),
+                hintStyle: TextStyle(color: Colors.grey, fontSize: textSize)),
             onChanged: (value) => context
                 .read<CreateSpaceBloc>()
                 .add(CreateSpaceNameChanged(name: value)),
@@ -168,7 +181,11 @@ class CreateSpacePopUpDialog extends StatelessWidget {
     });
   }
 
-  Widget _spaceDescriptionField() {
+  Widget _spaceDescriptionField(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+    final double textSize = screenSize.width <= 500 ? 12 : 20;
+    final double userProfilePicConstraints = screenSize.width <= 500 ? 22 : 30;
     return BlocBuilder<CreateSpaceBloc, CreateSpaceState>(
         builder: (context, state) {
       return Container(
@@ -178,13 +195,13 @@ class CreateSpacePopUpDialog extends StatelessWidget {
         ),
         child: TextFormField(
             textInputAction: TextInputAction.next,
-            style: const TextStyle(color: Colors.black, fontSize: 20),
+            style: TextStyle(color: Colors.black, fontSize: textSize),
             obscureText: false,
             decoration: InputDecoration(
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                 hintText: 'Space Description',
-                hintStyle: const TextStyle(color: Colors.grey, fontSize: 20)),
+                hintStyle: TextStyle(color: Colors.grey, fontSize: textSize)),
             //keyboardType: TextInputType.multiline,
             keyboardType: TextInputType.text,
             minLines: 4,
@@ -212,7 +229,11 @@ class CreateSpacePopUpDialog extends StatelessWidget {
     );
   }
 
-  Widget _createSpaceButton() {
+  Widget _createSpaceButton(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+    final double textSize = screenSize.width <= 500 ? 12 : 20;
+    final double userProfilePicConstraints = screenSize.width <= 500 ? 22 : 30;
     return BlocBuilder<CreateSpaceBloc, CreateSpaceState>(
         builder: (context, state) {
       return state.formStatus is FormSubmitting
@@ -228,8 +249,9 @@ class CreateSpacePopUpDialog extends StatelessWidget {
                   side: const BorderSide(color: Colors.black, width: 0.5),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5))),
-              child: const Text('Create Space',
-                  style: TextStyle(color: Colors.white, fontSize: 18)));
+              child: Text('Create Space',
+                  style: TextStyle(
+                      color: Colors.white, fontSize: textSize * 0.9)));
     });
   }
 }

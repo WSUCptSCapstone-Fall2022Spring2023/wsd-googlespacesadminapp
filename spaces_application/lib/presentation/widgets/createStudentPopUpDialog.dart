@@ -23,6 +23,10 @@ class CreateStudentPopUpDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+    final double textSize = screenSize.width <= 500 ? 12 : 20;
+    final double userProfilePicConstraints = screenSize.width <= 500 ? 22 : 30;
     return Dialog(
         insetPadding: EdgeInsets.symmetric(horizontal: 250, vertical: 225),
         backgroundColor: Colors.white,
@@ -36,18 +40,19 @@ class CreateStudentPopUpDialog extends StatelessWidget {
                   Align(
                       alignment: Alignment.topRight,
                       child: IconButton(
-                        icon: Icon(Icons.close, color: Colors.black, size: 25),
+                        icon: Icon(Icons.close,
+                            color: Colors.black, size: textSize * 1.2),
                         onPressed: () {
                           Navigator.pop(context);
                         },
                       )),
-                  const Align(
+                  Align(
                       alignment: Alignment.centerLeft,
                       child: Text("Student Creation",
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.normal,
-                              fontSize: 35))),
+                              fontSize: textSize * 1.7))),
                   const Padding(
                       padding: EdgeInsets.symmetric(vertical: 20),
                       child: Divider(height: 0)),
@@ -66,6 +71,10 @@ class CreateStudentPopUpDialog extends StatelessWidget {
   }
 
   Widget _registerForm(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+    final double textSize = screenSize.width <= 500 ? 12 : 20;
+    final double userProfilePicConstraints = screenSize.width <= 500 ? 22 : 30;
     return BlocListener<RegisterBloc, RegisterState>(
         listenWhen: (previous, current) {
           if (current.formStatus == previous.formStatus) {
@@ -95,13 +104,13 @@ class CreateStudentPopUpDialog extends StatelessWidget {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _firstNameField(),
+                    _firstNameField(context),
                     const SizedBox(height: 10),
-                    _lastNameField(),
+                    _lastNameField(context),
                     const SizedBox(height: 10),
-                    _emailField(),
+                    _emailField(context),
                     const SizedBox(height: 10),
-                    _parentEmailField(),
+                    _parentEmailField(context),
                     const SizedBox(height: 10),
                     Padding(
                         padding: const EdgeInsets.only(top: 5),
@@ -116,17 +125,22 @@ class CreateStudentPopUpDialog extends StatelessWidget {
                                       color: Colors.black, width: 0.5),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5))),
-                              child: const Text('Cancel',
+                              child: Text('Cancel',
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 18))),
+                                      color: Colors.black,
+                                      fontSize: textSize * 0.9))),
                           const SizedBox(width: 10),
-                          _registerButton()
+                          _registerButton(context)
                         ])),
                   ]),
             )));
   }
 
-  Widget _emailField() {
+  Widget _emailField(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+    final double textSize = screenSize.width <= 500 ? 12 : 20;
+    final double userProfilePicConstraints = screenSize.width <= 500 ? 22 : 30;
     return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
       return Container(
           decoration: BoxDecoration(
@@ -135,12 +149,12 @@ class CreateStudentPopUpDialog extends StatelessWidget {
           ),
           child: TextFormField(
             textInputAction: TextInputAction.next,
-            style: TextStyle(color: Colors.black, fontSize: 20),
+            style: TextStyle(color: Colors.black, fontSize: textSize),
             decoration: InputDecoration(
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                 hintText: 'Email',
-                hintStyle: TextStyle(color: Colors.grey, fontSize: 20)),
+                hintStyle: TextStyle(color: Colors.grey, fontSize: textSize)),
             validator: (value) =>
                 state.isValidEmail ? null : 'Not a valid Email',
             onChanged: (value) => context
@@ -150,7 +164,11 @@ class CreateStudentPopUpDialog extends StatelessWidget {
     });
   }
 
-  Widget _parentEmailField() {
+  Widget _parentEmailField(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+    final double textSize = screenSize.width <= 500 ? 12 : 20;
+    final double userProfilePicConstraints = screenSize.width <= 500 ? 22 : 30;
     return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
       return Container(
           decoration: BoxDecoration(
@@ -159,12 +177,12 @@ class CreateStudentPopUpDialog extends StatelessWidget {
           ),
           child: TextFormField(
             textInputAction: TextInputAction.next,
-            style: TextStyle(color: Colors.black, fontSize: 20),
+            style: TextStyle(color: Colors.black, fontSize: textSize),
             decoration: InputDecoration(
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                 hintText: 'Parent Email',
-                hintStyle: TextStyle(color: Colors.grey, fontSize: 20)),
+                hintStyle: TextStyle(color: Colors.grey, fontSize: textSize)),
             validator: (value) =>
                 state.isValidParentEmail ? null : 'Not a valid Parent Email',
             onChanged: (value) => context
@@ -174,7 +192,11 @@ class CreateStudentPopUpDialog extends StatelessWidget {
     });
   }
 
-  Widget _firstNameField() {
+  Widget _firstNameField(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+    final double textSize = screenSize.width <= 500 ? 12 : 20;
+    final double userProfilePicConstraints = screenSize.width <= 500 ? 22 : 30;
     return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
       return Container(
           decoration: BoxDecoration(
@@ -183,12 +205,12 @@ class CreateStudentPopUpDialog extends StatelessWidget {
           ),
           child: TextFormField(
             textInputAction: TextInputAction.next,
-            style: const TextStyle(color: Colors.black, fontSize: 20),
+            style: TextStyle(color: Colors.black, fontSize: textSize),
             decoration: InputDecoration(
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                 hintText: 'First Name',
-                hintStyle: const TextStyle(color: Colors.grey, fontSize: 20)),
+                hintStyle: TextStyle(color: Colors.grey, fontSize: textSize)),
             validator: (value) => state.isValidfirstName
                 ? null
                 : 'First Name must be between 2 - 20 characters',
@@ -199,7 +221,11 @@ class CreateStudentPopUpDialog extends StatelessWidget {
     });
   }
 
-  Widget _lastNameField() {
+  Widget _lastNameField(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+    final double textSize = screenSize.width <= 500 ? 12 : 20;
+    final double userProfilePicConstraints = screenSize.width <= 500 ? 22 : 30;
     return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
       return Container(
           decoration: BoxDecoration(
@@ -207,12 +233,12 @@ class CreateStudentPopUpDialog extends StatelessWidget {
             borderRadius: const BorderRadius.all(Radius.circular(5)),
           ),
           child: TextFormField(
-            style: const TextStyle(color: Colors.black, fontSize: 20),
+            style: TextStyle(color: Colors.black, fontSize: textSize),
             decoration: InputDecoration(
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                 hintText: 'Last Name',
-                hintStyle: const TextStyle(color: Colors.grey, fontSize: 20)),
+                hintStyle: TextStyle(color: Colors.grey, fontSize: textSize)),
             validator: (value) => state.isValidfirstName
                 ? null
                 : 'Last Name must be between 2 - 20 characters',
@@ -228,7 +254,11 @@ class CreateStudentPopUpDialog extends StatelessWidget {
     });
   }
 
-  Widget _registerButton() {
+  Widget _registerButton(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+    final double textSize = screenSize.width <= 500 ? 12 : 20;
+    final double userProfilePicConstraints = screenSize.width <= 500 ? 22 : 30;
     return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
       return state.formStatus is FormSubmitting
           ? CircularProgressIndicator()
@@ -243,8 +273,9 @@ class CreateStudentPopUpDialog extends StatelessWidget {
                   side: BorderSide(color: Colors.black, width: 0.5),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5))),
-              child: const Text('Register Account',
-                  style: TextStyle(color: Colors.white, fontSize: 18)));
+              child: Text('Register Account',
+                  style: TextStyle(
+                      color: Colors.white, fontSize: textSize * 0.9)));
     });
   }
 }
