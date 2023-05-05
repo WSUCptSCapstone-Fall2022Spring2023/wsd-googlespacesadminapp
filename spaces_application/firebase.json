@@ -15,6 +15,7 @@
     }
   ],
   "hosting": {
+		"site": "slate-for-mules",
     "public": "build/web",
     "ignore": [
       "firebase.json",
