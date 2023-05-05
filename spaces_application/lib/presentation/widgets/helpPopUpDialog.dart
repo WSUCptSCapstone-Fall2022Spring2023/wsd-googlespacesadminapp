@@ -35,7 +35,7 @@ class HelpPopUpDialog extends StatelessWidget {
     final double postBoxConstraints = screenSize.width <= 500 ? 30 : 50;
     final double commentBoxConstraints = screenSize.width <= 500 ? 20 : 30;
     return Dialog(
-        insetPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 200),
+        insetPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 275),
         child: Stack(alignment: Alignment.center, children: [
           Container(
             width: double.infinity,
@@ -63,23 +63,60 @@ class HelpPopUpDialog extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: textSize),
                   child: const Divider(height: 0),
                 ),
-                ListTile(
-                  title: Text("Clear Your Browser Cache",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: textSize)),
-                  subtitle: Text(
-                      "Many problems can be solved by clearing your browser cache. Click for more information",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: textSize * 0.8)),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Scaffold(
+                Center(
+                  child: ListTile(
+                    title: Text("Clear Your Browser Cache",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: textSize)),
+                    subtitle: Text(
+                        "Many problems can be solved by clearing your browser cache. Click for more information",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal,
+                            fontSize: textSize * 0.8)),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Scaffold(
+                              appBar: AppBar(
+                                title: const Text("Help"),
+                                leading: IconButton(
+                                  icon: const Icon(Icons.arrow_back),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ),
+                              body: Stack(
+                                children: const [
+                                  WebView(
+                                    initialUrl: "https://google.com/",
+                                  ),
+                                ],
+                              )),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: textSize),
+                  child: Divider(height: 0),
+                ),
+                Center(
+                  child: ListTile(
+                    title: Text("See our Slate guide.",
+                        style: TextStyle(
+                          fontSize: textSize,
+                        )),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Scaffold(
                             appBar: AppBar(
                               title: const Text("Help"),
                               leading: IconButton(
@@ -89,47 +126,14 @@ class HelpPopUpDialog extends StatelessWidget {
                                 },
                               ),
                             ),
-                            body: Stack(
-                              children: const [
-                                WebView(
-                                  initialUrl: "https://google.com/",
-                                ),
-                              ],
-                            )),
-                      ),
-                    );
-                  },
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  child: Divider(height: 0),
-                ),
-                ListTile(
-                  title: Text("See our Slate guide.",
-                      style: TextStyle(
-                        fontSize: textSize,
-                      )),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Scaffold(
-                          appBar: AppBar(
-                            title: const Text("Help"),
-                            leading: IconButton(
-                              icon: const Icon(Icons.arrow_back),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
+                            body: const WebView(
+                              initialUrl: 'https://google.com',
                             ),
                           ),
-                          body: const WebView(
-                            initialUrl: 'https://google.com',
-                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

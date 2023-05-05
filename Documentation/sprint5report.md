@@ -23,7 +23,7 @@ Here are links to the issues that we completed in this sprint:
 Please review the following important code files, which were actively developed/created during this sprint, for quality:
  * [pubspec.yaml]
  * [lib/main.dart]
- Business_Logic
+ * Business_Logic
  * [lib/business_logic/create_space/create_space_bloc.dart]
  *  [lib/business_logic/create_space/create_space_state.dart]
  * [lib/business_logic/edit_profile/edit_space_bloc.dart]
@@ -31,14 +31,14 @@ Please review the following important code files, which were actively developed/
  * [lib/business_logic/post/creat_post_bloc.dart]
  * [lib/business_logic/post/creat_post_event.dart]
  * [lib/business_logic/post/creat_post_state.dart]
- Data
+ * Data
  * [lib/data/models/spaceData._dart]
  * [lib/data/models/postData._dart]
  * [lib/data/models/userData._dart]
  * [lib/data/repositories/auth_repository.dart]
  * [lib/data/repositories/space_repository.dart]
  * [lib/data/repositories/userData_repository.dart]
- Presentation
+ * Presentation
  * [lib/presentation/views/edit_profileView.dart]
  * [lib/presentation/views/homeView.dart]
  * [lib/presentation/views/loginView.dart]

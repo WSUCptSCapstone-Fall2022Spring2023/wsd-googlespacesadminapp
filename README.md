@@ -8,10 +8,7 @@ The Google Workspace Alternative Application is a communication platform designe
 
 In today's information age, our communication is dominated by digital computer applications such as Discord, Zoom, and many more. Wahkiakum School District and Naselle School District also use these applications for streamlined collaboration with instant messaging, VoIP, and file transfers. However, these applications are not supervisable and CIPA compliant, which is in violation of the districts' regulations. It is Team Toto's mission to design this application in the interests of Wahkiakum School District and Naselle School District. It is within our hope that this application fulfills the districts' needs and that the application can be used and further developed for other school districts as well.
 
-It is also worth noting that half of the students own smartphones, but they all have their own Chromebooks supplied to them by the school.
-
-## Installation
-N/A 
+It is also worth noting that half of the students own smartphones, but they all have their own Chromebooks supplied to them by the school. This application will be designed to be used on Chromebooks, but it will also be compatible with smartphones.
 
 ### Prerequisites
 
@@ -23,17 +20,36 @@ None
 
 ### Installation Steps
 
-None
+Flutter installation instructions can be found [here](https://flutter.dev/docs/get-started/install).
+
+Application can be found at https://spaces-application.web.app/#/ on any web browser.
 
 
 ## Functionality
 
-None
+Fully functional application with the following features:
+* Login
+* Create Space
+* Edit Profile
+* View Spaces
+* View Posts
+* View Comments
+* Create Post
+* Create Comment
+* Edit Post
+* Edit Comment
+* Delete Post
+* Delete Comment
+* Delete Space
+* Logout
+* Administrative Controls
+* Create and Register Student Profiles (Admin)
+* Copy user comment/post history (Admin)
 
 
 ## Known Problems
 
-Comments UI needs polishing.
+Mobile UI/Views need to be updated to match the web UI/Views. 
 
 
 ## Contributing
@@ -49,12 +65,13 @@ TODO: Leave the steps below if you want others to contribute to your project.
 ## Additional Documentation
 
 TODO: Provide links to additional documentation that may exist in the repo, e.g.,
-  * [MVP Project Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/MVP_Project_Report_(Draft).pdf)
+  * [MVP Project Final Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/TeamToto_FinalMVP_Report.pdf)
   * [Project Description](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/Project_Description.docx.pdf)
   * [Prototype Project Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/Prototype_Project_Report.pdf)
   * [Requirements and Specifications](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/Requirements_and_Specifications.docx.pdf)
   * [Solution Approach](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/Solution_Approach.docx.pdf)
   * [Testing and Acceptance](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/Testing_and_Acceptance_plans.docx.pdf)
+  * [Sprint 7 Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint7report.md)
   * [Sprint 6 Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint6report.md)
   * [Sprint 5 Demo](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint5demovideo.mp4)
   * [Sprint 5 Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint5report.md)
