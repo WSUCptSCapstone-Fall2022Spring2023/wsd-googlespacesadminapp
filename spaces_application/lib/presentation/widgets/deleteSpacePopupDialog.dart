@@ -47,6 +47,10 @@ class DeleteSpacePopupDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+    final double textSize = screenSize.width <= 500 ? 12 : 20;
+    final double userProfilePicConstraints = screenSize.width <= 500 ? 22 : 30;
     return BlocConsumer<SpaceBloc, SpaceState>(
       listener: (context, state) {
         final dataStatus = state.deleteSpaceStatus;
@@ -60,52 +64,53 @@ class DeleteSpacePopupDialog extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Dialog(
-                insetPadding:
-                    const EdgeInsets.symmetric(horizontal: 150, vertical: 250),
-                backgroundColor: Colors.white,
-                child: Stack(alignment: Alignment.topLeft, children: [
-                  Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(20),
-                      child: Column(children: [
-                        Align(
-                            alignment: Alignment.topRight,
-                            child: IconButton(
-                              icon: const Icon(Icons.close,
-                                  color: Colors.black, size: 25),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            )),
-                        Text("Delete Space?", style: TextStyle(fontSize: 50)),
-                        SizedBox(height: 10),
-                        Text(
-                            "This will permanently delete your space, and users will lose access to all content within it.",
-                            style: TextStyle(fontSize: 35)),
-                        SizedBox(height: 10),
-                        Text("Make sure you want to delete this space.",
-                            style: TextStyle(fontSize: 35)),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              side: const BorderSide(
-                                  color: Colors.black, width: 0.5),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5))),
-                          child: const Text(
-                            "Delete Space",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          ),
+        return Dialog(
+            insetPadding:
+                const EdgeInsets.symmetric(horizontal: 50, vertical: 100),
+            backgroundColor: Colors.white,
+            child: Stack(alignment: Alignment.topLeft, children: [
+              Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(20),
+                  child: Column(children: [
+                    Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                          icon: Icon(Icons.close,
+                              color: Colors.black, size: textSize * 1.2),
                           onPressed: () {
-                            // delete space here
-                            context.read<SpaceBloc>().add(DeleteSpace());
+                            Navigator.pop(context);
                           },
-                        )
-                      ]))
-                ])));
+                        )),
+                    Text("Delete Space?",
+                        style: TextStyle(fontSize: textSize * 2)),
+                    SizedBox(height: 10),
+                    Text(
+                        "This will permanently delete your space, and users will lose access to all content within it.",
+                        style: TextStyle(fontSize: textSize * 1.7)),
+                    SizedBox(height: 10),
+                    Text("Make sure you want to delete this space.",
+                        style: TextStyle(fontSize: textSize * 1.7)),
+                    SizedBox(height: 10),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          side:
+                              const BorderSide(color: Colors.black, width: 0.5),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5))),
+                      child: Text(
+                        "Delete Space",
+                        style:
+                            TextStyle(color: Colors.white, fontSize: textSize),
+                      ),
+                      onPressed: () {
+                        // delete space here
+                        context.read<SpaceBloc>().add(DeleteSpace());
+                      },
+                    )
+                  ]))
+            ]));
       },
     );
   }

@@ -50,8 +50,10 @@ class _CreateInviteUserPopUpDialogState
 
   @override
   Widget build(BuildContext context) {
-    var ScreenHeight = MediaQuery.of(context).size.height;
-    var ScreenWidth = MediaQuery.of(context).size.width;
+    final Size screenSize = MediaQuery.of(context).size;
+    final double textScaleFactor = screenSize.width <= 500 ? 3 : 5;
+    final double textSize = screenSize.width <= 500 ? 12 : 20;
+    final double userProfilePicConstraints = screenSize.width <= 500 ? 22 : 30;
     return BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
       if (state.getNonSpaceUsers is InitialRetrievalStatus) {
         context.read<SpaceBloc>().add(GetNonSpaceUsers());
@@ -66,14 +68,15 @@ class _CreateInviteUserPopUpDialogState
             child: Text("Error with Data Retrieval. Please Refresh."));
       } else if (state.getNonSpaceUsers is RetrievalSuccess) {
         return Dialog(
-            // insetPadding: const EdgeInsets.symmetric(horizontal: 50, vertical: 100),
+            insetPadding:
+                const EdgeInsets.symmetric(horizontal: 50, vertical: 100),
             backgroundColor: Colors.white,
             child: Stack(
               alignment: Alignment.center,
               children: <Widget>[
                 Container(
-                  width: ScreenWidth * 0.5,
-                  height: ScreenHeight * 0.8,
+                  width: double.infinity,
+                  height: screenSize.height * 0.8,
                   padding: const EdgeInsets.all(20),
                   color: Colors.white,
                   child: Column(
@@ -81,31 +84,32 @@ class _CreateInviteUserPopUpDialogState
                       Align(
                         alignment: Alignment.topRight,
                         child: IconButton(
-                            icon: const Icon(Icons.close,
-                                color: Colors.black, size: 25),
+                            icon: Icon(Icons.close,
+                                color: Colors.black, size: textSize * 1.2),
                             onPressed: (() {
                               Navigator.pop(context);
                             })),
                       ),
-                      const Align(
+                      Align(
                         alignment: Alignment.centerLeft,
                         child: Text("Invite a User",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.normal,
-                                fontSize: 35)),
+                                fontSize: textSize * 1.7)),
                       ),
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 20),
                         child: Divider(height: 0),
                       ),
                       if (state.allUsers.isEmpty)
-                        const Align(
+                        Align(
                             alignment: Alignment.center,
                             child: Text(
                               "No users left to invite.",
-                              style:
-                                  TextStyle(fontSize: 60, color: Colors.black),
+                              style: TextStyle(
+                                  fontSize: textSize * 1.2,
+                                  color: Colors.black),
                             ))
                       else
                         Flexible(
@@ -142,11 +146,13 @@ class _CreateInviteUserPopUpDialogState
                                         });
                                       },
                                       leading: ConstrainedBox(
-                                        constraints: const BoxConstraints(
-                                            maxHeight: 30,
-                                            maxWidth: 30,
-                                            minWidth: 30,
-                                            minHeight: 30),
+                                        constraints: BoxConstraints(
+                                            maxHeight:
+                                                userProfilePicConstraints,
+                                            maxWidth: userProfilePicConstraints,
+                                            minWidth: userProfilePicConstraints,
+                                            minHeight:
+                                                userProfilePicConstraints),
                                         child: SvgPicture.string(
                                             FluttermojiFunctions()
                                                 .decodeFluttermojifromString(
@@ -154,7 +160,7 @@ class _CreateInviteUserPopUpDialogState
                                                         .profilePicString)),
                                       ),
                                       shape: const Border(
-                                          top: BorderSide(width: 5)),
+                                          top: BorderSide(width: 0.1)),
                                       title: RichText(
                                           text: TextSpan(children: [
                                         TextSpan(
@@ -162,16 +168,16 @@ class _CreateInviteUserPopUpDialogState
                                             text: state
                                                 .allUsers[index].displayName
                                                 .toString(),
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.normal,
-                                                fontSize: 25)),
+                                                fontSize: textSize * 1.2)),
                                         TextSpan(
                                             text:
                                                 "  ${state.allUsers[index].firstName} ${state.allUsers[index].lastName}",
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                                 color: Colors.grey,
-                                                fontSize: 20))
+                                                fontSize: textSize))
                                         // if (state.allUsers[index] is in state.spaceUsers) { Text("Invited"); }
                                       ])),
                                     ),
