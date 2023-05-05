@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
             GlobalMaterialLocalizations.delegate,
             MonthYearPickerLocalizations.delegate,
           ],
-          title: 'Home Page',
+          title: 'Slate For Mules',
           home: LoginView(),
           theme: ThemeData(fontFamily: 'Circular', primarySwatch: Colors.red)),
       //create: (context) => AuthRepository(),

@@ -113,25 +113,8 @@ class HelpPopUpDialog extends StatelessWidget {
                           fontSize: textSize,
                         )),
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Scaffold(
-                            appBar: AppBar(
-                              title: const Text("Help"),
-                              leading: IconButton(
-                                icon: const Icon(Icons.arrow_back),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ),
-                            body: const WebView(
-                              initialUrl: 'https://google.com',
-                            ),
-                          ),
-                        ),
-                      );
+                      launchUrl(Uri.parse(
+                          "https://docs.google.com/document/d/1ZLl0Lxj767ZwxmJtq9rr2fMZpYNwR4HboIlo8l2-xAY/edit?usp=sharing"));
                     },
                   ),
                 ),
