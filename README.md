@@ -6,23 +6,13 @@ The Google Workspace Alternative Application is a communication platform designe
 
 ### Additional information about the project
 
-In today's information age, our communication is dominated by digital computer applications such as Discord, Zoom, and many more. Wahkiakum School District and Naselle School District also use these applications for streamlined collaboration with instant messaging, VoIP, and file transfers. However, these applications are not supervisable and CIPA compliant, which is in violation of the districts' regulations. It is Team Toto's mission to design this application in the interests of Wahkiakum School District and Naselle School District. It is within our hope that this application fulfills the districts' needs and that the application can be used and further developed for other school districts as well.
+In today's information age, our communication is dominated by digital computer applications such as Discord, Zoom, and many more. Wahkiakum School District and Naselle School District also use these applications for streamlined collaboration with instant messaging, VoIP, and file transfers. However, these applications are not supervisable and CIPA compliant, which is in violation of the districts' regulations. It is Team Toto's mission to design this application in the interests of Wahkiakum School District and Naselle School District. It is our hope that this application fulfills the districts' needs and that the application can be used and further developed for other school districts as well.
 
 It is also worth noting that half of the students own smartphones, but they all have their own Chromebooks supplied to them by the school. This application will be designed to be used on Chromebooks, but it will also be compatible with smartphones.
 
-### Prerequisites
-
-None
-
-### Add-ons
-
-None
-
 ### Installation Steps
 
-Flutter installation instructions can be found [here](https://flutter.dev/docs/get-started/install).
-
-Application can be found at https://spaces-application.web.app/#/ on any web browser.
+The application can be found at https://spaces-application.web.app/#/ on any web browser.
 
 
 ## Functionality
@@ -54,8 +44,6 @@ Mobile UI/Views need to be updated to match the web UI/Views.
 
 ## Contributing
 
-TODO: Leave the steps below if you want others to contribute to your project.
-
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
 3. Commit your changes: `git commit -am 'Add some feature'`
@@ -64,7 +52,6 @@ TODO: Leave the steps below if you want others to contribute to your project.
 
 ## Additional Documentation
 
-TODO: Provide links to additional documentation that may exist in the repo, e.g.,
   * [MVP Project Final Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/TeamToto_FinalMVP_Report.pdf)
   * [Project Description](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/Project_Description.docx.pdf)
   * [Prototype Project Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/Sprint-6-Report/Documentation/Prototype_Project_Report.pdf)
@@ -86,7 +73,24 @@ TODO: Provide links to additional documentation that may exist in the repo, e.g.
 
 ## License
 
-If you haven't already, add a file called `LICENSE.txt` with the text of the appropriate license.
-We recommend using the MIT license: <https://choosealicense.com/licenses/mit/>
+Copyright (c) 2023 Daniel Semenko, Ben Kaufmann, Albert Lucas
 
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+:)
