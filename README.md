@@ -4,6 +4,7 @@
 
 The Google Workspace Alternative Application is a communication platform designed for Wahkiakum School District, Naselle School District, and Wahkiakum 4-H. The purpose of this application is to help faculty and students in classrooms, clubs, and groups communicate with each other in a forum-like structure. It will be designed to have a coordinated user interface to allow for fluid student collaboration while letting faculty monitor their students' behavior. 
 
+
 ### Additional information about the project
 
 In today's information age, our communication is dominated by digital computer applications such as Discord, Zoom, and many more. Wahkiakum School District and Naselle School District also use these applications for streamlined collaboration with instant messaging, VoIP, and file transfers. However, these applications are not supervisable and CIPA compliant, which is in violation of the districts' regulations. It is Team Toto's mission to design this application in the interests of Wahkiakum School District and Naselle School District. It is our hope that this application fulfills the districts' needs and that the application can be used and further developed for other school districts as well.
@@ -36,12 +37,6 @@ Fully functional application with the following features:
 * Create and Register Student Profiles (Admin)
 * Copy user comment/post history (Admin)
 
-
-## Known Problems
-
-Mobile UI/Views need to be updated to match the web UI/Views. 
-
-
 ## Contributing
 
 1. Fork it!
@@ -49,6 +44,7 @@ Mobile UI/Views need to be updated to match the web UI/Views.
 3. Commit your changes: `git commit -am 'Add some feature'`
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
+
 
 ## Additional Documentation
 
@@ -69,7 +65,6 @@ Mobile UI/Views need to be updated to match the web UI/Views.
   * [Sprint 2 Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint2report.md)
   * [Sprint 1 Report](https://github.com/WSUCptSCapstone-Fall2022Spring2023/wsd-googlespacesadminapp/blob/main/Documentation/sprint1report.md)
 
-  * User links
 
 ## License
 
